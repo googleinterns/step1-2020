@@ -16,18 +16,19 @@ package com.google.step.YOUR_PROJECT_NAME_HERE.servlets;
 
 import java.io.IOException;
 import java.util.Date;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
 
 /** Servlet that renders a basic homepage. */
 @WebServlet("/")
 public class HomepageServlet extends HttpServlet {
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
     // Set some data on the request for the template to access.
     request.setAttribute("date", new Date());
     // Forward the request to the template (which is a servlet itself).
