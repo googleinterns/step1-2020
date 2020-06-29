@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "google"
+  ],
+  "env": {
+    "browser": true,
+    "es2020": true
+  },
+  "rules": {
+    "require-jsdoc": "off",
+    "valid-jsdoc": "off"
+  }
+}

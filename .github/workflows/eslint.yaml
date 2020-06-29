@@ -1,0 +1,14 @@
+name: JavaScript Lint
+
+on: [push]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Lint with ESLint
+        uses: hallee/eslint-action@1.0.3
+        with:
+          repo-token: ${{secrets.GITHUB_TOKEN}}
