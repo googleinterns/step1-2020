@@ -35,14 +35,12 @@ import org.json.JSONObject;
 @WebServlet("/search")
 public class SearchServlet extends HttpServlet {
 
-  private static final String W3_CSE =
-      "https://www.googleapis.com/customsearch/v1?key=AIzaSyCSKQy6t7HgEc1zI2thwgGncFVzyB8zZ00&cx=010448377421452380243:pat2rmwjvb8&q=";
-
-  private static final String STACK_CSE =
-      "https://www.googleapis.com/customsearch/v1?key=AIzaSyCSKQy6t7HgEc1zI2thwgGncFVzyB8zZ00&cx=010448377421452380243:6b8rs1ze5oy&q=";
-
-  private static final String GEEKS_CSE =
-      "https://www.googleapis.com/customsearch/v1?key=AIzaSyCSKQy6t7HgEc1zI2thwgGncFVzyB8zZ00&cx=010448377421452380243:ieq7z84z2qq&q=";
+  private static final String W3_CSE_ID = "010448377421452380243:pat2rmwjvb8";
+  private static final String STACK_CSE_ID = "010448377421452380243:6b8rs1ze5oy";
+  private static final String GEEKS_CSE_ID = "010448377421452380243:ieq7z84z2qq";
+  private static final String API_KEY = "AIzaSyCSKQy6t7HgEc1zI2thwgGncFVzyB8zZ00";
+  private static final String CSE_URL =
+      "https://www.googleapis.com/customsearch/v1?key=" + API_KEY + "&cx=";
 
   private final HttpClient httpClient =
       HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
@@ -59,25 +57,25 @@ public class SearchServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
 
-    String query = encodeValue(request.getParameter("q"));
+    String query = "&q=" + encodeValue(request.getParameter("q"));
     List<String> allLinks = new ArrayList<>();
 
     try {
-      String w3Link = getLink(W3_CSE + query);
+      String w3Link = getLink(CSE_URL + W3_CSE_ID + query);
       allLinks.add(w3Link);
     } catch (Exception e) {
       e.printStackTrace();
     }
 
     try {
-      String stackLink = getLink(STACK_CSE + query);
+      String stackLink = getLink(CSE_URL + STACK_CSE_ID + query);
       allLinks.add(stackLink);
     } catch (Exception e) {
       e.printStackTrace();
     }
 
     try {
-      String geeksLink = getLink(GEEKS_CSE + query);
+      String geeksLink = getLink(CSE_URL + GEEKS_CSE_ID + query);
       allLinks.add(geeksLink);
     } catch (Exception e) {
       e.printStackTrace();
