@@ -8,7 +8,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Install npm packages
+        run: npm install
       - name: Lint with ESLint
-        uses: hallee/eslint-action@1.0.3
-        with:
-          repo-token: ${{secrets.GITHUB_TOKEN}}
+        run: ./node_modules/.bin/eslint .
