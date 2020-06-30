@@ -89,7 +89,7 @@ public class SearchServlet extends HttpServlet {
 
   private String getLink(String CSE) throws Exception {
 
-    HttpRequest w3LinkRequest =
+    HttpRequest linkRequest =
         HttpRequest.newBuilder()
             .GET()
             .uri(URI.create(CSE))
@@ -97,9 +97,9 @@ public class SearchServlet extends HttpServlet {
             .build();
 
     try {
-      HttpResponse<String> w3LinkResponse =
-          httpClient.send(w3LinkRequest, HttpResponse.BodyHandlers.ofString());
-      JSONObject obj = new JSONObject(w3LinkResponse.body());
+      HttpResponse<String> linkResponse =
+          httpClient.send(linkRequest, HttpResponse.BodyHandlers.ofString());
+      JSONObject obj = new JSONObject(linkResponse.body());
       String link = obj.getJSONArray("items").getJSONObject(0).getString("link");
       return link;
     } catch (Exception e) {
