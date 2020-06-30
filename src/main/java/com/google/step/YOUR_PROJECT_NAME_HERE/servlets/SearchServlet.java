@@ -35,6 +35,15 @@ import org.json.JSONObject;
 @WebServlet("/search")
 public class SearchServlet extends HttpServlet {
 
+  private static final String W3_CSE =
+      "https://www.googleapis.com/customsearch/v1?key=AIzaSyCSKQy6t7HgEc1zI2thwgGncFVzyB8zZ00&cx=010448377421452380243:pat2rmwjvb8&q=";
+
+  private static final String STACK_CSE =
+      "https://www.googleapis.com/customsearch/v1?key=AIzaSyCSKQy6t7HgEc1zI2thwgGncFVzyB8zZ00&cx=010448377421452380243:6b8rs1ze5oy&q=";
+
+  private static final String GEEKS_CSE =
+      "https://www.googleapis.com/customsearch/v1?key=AIzaSyCSKQy6t7HgEc1zI2thwgGncFVzyB8zZ00&cx=010448377421452380243:ieq7z84z2qq&q=";
+
   private final HttpClient httpClient =
       HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
 
@@ -53,31 +62,22 @@ public class SearchServlet extends HttpServlet {
     String query = encodeValue(request.getParameter("q"));
     List<String> allLinks = new ArrayList<>();
 
-    String w3GoogleCSE =
-        "https://www.googleapis.com/customsearch/v1?key=AIzaSyCSKQy6t7HgEc1zI2thwgGncFVzyB8zZ00&cx=010448377421452380243:pat2rmwjvb8&q=";
-
-    String stackGoogleCSE =
-        "https://www.googleapis.com/customsearch/v1?key=AIzaSyCSKQy6t7HgEc1zI2thwgGncFVzyB8zZ00&cx=010448377421452380243:6b8rs1ze5oy&q=";
-
-    String geeksGoogleCSE =
-        "https://www.googleapis.com/customsearch/v1?key=AIzaSyCSKQy6t7HgEc1zI2thwgGncFVzyB8zZ00&cx=010448377421452380243:ieq7z84z2qq&q=";
-
     try {
-      String w3Link = getLink(w3GoogleCSE + query);
+      String w3Link = getLink(W3_CSE + query);
       allLinks.add(w3Link);
     } catch (Exception e) {
       e.printStackTrace();
     }
 
     try {
-      String stackLink = getLink(stackGoogleCSE + query);
+      String stackLink = getLink(STACK_CSE + query);
       allLinks.add(stackLink);
     } catch (Exception e) {
       e.printStackTrace();
     }
 
     try {
-      String geeksLink = getLink(geeksGoogleCSE + query);
+      String geeksLink = getLink(GEEKS_CSE + query);
       allLinks.add(geeksLink);
     } catch (Exception e) {
       e.printStackTrace();
@@ -87,24 +87,21 @@ public class SearchServlet extends HttpServlet {
     response.getWriter().println(allLinks);
   }
 
-  private String getLink(String cse) throws Exception {
+  private String getLink(String CSE) throws Exception {
 
     HttpRequest w3LinkRequest =
         HttpRequest.newBuilder()
             .GET()
-            .uri(URI.create(cse))
+            .uri(URI.create(CSE))
             .setHeader("User-Agent", "Java 11 HttpClient Bot")
             .build();
 
     try {
       HttpResponse<String> w3LinkResponse =
           httpClient.send(w3LinkRequest, HttpResponse.BodyHandlers.ofString());
-
       JSONObject obj = new JSONObject(w3LinkResponse.body());
       String link = obj.getJSONArray("items").getJSONObject(0).getString("link");
-
       return link;
-
     } catch (Exception e) {
       e.printStackTrace();
       throw new Exception("Link not found!");
