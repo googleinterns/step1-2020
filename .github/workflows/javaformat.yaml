@@ -12,12 +12,10 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Download google-java-format 1.8
+        run: wget -q https://github.com/google/google-java-format/releases/download/google-java-format-1.8/google-java-format-1.8-all-deps.jar
       - name: Format with google-java-format 1.8
         run: |
-          echo "Downloading google-java-format 1.8..."
-          wget -q https://github.com/google/google-java-format/releases/download/google-java-format-1.8/google-java-format-1.8-all-deps.jar
-          echo ""
-
           FILES=`find . -name "*.java" -type f`
           echo "Found the following Java files:"
           for file in $FILES; do
