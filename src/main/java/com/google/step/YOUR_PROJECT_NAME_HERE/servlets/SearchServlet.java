@@ -38,7 +38,7 @@ public class SearchServlet extends HttpServlet {
   private static final String W3_CSE_ID = "010448377421452380243:pat2rmwjvb8";
   private static final String STACK_CSE_ID = "010448377421452380243:6b8rs1ze5oy";
   private static final String GEEKS_CSE_ID = "010448377421452380243:ieq7z84z2qq";
-  private static final String API_KEY = "AIzaSyCSKQy6t7HgEc1zI2thwgGncFVzyB8zZ00";
+  private static final String API_KEY = "AIzaSyCMg08fxt9IX8LOAdwJGR0DyphMFpXPe5k";
   private static final String CSE_URL =
       "https://www.googleapis.com/customsearch/v1?key=" + API_KEY + "&cx=";
 
