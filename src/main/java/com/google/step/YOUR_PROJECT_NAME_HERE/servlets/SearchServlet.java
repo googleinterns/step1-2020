@@ -56,10 +56,10 @@ public class SearchServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-
     String query = "&q=" + encodeValue(request.getParameter("q"));
     List<String> allLinks = new ArrayList<>();
 
+    /** Send request to retrieve card content through w3School site link from Google CSE */
     try {
       String w3Link = getLink(CSE_URL + W3_CSE_ID + query);
       allLinks.add(w3Link);
@@ -67,6 +67,7 @@ public class SearchServlet extends HttpServlet {
       e.printStackTrace();
     }
 
+    /** Send request to retrieve card content through StackOverflow site link from Google CSE */
     try {
       String stackLink = getLink(CSE_URL + STACK_CSE_ID + query);
       allLinks.add(stackLink);
@@ -74,6 +75,7 @@ public class SearchServlet extends HttpServlet {
       e.printStackTrace();
     }
 
+    /** Send request to retrieve card content through GeeksForGeeks site link from Google CSE */
     try {
       String geeksLink = getLink(CSE_URL + GEEKS_CSE_ID + query);
       allLinks.add(geeksLink);
@@ -86,7 +88,6 @@ public class SearchServlet extends HttpServlet {
   }
 
   private String getLink(String CSE) throws Exception {
-
     HttpRequest linkRequest =
         HttpRequest.newBuilder()
             .GET()
@@ -97,6 +98,7 @@ public class SearchServlet extends HttpServlet {
     try {
       HttpResponse<String> linkResponse =
           httpClient.send(linkRequest, HttpResponse.BodyHandlers.ofString());
+      /** Parse JSON of CSE SRP to retrieve link from only the first search result */
       JSONObject obj = new JSONObject(linkResponse.body());
       String link = obj.getJSONArray("items").getJSONObject(0).getString("link");
       return link;
