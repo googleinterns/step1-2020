@@ -14,6 +14,9 @@
 
 package com.google.step.YOUR_PROJECT_NAME_HERE.servlets;
 
+import com.google.gson.Gson;
+import com.google.step.YOUR_PROJECT_NAME_HERE.data.Card;
+import com.google.step.YOUR_PROJECT_NAME_HERE.external.W3SchoolClient;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -56,13 +59,18 @@ public class SearchServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-
     String query = "&q=" + encodeValue(request.getParameter("q"));
     List<String> allLinks = new ArrayList<>();
+    List<Card> allCards = new ArrayList<>();
 
     try {
       String w3Link = getLink(CSE_URL + W3_CSE_ID + query);
       allLinks.add(w3Link);
+      W3SchoolClient w3Client = new W3SchoolClient();
+      Card w3Card = w3Client.search(w3Link);
+      if (w3Card != null) {
+        allCards.add(w3Card);
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -81,19 +89,20 @@ public class SearchServlet extends HttpServlet {
       e.printStackTrace();
     }
 
-    response.setContentType("text/html;");
+    response.setContentType("application/json;");
     response.getWriter().println(allLinks);
+
+    String json = convertToJson(allCards);
+    response.getWriter().println(json);
   }
 
   private String getLink(String CSE) throws Exception {
-
     HttpRequest linkRequest =
         HttpRequest.newBuilder()
             .GET()
             .uri(URI.create(CSE))
             .setHeader("User-Agent", "Java 11 HttpClient Bot")
             .build();
-
     try {
       HttpResponse<String> linkResponse =
           httpClient.send(linkRequest, HttpResponse.BodyHandlers.ofString());
@@ -104,5 +113,10 @@ public class SearchServlet extends HttpServlet {
       e.printStackTrace();
       throw new Exception("Link not found!");
     }
+  }
+
+  private String convertToJson(List<Card> cards) {
+    Gson gson = new Gson();
+    return gson.toJson(cards);
   }
 }
