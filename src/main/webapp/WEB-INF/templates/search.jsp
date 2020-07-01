@@ -11,6 +11,6 @@
   <body>
     <t:base/>
     <div class="gcse-searchbox-only" data-resultsUrl="/search"></div>
-    <div class="gcse-searchresults-only"></div>
+    <div id="results-box" class="gcse-searchresults-only"></div>
   </body>
 </html>
