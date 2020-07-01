@@ -59,10 +59,12 @@ public class SearchServlet extends HttpServlet {
     String query = "&q=" + encodeValue(request.getParameter("q"));
     List<String> allLinks = new ArrayList<>();
 
+    // TODO: after implementing scraping, consider changing try/catch calls to a for-loop
     /** Send request to retrieve card content through w3School site link from Google CSE */
     try {
       String w3Link = getLink(CSE_URL + W3_CSE_ID + query);
       allLinks.add(w3Link);
+      // TODO: Call scraping function to return JSON card content
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -71,6 +73,7 @@ public class SearchServlet extends HttpServlet {
     try {
       String stackLink = getLink(CSE_URL + STACK_CSE_ID + query);
       allLinks.add(stackLink);
+      // TODO: Call stackoverflow API to return JSON card content
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -79,6 +82,7 @@ public class SearchServlet extends HttpServlet {
     try {
       String geeksLink = getLink(CSE_URL + GEEKS_CSE_ID + query);
       allLinks.add(geeksLink);
+      // TODO: Call scraping function to return JSON card content
     } catch (Exception e) {
       e.printStackTrace();
     }
