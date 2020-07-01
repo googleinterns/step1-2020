@@ -10,15 +10,7 @@
   </head>
   <body>
     <t:base/>
-    <form method="GET" action="/search">
-      <input name="q" value='${requestScope["previousQuery"]}' placeholder="Query goes here" required>
-      <input type="submit">
-    </form>
-    <p>We found results NOT matching your query since we ignored your input:</p>
-    <ul>
-      <c:forEach items='${requestScope["results"]}' var="result">
-      <li>${result}</li>
-      </c:forEach>
-    </ul>
+    <div class="gcse-searchbox-only" data-resultsUrl="/search"></div>
+    <div class="gcse-searchresults-only"></div>
   </body>
 </html>

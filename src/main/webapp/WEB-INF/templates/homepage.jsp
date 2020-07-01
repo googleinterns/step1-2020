@@ -5,15 +5,11 @@
 <html>
   <head>
     <t:head/>
+    <link href="../searchbox-style.css" rel="stylesheet" type="text/css">
     <title>Project Homepage</title>
   </head>
   <body>
     <t:base/>
-    <p>Hello World!</p>
-    <p>The current date is ${requestScope["date"]}</p>
-    <form method="GET" action="/search">
-      <input name="q" placeholder="Query goes here" required>
-      <input type="submit">
-    </form>
+    <div class="gcse-searchbox-only" data-resultsUrl="/search"></div>
   </body>
 </html>
