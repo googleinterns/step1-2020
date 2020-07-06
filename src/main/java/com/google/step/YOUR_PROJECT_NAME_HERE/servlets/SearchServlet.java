@@ -58,39 +58,45 @@ public class SearchServlet extends HttpServlet {
     String query = encodeValue(request.getParameter("q"));
     List<String> allLinks = new ArrayList<>();
 
-    // TODO: after implementing scraping, consider changing try/catch calls to a for-loop
-    /* Send request to retrieve card content through w3School site link from Google CSE */
-    try {
-      String w3Link = getLink(W3_CSE_ID, query);
+    // TODO: after implementing scraping, consider changing getLink calls to a
+    // for-loop
+
+    /*
+     * Send request to retrieve card content through w3School site link from Google
+     * CSE
+     */
+    String w3Link = getLink(W3_CSE_ID, query);
+    if (w3Link != null) {
       allLinks.add(w3Link);
       // TODO: Call scraping function to return JSON card content
-    } catch (Exception e) {
-      e.printStackTrace();
+
     }
 
-    /* Send request to retrieve card content through StackOverflow site link from Google CSE */
-    try {
-      String stackLink = getLink(STACK_CSE_ID, query);
+    /*
+     * Send request to retrieve card content through StackOverflow site link from
+     * Google CSE
+     */
+    String stackLink = getLink(STACK_CSE_ID, query);
+    if (stackLink != null) {
       allLinks.add(stackLink);
       // TODO: Call stackoverflow API to return JSON card content
-    } catch (Exception e) {
-      e.printStackTrace();
     }
 
-    /* Send request to retrieve card content through GeeksForGeeks site link from Google CSE */
-    try {
-      String geeksLink = getLink(GEEKS_CSE_ID, query);
+    /*
+     * Send request to retrieve card content through GeeksForGeeks site link from
+     * Google CSE
+     */
+    String geeksLink = getLink(GEEKS_CSE_ID, query);
+    if (geeksLink != null) {
       allLinks.add(geeksLink);
       // TODO: Call scraping function to return JSON card content
-    } catch (Exception e) {
-      e.printStackTrace();
     }
 
     response.setContentType("text/html;");
     response.getWriter().println(allLinks);
   }
 
-  private String getLink(String id, String query) throws Exception {
+  private String getLink(String id, String query) {
     String cse_request = CSE_URL + "?key=" + API_KEY + "&cx=" + id + "&q=" + query;
 
     HttpRequest linkRequest =
@@ -100,16 +106,17 @@ public class SearchServlet extends HttpServlet {
             .setHeader("User-Agent", "Java 11 HttpClient Bot")
             .build();
 
+    HttpResponse<String> linkResponse;
     try {
-      HttpResponse<String> linkResponse =
-          httpClient.send(linkRequest, HttpResponse.BodyHandlers.ofString());
-      /* Parse JSON of CSE SRP to retrieve link from only the first search result */
-      JSONObject obj = new JSONObject(linkResponse.body());
-      String link = obj.getJSONArray("items").getJSONObject(0).getString("link");
-      return link;
-    } catch (Exception e) {
-      e.printStackTrace();
-      throw new Exception("Link not found!");
+      linkResponse = httpClient.send(linkRequest, HttpResponse.BodyHandlers.ofString());
+    } catch (IOException e) {
+      return null;
+    } catch (InterruptedException e) {
+      return null;
     }
+    /* Parse JSON of CSE SRP to retrieve link from only the first search result */
+    JSONObject obj = new JSONObject(linkResponse.body());
+    String link = obj.getJSONArray("items").getJSONObject(0).getString("link");
+    return link;
   }
 }
