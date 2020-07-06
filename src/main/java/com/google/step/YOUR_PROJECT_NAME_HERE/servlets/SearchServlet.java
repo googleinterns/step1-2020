@@ -48,14 +48,20 @@ public class SearchServlet extends HttpServlet {
     try {
       return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
     } catch (UnsupportedEncodingException ex) {
-      throw new RuntimeException(ex.getCause());
+      return null;
     }
   }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    String query = encodeValue(request.getParameter("q"));
+    String query = request.getParameter("q");
+    if (query == null || encodeValue(query) == null) {
+      response.setContentType("text/html;");
+      response.getWriter().println("Invalid Query");
+      return;
+    }
+
     List<String> allLinks = new ArrayList<>();
 
     // TODO: after implementing scraping, consider changing getLink calls to a
@@ -98,14 +104,12 @@ public class SearchServlet extends HttpServlet {
 
   private String getLink(String id, String query) {
     String cse_request = CSE_URL + "?key=" + API_KEY + "&cx=" + id + "&q=" + query;
-
     HttpRequest linkRequest =
         HttpRequest.newBuilder()
             .GET()
             .uri(URI.create(cse_request))
             .setHeader("User-Agent", "Java 11 HttpClient Bot")
             .build();
-
     HttpResponse<String> linkResponse;
     try {
       linkResponse = httpClient.send(linkRequest, HttpResponse.BodyHandlers.ofString());
