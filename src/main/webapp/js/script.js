@@ -21,8 +21,7 @@ const handleSubmitButton = function() {
   const url = document.getElementById('query').value;
   fetch('/query?query='+url).then((response) => response.json()).
       then((data) => {
-        for (let i = 0; i < 1; i++) {
-          document.getElementById('so-card').innerHTML = data[i].code;
-        }
+        console.log(data);
+        document.getElementById('so-card').innerHTML = data.code + data.description;
       });
 };

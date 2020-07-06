@@ -16,13 +16,12 @@ public class QueryServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String query = request.getParameter("query");
     System.out.print(query);
-    List<String> so_urls = new ArrayList<>();
-    so_urls.add(query);
+    String so_urls = query;
     Gson gson = new Gson();
     StackOverflowClient so_client = new StackOverflowClient();
-    List<Card> cards = so_client.search(so_urls);
+    Card card = so_client.search(so_urls);
     // TODO: add cards from other two website
     response.setContentType("application/json");
-    response.getWriter().print(gson.toJson(cards));
+    response.getWriter().print(gson.toJson(card));
   }
 }
