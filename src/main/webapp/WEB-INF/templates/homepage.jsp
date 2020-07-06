@@ -6,7 +6,7 @@
   <head>
     <t:head/>
     <link href="../searchbox-style.css" rel="stylesheet" type="text/css">
-    <title>Project Homepage</title>
+    <title>YOUR_PROJECT_NAME_HERE</title>
   </head>
   <body>
     <t:base/>

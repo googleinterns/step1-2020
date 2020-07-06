@@ -2,6 +2,7 @@ h3 {
   text-align: center;
 }
 
-#results-box {
-  width: 50%;
+.srp-container {
+  display: flex;
+  flex-direction: row;
 }

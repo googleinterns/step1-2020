@@ -6,11 +6,14 @@
 <html>
   <head>
     <t:head/>
-    <title>Project Search</title>
+    <title>YOUR_PROJECT_NAME_HERE</title>
   </head>
   <body>
     <t:base/>
     <div class="gcse-searchbox-only" data-resultsUrl="/search"></div>
-    <div id="results-box" class="gcse-searchresults-only"></div>
+    <div class="srp-container">
+      <div class="gcse-searchresults-only"></div>
+      <div>test</div>
+    </div>
   </body>
 </html>

@@ -1,2 +1,2 @@
 <%@tag description="Common page content" pageEncoding="UTF-8"%>
-<h3>CodeSnippet</h3>
+<h3>YOUR_PROJECT_NAME_HERE</h3>
