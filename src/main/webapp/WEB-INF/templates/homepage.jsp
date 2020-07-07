@@ -5,7 +5,6 @@
 <html>
   <head>
     <t:head/>
-    <link href="../searchbox-style.css" rel="stylesheet" type="text/css">
     <title>YOUR_PROJECT_NAME_HERE</title>
   </head>
   <body>
