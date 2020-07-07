@@ -38,12 +38,11 @@ import org.json.JSONObject;
 @WebServlet("/search")
 public class SearchServlet extends HttpServlet {
 
-  private static final String W3_CSE_ID = "010448377421452380243:pat2rmwjvb8";
-  private static final String STACK_CSE_ID = "010448377421452380243:6b8rs1ze5oy";
-  private static final String GEEKS_CSE_ID = "010448377421452380243:ieq7z84z2qq";
-  private static final String API_KEY = "AIzaSyCMg08fxt9IX8LOAdwJGR0DyphMFpXPe5k";
-  private static final String CSE_URL =
-      "https://www.googleapis.com/customsearch/v1?key=" + API_KEY + "&cx=";
+  private static final String W3_CSE_ID = "INSERT_W3SCHOOL_CSE_ID";
+  private static final String STACK_CSE_ID = "INSERT_STACKOVERFLOW_CSE_ID";
+  private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CSE_ID";
+  private static final String API_KEY = "INSERT_API_KEY";
+  private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
 
   private final HttpClient httpClient =
       HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
@@ -52,41 +51,59 @@ public class SearchServlet extends HttpServlet {
     try {
       return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
     } catch (UnsupportedEncodingException ex) {
-      throw new RuntimeException(ex.getCause());
+      return null;
     }
   }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    String query = "&q=" + encodeValue(request.getParameter("q"));
+    String param = request.getParameter("q");
+    if (param == null || encodeValue(param) == null) {
+      response.setContentType("text/html;");
+      response.getWriter().println("Invalid Query");
+      return;
+    }
+
+    String query = encodeValue(param);
     List<String> allLinks = new ArrayList<>();
     List<Card> allCards = new ArrayList<>();
 
-    try {
-      String w3Link = getLink(CSE_URL + W3_CSE_ID + query);
+    // TODO: after implementing scraping, consider changing getLink calls to a
+    // for-loop
+
+    /*
+     * Send request to retrieve card content through w3School site link from Google
+     * CSE
+     */
+    String w3Link = getLink(W3_CSE_ID, query);
+    if (w3Link != null) {
       allLinks.add(w3Link);
       W3SchoolClient w3Client = new W3SchoolClient();
       Card w3Card = w3Client.search(w3Link);
       if (w3Card != null) {
         allCards.add(w3Card);
       }
-    } catch (Exception e) {
-      e.printStackTrace();
     }
 
-    try {
-      String stackLink = getLink(CSE_URL + STACK_CSE_ID + query);
+    /*
+     * Send request to retrieve card content through StackOverflow site link from
+     * Google CSE
+     */
+    String stackLink = getLink(STACK_CSE_ID, query);
+    if (stackLink != null) {
       allLinks.add(stackLink);
-    } catch (Exception e) {
-      e.printStackTrace();
+      // TODO: Call stackoverflow API to return JSON card content
     }
 
-    try {
-      String geeksLink = getLink(CSE_URL + GEEKS_CSE_ID + query);
+    /*
+     * Send request to retrieve card content through GeeksForGeeks site link from
+     * Google CSE
+     */
+    String geeksLink = getLink(GEEKS_CSE_ID, query);
+    if (geeksLink != null) {
       allLinks.add(geeksLink);
-    } catch (Exception e) {
-      e.printStackTrace();
+      // TODO: Call scraping function to return JSON card content
     }
 
     response.setContentType("application/json;");
@@ -96,23 +113,24 @@ public class SearchServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
-  private String getLink(String CSE) throws Exception {
+  private String getLink(String id, String query) {
+    String cse_request = CSE_URL + "?key=" + API_KEY + "&cx=" + id + "&q=" + query;
     HttpRequest linkRequest =
         HttpRequest.newBuilder()
             .GET()
-            .uri(URI.create(CSE))
+            .uri(URI.create(cse_request))
             .setHeader("User-Agent", "Java 11 HttpClient Bot")
             .build();
+    HttpResponse<String> linkResponse;
     try {
-      HttpResponse<String> linkResponse =
-          httpClient.send(linkRequest, HttpResponse.BodyHandlers.ofString());
-      JSONObject obj = new JSONObject(linkResponse.body());
-      String link = obj.getJSONArray("items").getJSONObject(0).getString("link");
-      return link;
-    } catch (Exception e) {
-      e.printStackTrace();
-      throw new Exception("Link not found!");
+      linkResponse = httpClient.send(linkRequest, HttpResponse.BodyHandlers.ofString());
+    } catch (IOException | InterruptedException ex) {
+      return null;
     }
+    /* Parse JSON of CSE SRP to retrieve link from only the first search result */
+    JSONObject obj = new JSONObject(linkResponse.body());
+    String link = obj.getJSONArray("items").getJSONObject(0).getString("link");
+    return link;
   }
 
   private String convertToJson(List<Card> cards) {
