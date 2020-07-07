@@ -55,13 +55,14 @@ public class SearchServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    String query = request.getParameter("q");
-    if (query == null || encodeValue(query) == null) {
+    String param = request.getParameter("q");
+    if (param == null || encodeValue(param) == null) {
       response.setContentType("text/html;");
       response.getWriter().println("Invalid Query");
       return;
     }
 
+    String query = encodeValue(param);
     List<String> allLinks = new ArrayList<>();
 
     // TODO: after implementing scraping, consider changing getLink calls to a
@@ -75,7 +76,6 @@ public class SearchServlet extends HttpServlet {
     if (w3Link != null) {
       allLinks.add(w3Link);
       // TODO: Call scraping function to return JSON card content
-
     }
 
     /*
@@ -113,9 +113,7 @@ public class SearchServlet extends HttpServlet {
     HttpResponse<String> linkResponse;
     try {
       linkResponse = httpClient.send(linkRequest, HttpResponse.BodyHandlers.ofString());
-    } catch (IOException e) {
-      return null;
-    } catch (InterruptedException e) {
+    } catch (IOException | InterruptedException ex) {
       return null;
     }
     /* Parse JSON of CSE SRP to retrieve link from only the first search result */
