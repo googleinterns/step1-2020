@@ -14,9 +14,6 @@
 
 package com.google.step.YOUR_PROJECT_NAME_HERE.servlets;
 
-import com.google.gson.Gson;
-import com.google.step.YOUR_PROJECT_NAME_HERE.data.Card;
-import com.google.step.YOUR_PROJECT_NAME_HERE.external.W3SchoolClient;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -67,7 +64,6 @@ public class SearchServlet extends HttpServlet {
 
     String query = encodeValue(param);
     List<String> allLinks = new ArrayList<>();
-    List<Card> allCards = new ArrayList<>();
 
     // TODO: after implementing scraping, consider changing getLink calls to a
     // for-loop
@@ -79,11 +75,7 @@ public class SearchServlet extends HttpServlet {
     String w3Link = getLink(W3_CSE_ID, query);
     if (w3Link != null) {
       allLinks.add(w3Link);
-      W3SchoolClient w3Client = new W3SchoolClient();
-      Card w3Card = w3Client.search(w3Link);
-      if (w3Card != null) {
-        allCards.add(w3Card);
-      }
+      // TODO: Call scraping function to return JSON card content
     }
 
     /*
@@ -106,11 +98,8 @@ public class SearchServlet extends HttpServlet {
       // TODO: Call scraping function to return JSON card content
     }
 
-    response.setContentType("application/json;");
+    response.setContentType("text/html;");
     response.getWriter().println(allLinks);
-
-    String json = convertToJson(allCards);
-    response.getWriter().println(json);
   }
 
   private String getLink(String id, String query) {
@@ -131,10 +120,5 @@ public class SearchServlet extends HttpServlet {
     JSONObject obj = new JSONObject(linkResponse.body());
     String link = obj.getJSONArray("items").getJSONObject(0).getString("link");
     return link;
-  }
-
-  private String convertToJson(List<Card> cards) {
-    Gson gson = new Gson();
-    return gson.toJson(cards);
   }
 }

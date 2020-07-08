@@ -6,12 +6,7 @@ public final class Card {
   private String link;
   private String description;
 
-  public Card() {
-    this.title = "";
-    this.code = "";
-    this.link = "";
-    this.description = "";
-  }
+  public Card() {}
 
   public Card(String title, String code, String link, String description) {
     this.title = title;
