@@ -5,12 +5,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
+import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.HttpEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.json.JSONArray;
@@ -27,10 +27,12 @@ public final class StackOverflowClient {
   private static final String QUESTION_URL_TEMPLATE =
       "https://api.stackexchange.com/2.2/questions/%s/answers?"
           + "order=desc&sort=votes&site=stackoverflow";
+  // this url specify filter to generate answer body
   private static final String ANSWER_URL_TEMPLATE =
       "https://api.stackexchange.com/2.2/answers/%s?order"
           + "=desc&sort=activity&site=stackoverflow&filter=!9_bDE(fI5";
   private static final int ID_INDEX = 2;
+
   public Card search(String so_url) {
     try {
       Card card = getQuestion(so_url);
@@ -45,9 +47,6 @@ public final class StackOverflowClient {
   /* Get the question id based on url from the CSE result */
   private Card getQuestion(String so_url) throws URISyntaxException {
     Card card = new Card();
-    if (so_url == null) {
-      return card;
-    }
     URI uri = new URI(so_url);
     // Parse the URL to get the question id.
     String[] segments = uri.getPath().split("/");
