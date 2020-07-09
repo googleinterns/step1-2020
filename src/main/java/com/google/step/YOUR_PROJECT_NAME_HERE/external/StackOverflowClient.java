@@ -101,7 +101,7 @@ public final class StackOverflowClient {
             for (Element e : descriptionHtml) {
                 description += e.outerHtml();
             }
-            if(description.length() > DESCRIPTION_LENGTH_PARAMETER) {
+            if (description.length() > DESCRIPTION_LENGTH_PARAMETER) {
                 description = description.substring(0, DESCRIPTION_LENGTH_PARAMETER);
             }
             // Combine all code in the answer body.
