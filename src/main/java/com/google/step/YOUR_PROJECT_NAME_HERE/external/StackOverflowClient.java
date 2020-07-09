@@ -58,7 +58,7 @@ public final class StackOverflowClient {
     // Parse the URL to get the question id.
     String[] segments = uri.getPath().split("/");
     String questionId = segments[ID_INDEX];
-    if(!Pattern.matches("[0-9]+",questionId)) {
+    if (!Pattern.matches("[0-9]+", questionId)) {
       return null;
     }
     String searchUrl = String.format(SEARCH_URL_TEMPLATE, questionId);
