@@ -1,6 +1,11 @@
 package com.google.step.YOUR_PROJECT_NAME_HERE.external;
 
 import com.google.step.YOUR_PROJECT_NAME_HERE.data.Card;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.*;
+import java.util.*;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -11,10 +16,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 public final class StackOverflowClient {
   private static final String SEARCH_URL_TEMPLATE =
