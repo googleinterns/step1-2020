@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
+import java.util.regex.*;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -38,6 +39,9 @@ public final class StackOverflowClient {
   public Card search(String url) {
     try {
       Card card = getQuestion(url);
+      if (card == null) {
+        return null;
+      }
       card = getAnswerId(card);
       card = getAnswer(card);
       return card;
@@ -54,6 +58,9 @@ public final class StackOverflowClient {
     // Parse the URL to get the question id.
     String[] segments = uri.getPath().split("/");
     String questionId = segments[ID_INDEX];
+    if(!Pattern.matches("[0-9]+",questionId)) {
+      return null;
+    }
     String searchUrl = String.format(SEARCH_URL_TEMPLATE, questionId);
     try {
       JSONObject res = getResponse(searchUrl);
