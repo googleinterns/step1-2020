@@ -41,7 +41,6 @@ public final class StackOverflowClient {
       Card card = getQuestion(stackLink);
       card = getAnswerId(card);
       card = getAnswer(card);
-      card = getAnswer(card);
       return card;
     } catch (URISyntaxException e) {
       // return null card if no valid card available
