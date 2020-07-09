@@ -14,6 +14,8 @@
 
 package com.google.step.YOUR_PROJECT_NAME_HERE.servlets;
 
+import com.google.step.YOUR_PROJECT_NAME_HERE.data.Card;
+import com.google.step.YOUR_PROJECT_NAME_HERE.external.StackOverflowClient;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -35,10 +37,10 @@ import org.json.JSONObject;
 @WebServlet("/search")
 public class SearchServlet extends HttpServlet {
 
-  private static final String W3_CSE_ID = "INSERT_W3SCHOOL_CSE_ID";
-  private static final String STACK_CSE_ID = "INSERT_STACKOVERFLOW_CSE_ID";
-  private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CSE_ID";
-  private static final String API_KEY = "INSERT_API_KEY";
+  private static final String W3_CSE_ID = "017022763452466193978:wutqur3vf1w";
+  private static final String STACK_CSE_ID = "017022763452466193978:5jkwwqhp3re";
+  private static final String GEEKS_CSE_ID = "017022763452466193978:hfcnls4tlio";
+  private static final String API_KEY = "AIzaSyAu1kT7ulGy3DMTCksBHk0gMHio1t4ec0E";
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
 
   private final HttpClient httpClient =
@@ -64,6 +66,7 @@ public class SearchServlet extends HttpServlet {
 
     String query = encodeValue(param);
     List<String> allLinks = new ArrayList<>();
+    List<Card> cards = new ArrayList<>();
 
     // TODO: after implementing scraping, consider changing getLink calls to a
     // for-loop
@@ -85,7 +88,9 @@ public class SearchServlet extends HttpServlet {
     String stackLink = getLink(STACK_CSE_ID, query);
     if (stackLink != null) {
       allLinks.add(stackLink);
-      // TODO: Call stackoverflow API to return JSON card content
+      StackOverflowClient stackClient = new StackOverflowClient();
+      Card stackCard = stackClient.search(stackLink);
+      cards.add(stackCard);
     }
 
     /*
@@ -98,8 +103,10 @@ public class SearchServlet extends HttpServlet {
       // TODO: Call scraping function to return JSON card content
     }
 
-    response.setContentType("text/html;");
-    response.getWriter().println(allLinks);
+    Gson gson = new Gson();
+    response.setContentType("application/json");
+    response.getWriter().println(gson.Json(cards));
+    request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
 
   private String getLink(String id, String query) {
