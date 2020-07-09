@@ -20,15 +20,15 @@ import org.jsoup.select.Elements;
 
 public final class StackOverflowClient {
   private static final String SEARCH_URL_TEMPLATE =
-          "https://api.stackexchange.com/2.2/questions/%s?"
-                  + "order=desc&sort=activity&site=stackoverflow";
+      "https://api.stackexchange.com/2.2/questions/%s?"
+          + "order=desc&sort=activity&site=stackoverflow";
   private static final String QUESTION_URL_TEMPLATE =
-          "https://api.stackexchange.com/2.2/questions/%s/answers?"
-                  + "order=desc&sort=votes&site=stackoverflow";
+      "https://api.stackexchange.com/2.2/questions/%s/answers?"
+          + "order=desc&sort=votes&site=stackoverflow";
   // this url specify filter to generate answer body
   private static final String ANSWER_URL_TEMPLATE =
-          "https://api.stackexchange.com/2.2/answers/%s?order"
-                  + "=desc&sort=activity&site=stackoverflow&filter=!9_bDE(fI5";
+      "https://api.stackexchange.com/2.2/answers/%s?order"
+          + "=desc&sort=activity&site=stackoverflow&filter=!9_bDE(fI5";
   private static final int ID_INDEX = 2;
   private static final String ITEM_PARAMETER = "items";
   private static final String TITLE_PARAMETER = "title";
@@ -61,7 +61,7 @@ public final class StackOverflowClient {
     try {
       JSONObject res = getResponse(url);
       String title =
-              res.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(TITLE_PARAMETER).toString();
+          res.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(TITLE_PARAMETER).toString();
       card.setLink(uri.toString());
       // Store the id of the question in order to get the code body of the answer.
       card.setCode(idStr);
@@ -78,7 +78,7 @@ public final class StackOverflowClient {
     try {
       JSONObject res = getResponse(url);
       String answerId =
-              res.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(ANSWER_ID_PARAMETER).toString();
+          res.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(ANSWER_ID_PARAMETER).toString();
       // Replace the question id by the answer id in order to retrieve the code body next.
       card.setCode(answerId);
     } catch (IOException e) {
@@ -93,7 +93,7 @@ public final class StackOverflowClient {
     try {
       JSONObject res = getResponse(url);
       String body =
-              res.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(BODY_PARAMETER).toString();
+          res.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(BODY_PARAMETER).toString();
       Document doc = Jsoup.parse(body);
       // Combine all description in the answer body.
       Elements descriptionHtml = doc.select("p");
