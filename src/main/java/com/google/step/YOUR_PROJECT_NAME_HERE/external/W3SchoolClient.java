@@ -23,12 +23,7 @@ public final class W3SchoolClient {
     String description = "";
     String code = "";
 
-    if (titles != null
-        && !titles.isEmpty()
-        && descriptions != null
-        && !descriptions.isEmpty()
-        && snippets != null
-        && !snippets.isEmpty()) {
+    if (!isNullOrEmpty(titles) && !isNullOrEmpty(descriptions) && !isNullOrEmpty(snippets)) {
       title = titles.first().text();
       description = descriptions.first().text();
       code = snippets.first().getElementsByClass(CODE_ID).text();
@@ -39,5 +34,9 @@ public final class W3SchoolClient {
       return w3Card;
     }
     return null;
+  }
+
+  public boolean isNullOrEmpty(Elements elements) {
+    return elements == null || elements.isEmpty();
   }
 }
