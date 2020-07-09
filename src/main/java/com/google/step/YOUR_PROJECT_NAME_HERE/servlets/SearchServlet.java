@@ -98,8 +98,7 @@ public class SearchServlet extends HttpServlet {
       // TODO: Call scraping function to return JSON card content
     }
 
-    response.setContentType("text/html;");
-    response.getWriter().println(allLinks);
+    request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
 
   private String getLink(String id, String query) {
