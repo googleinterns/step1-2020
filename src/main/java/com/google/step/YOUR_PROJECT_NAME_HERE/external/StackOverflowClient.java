@@ -30,29 +30,37 @@ public final class StackOverflowClient {
       "https://api.stackexchange.com/2.2/answers/%s?order"
           + "=desc&sort=activity&site=stackoverflow&filter=!9_bDE(fI5";
   private static final int ID_INDEX = 2;
+  private static final String ITEM_PARAMETER = "items";
+  private static final String TITLE_PARAMETER = "title";
+  private static final String BODY_PARAMETER = "body";
+  private static final String CODE_PARAMETER = "code";
+  private static final String ANSWER_ID_PARAMETER = "answer_id";
+  private static final int DESCRIPTION_LENGTH_PARAMETER = 200;
 
-  public Card search(String so_url) {
+  public Card search(String stackLink) {
     try {
-      Card card = getQuestion(so_url);
+      Card card = getQuestion(stackLink);
       card = getAnswerId(card);
+      card = getAnswer(card);
       card = getAnswer(card);
       return card;
     } catch (URISyntaxException e) {
-      return new Card();
+      return null;
     }
   }
 
   /* Get the question id based on url from the CSE result */
-  private Card getQuestion(String so_url) throws URISyntaxException {
+  private Card getQuestion(String stackLink) throws URISyntaxException {
     Card card = new Card();
-    URI uri = new URI(so_url);
+    URI uri = new URI(stackLink);
     // Parse the URL to get the question id.
     String[] segments = uri.getPath().split("/");
     String idStr = segments[ID_INDEX];
     String url = String.format(SEARCH_URL_TEMPLATE, idStr);
     try {
       JSONObject res = getResponse(url);
-      String title = res.getJSONArray("items").getJSONObject(0).get("title").toString();
+      String title =
+          res.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(TITLE_PARAMETER).toString();
       card.setLink(uri.toString());
       // Store the id of the question in order to get the code body of the answer.
       card.setCode(idStr);
@@ -68,10 +76,10 @@ public final class StackOverflowClient {
     String url = String.format(QUESTION_URL_TEMPLATE, card.getCode());
     try {
       JSONObject res = getResponse(url);
-      JSONArray answer_list = res.getJSONArray("items");
-      String answer_id = res.getJSONArray("items").getJSONObject(0).get("answer_id").toString();
+      String answerId =
+          res.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(ANSWER_ID_PARAMETER).toString();
       // Replace the question id by the answer id in order to retrieve the code body next.
-      card.setCode(answer_id);
+      card.setCode(answerId);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -83,20 +91,20 @@ public final class StackOverflowClient {
     String url = String.format(ANSWER_URL_TEMPLATE, card.getCode());
     try {
       JSONObject res = getResponse(url);
-      String body = res.getJSONArray("items").getJSONObject(0).get("body").toString();
+      String body =
+          res.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(BODY_PARAMETER).toString();
       Document doc = Jsoup.parse(body);
       // Combine all description in the answer body.
-      Elements description_html = doc.select("p");
+      Elements descriptionHtml = doc.select("p");
       String description = "";
-      for (Element e : description_html) {
+      for (Element e : descriptionHtml) {
         description += e.outerHtml();
       }
-      // Get the first 100 characters for displaying.
-      description = description.substring(0, 99);
+      description = description.substring(0, DESCRIPTION_LENGTH_PARAMETER);
       // Combine all code in the answer body.
-      Elements code_html = doc.select("code");
+      Elements codeHtml = doc.select(CODE_PARAMETER);
       String code = "";
-      for (Element e : code_html) {
+      for (Element e : codeHtml) {
         code += e.outerHtml();
       }
       card.setDescription(description);
@@ -119,11 +127,10 @@ public final class StackOverflowClient {
     }
     BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()));
     StringBuilder responseBody = new StringBuilder();
-    String line = null;
+    String line;
     while ((line = reader.readLine()) != null) {
       responseBody.append(line);
     }
-    JSONObject res = new JSONObject(responseBody.toString());
-    return res;
+    return new JSONObject(responseBody.toString());
   }
 }
