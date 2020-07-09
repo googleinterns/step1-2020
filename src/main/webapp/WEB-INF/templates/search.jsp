@@ -6,19 +6,14 @@
 <html>
   <head>
     <t:head/>
-    <title>Project Search</title>
+    <title>YOUR_PROJECT_NAME_HERE</title>
   </head>
   <body>
     <t:base/>
-    <form method="GET" action="/search">
-      <input name="q" value='${requestScope["previousQuery"]}' placeholder="Query goes here" required>
-      <input type="submit">
-    </form>
-    <p>We found results NOT matching your query since we ignored your input:</p>
-    <ul>
-      <c:forEach items='${requestScope["results"]}' var="result">
-      <li>${result}</li>
-      </c:forEach>
-    </ul>
+    <div class="gcse-searchbox-only" data-resultsUrl="/search"></div>
+    <div class="srp-container">
+      <div class="gcse-searchresults-only"></div>
+      <div>test</div>
+    </div>
   </body>
 </html>
