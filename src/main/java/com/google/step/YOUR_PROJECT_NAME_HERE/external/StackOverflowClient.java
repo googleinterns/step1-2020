@@ -23,7 +23,7 @@ public final class StackOverflowClient {
   private static final String QUESTION_URL_TEMPLATE =
       "https://api.stackexchange.com/2.2/questions/%s/answers?"
           + "order=desc&sort=votes&site=stackoverflow";
-  // this url specify filter to generate answer body
+  // This url specify filter to generate answer body.
   private static final String ANSWER_URL_TEMPLATE =
       "https://api.stackexchange.com/2.2/answers/%s?order"
           + "=desc&sort=activity&site=stackoverflow&filter=!9_bDE(fI5";
@@ -35,33 +35,33 @@ public final class StackOverflowClient {
   private static final String ANSWER_ID_PARAMETER = "answer_id";
   private static final int DESCRIPTION_LENGTH_PARAMETER = 200;
 
-  public Card search(String stackLink) {
+  public Card search(String url) {
     try {
-      Card card = getQuestion(stackLink);
+      Card card = getQuestion(url);
       card = getAnswerId(card);
       card = getAnswer(card);
       return card;
     } catch (URISyntaxException e) {
-      // return null card if no valid card available
+      // Return null card if no valid card available.
       return null;
     }
   }
 
-  /* Get the question id based on url from the CSE result */
-  private Card getQuestion(String stackLink) throws URISyntaxException {
+  /* Get the question id based on URL from the CSE result. */
+  private Card getQuestion(String url) throws URISyntaxException {
     Card card = new Card();
-    URI uri = new URI(stackLink);
+    URI uri = new URI(url);
     // Parse the URL to get the question id.
     String[] segments = uri.getPath().split("/");
-    String idStr = segments[ID_INDEX];
-    String url = String.format(SEARCH_URL_TEMPLATE, idStr);
+    String questionId = segments[ID_INDEX];
+    String searchUrl = String.format(SEARCH_URL_TEMPLATE, questionId);
     try {
-      JSONObject res = getResponse(url);
+      JSONObject res = getResponse(searchUrl);
       String title =
           res.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(TITLE_PARAMETER).toString();
       card.setLink(uri.toString());
       // Store the id of the question in order to get the code body of the answer.
-      card.setCode(idStr);
+      card.setCode(questionId);
       card.setTitle(title);
     } catch (IOException e) {
       e.printStackTrace();
@@ -69,11 +69,11 @@ public final class StackOverflowClient {
     return card;
   }
 
-  /* Get the most voted answer's id and store it in the card */
+  /* Get the most voted answer's id and store it in the card. */
   private Card getAnswerId(Card card) {
-    String url = String.format(QUESTION_URL_TEMPLATE, card.getCode());
+    String questionUrl = String.format(QUESTION_URL_TEMPLATE, card.getCode());
     try {
-      JSONObject res = getResponse(url);
+      JSONObject res = getResponse(questionUrl);
       String answerId =
           res.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(ANSWER_ID_PARAMETER).toString();
       // Replace the question id by the answer id in order to retrieve the code body next.
@@ -84,11 +84,11 @@ public final class StackOverflowClient {
     return card;
   }
 
-  /* Get the content of the answer and store it in the card */
+  /* Get the content of the answer and store it in the card. */
   private Card getAnswer(Card card) {
-    String url = String.format(ANSWER_URL_TEMPLATE, card.getCode());
+    String answerUrl = String.format(ANSWER_URL_TEMPLATE, card.getCode());
     try {
-      JSONObject res = getResponse(url);
+      JSONObject res = getResponse(answerUrl);
       String body =
           res.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(BODY_PARAMETER).toString();
       Document doc = Jsoup.parse(body);
