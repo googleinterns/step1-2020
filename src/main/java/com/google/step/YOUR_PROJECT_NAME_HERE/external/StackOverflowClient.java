@@ -49,6 +49,10 @@ public final class StackOverflowClient {
     }
     String title = getTitle(questionId);
     String answerId = getAnswerId(questionId);
+    // If there is no answer to the question, return a null card
+    if(answerId == null) {
+      return null;
+    }
     String answerBody = getAnswerBody(answerId);
     String description = getDescription(answerBody);
     String code = getCode(answerBody);
@@ -79,7 +83,6 @@ public final class StackOverflowClient {
   private String getAnswerId(String questionId) {
     String questionUrl = String.format(QUESTION_URL_TEMPLATE, questionId);
     String answerId = getResponse(questionUrl, ANSWER_ID_PARAMETER);
-    // Replace the question id by the answer id in order to retrieve the code body next.
     return answerId;
   }
 
