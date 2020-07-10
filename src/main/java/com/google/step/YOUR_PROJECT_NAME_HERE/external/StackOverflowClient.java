@@ -1,4 +1,4 @@
-package com.google.step.YOUR_PROJECT_NAME_HERE.external;
+package com.google.step.snippet.external;
 
 import com.google.step.YOUR_PROJECT_NAME_HERE.data.Card;
 import java.io.BufferedReader;
