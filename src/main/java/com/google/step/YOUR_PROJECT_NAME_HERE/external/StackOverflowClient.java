@@ -24,10 +24,12 @@ public final class StackOverflowClient {
   private static final String QUESTION_URL_TEMPLATE =
       "https://api.stackexchange.com/2.2/questions/%s/answers?"
           + "order=desc&sort=votes&site=stackoverflow";
-  // This url specify filter to generate answer body.
+  // This URL specifies a custom StackExchange API filter that generates answer body.
   private static final String ANSWER_URL_TEMPLATE =
       "https://api.stackexchange.com/2.2/answers/%s?order"
           + "=desc&sort=activity&site=stackoverflow&filter=!9_bDE(fI5";
+  // The URL is in the pattern of stackoverlow.com/questions/question_id/title.
+  // The ID_INDEX help retrieve the question_id from parsed URL.
   private static final int ID_INDEX = 2;
   private static final String ITEM_PARAMETER = "items";
   private static final String TITLE_PARAMETER = "title";
@@ -55,8 +57,7 @@ public final class StackOverflowClient {
     String answerBody = getAnswerBody(answerId);
     String description = getDescription(answerBody);
     String code = getCode(answerBody);
-    Card card = new Card(title, code, url, description);
-    return card;
+    return new Card(title, code, url, description);
   }
 
   /* Get the question id of passed in URL. */
@@ -71,29 +72,25 @@ public final class StackOverflowClient {
     return questionId;
   }
 
-  /* Get the question title using question id */
+  /* Return the question title using question id */
   private String getTitle(String questionId) {
     String searchUrl = String.format(SEARCH_URL_TEMPLATE, questionId);
-    String title = getResponse(searchUrl, TITLE_PARAMETER);
-    return title;
+    return getResponse(searchUrl, TITLE_PARAMETER);
   }
 
-  /* Get the most voted answer's id and store it in the card. */
+  /* Return the most voted answer's id. */
   private String getAnswerId(String questionId) {
     String questionUrl = String.format(QUESTION_URL_TEMPLATE, questionId);
-    String answerId = getResponse(questionUrl, ANSWER_ID_PARAMETER);
-    // Replace the question id by the answer id in order to retrieve the code body next.
-    return answerId;
+    return getResponse(questionUrl, ANSWER_ID_PARAMETER);
   }
 
   /* Get the content of the answer and store it in the card. */
   private String getAnswerBody(String answerId) {
     String answerUrl = String.format(ANSWER_URL_TEMPLATE, answerId);
-    String body = getResponse(answerUrl, BODY_PARAMETER);
-    return body;
+    return getResponse(answerUrl, BODY_PARAMETER);
   }
 
-  /* Get the description using return answer body. */
+  /* Return the description parsed from answer body. */
   private String getDescription(String body) {
     Document doc = Jsoup.parse(body);
     // Combine all description in the answer body.
@@ -108,7 +105,7 @@ public final class StackOverflowClient {
     return description;
   }
 
-  /* Get the code using return answer body. */
+  /* Return the code parsed from answer body. */
   private String getCode(String body) {
     Document doc = Jsoup.parse(body);
     // Combine all code in the answer body.
