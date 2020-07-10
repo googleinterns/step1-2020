@@ -84,7 +84,7 @@ public final class StackOverflowClient {
       // Replace the question id by the answer id in order to retrieve the code body next.
       return answerId;
     } catch (IOException e) {
-     return null;
+      return null;
     }
   }
 
