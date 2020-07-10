@@ -74,7 +74,6 @@ public final class StackOverflowClient {
   private String getTitle(String questionId) {
     String searchUrl = String.format(SEARCH_URL_TEMPLATE, questionId);
     return getResponse(searchUrl, TITLE_PARAMETER);
-
   }
 
   /* Return the most voted answer's id. */
