@@ -47,8 +47,11 @@ public final class StackOverflowClient {
       // Return null card if no valid card available.
       return null;
     }
-    String title = getTitle(questionId);
     String answerId = getAnswerId(questionId);
+    if (answerId == null) {
+      return null;
+    }
+    String title = getTitle(questionId);
     String answerBody = getAnswerBody(answerId);
     String description = getDescription(answerBody);
     String code = getCode(answerBody);
