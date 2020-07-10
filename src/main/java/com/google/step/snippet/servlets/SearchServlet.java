@@ -14,13 +14,11 @@
 
 package com.google.step.snippet.servlets;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.net.URLEncoder;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +27,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.json.JSONObject;
 
 /** Servlet that handles searches. */
@@ -40,9 +43,8 @@ public class SearchServlet extends HttpServlet {
   private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CSE_ID";
   private static final String API_KEY = "INSERT_API_KEY";
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
-
-  private final HttpClient httpClient =
-      HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
+  private static final String CSE_ITEMS = "items";
+  private static final String CSE_LINK = "link";
 
   private static String encodeValue(String value) {
     try {
@@ -98,26 +100,35 @@ public class SearchServlet extends HttpServlet {
       // TODO: Call scraping function to return JSON card content
     }
 
-    request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
+    response.setContentType("text/html;");
+    response.getWriter().println(allLinks);
   }
 
   private String getLink(String id, String query) {
-    String cse_request = CSE_URL + "?key=" + API_KEY + "&cx=" + id + "&q=" + query;
-    HttpRequest linkRequest =
-        HttpRequest.newBuilder()
-            .GET()
-            .uri(URI.create(cse_request))
-            .setHeader("User-Agent", "Java 11 HttpClient Bot")
-            .build();
-    HttpResponse<String> linkResponse;
+    String url = CSE_URL + "?key=" + API_KEY + "&cx=" + id + "&q=" + query;
     try {
-      linkResponse = httpClient.send(linkRequest, HttpResponse.BodyHandlers.ofString());
-    } catch (IOException | InterruptedException ex) {
+      CloseableHttpClient httpClient = HttpClients.createDefault();
+      CloseableHttpResponse response = httpClient.execute(new HttpGet(url));
+      HttpEntity entity = response.getEntity();
+      if (entity == null) {
+        return null;
+      }
+      BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()));
+      StringBuilder responseBody = new StringBuilder();
+      String line;
+      while ((line = reader.readLine()) != null) {
+        responseBody.append(line);
+      }
+      JSONObject json = new JSONObject(responseBody.toString());
+      if (!json.isNull(CSE_ITEMS) && !json.getJSONArray(CSE_ITEMS).isNull(0)) {
+        JSONObject obj = json.getJSONArray(CSE_ITEMS).getJSONObject(0);
+        if (!obj.isNull(CSE_LINK)) {
+          return obj.getString(CSE_LINK);
+        }
+      }
+      return null;
+    } catch (IOException e) {
       return null;
     }
-    /* Parse JSON of CSE SRP to retrieve link from only the first search result */
-    JSONObject obj = new JSONObject(linkResponse.body());
-    String link = obj.getJSONArray("items").getJSONObject(0).getString("link");
-    return link;
   }
 }
