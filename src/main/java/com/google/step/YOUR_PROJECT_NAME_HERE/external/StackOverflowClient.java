@@ -5,7 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
-import java.util.regex.*;
+import java.util.regex.Pattern;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -38,12 +38,13 @@ public final class StackOverflowClient {
 
   public Card search(String url) {
     try {
-      Card card = getQuestion(url);
-      if (card == null) {
-        return null;
-      }
-      card = getAnswerId(card);
-      card = getAnswer(card);
+      String questionId = getQuestionId(url);
+      String title = getTitle(questionId);
+      String answerId = getAnswerId(questionId);
+      String answerBody = getAnswerBody(answerId);
+      String description = getDescription(answerBody);
+      String code = getCode(answerBody);
+      Card card = new Card(title, code, url, description);
       return card;
     } catch (URISyntaxException e) {
       // Return null card if no valid card available.
@@ -51,9 +52,8 @@ public final class StackOverflowClient {
     }
   }
 
-  /* Get the question id based on URL from the CSE result. */
-  private Card getQuestion(String url) throws URISyntaxException {
-    Card card = new Card();
+  /* Get the question id of passed in URL. */
+  private String getQuestionId(String url) throws URISyntaxException {
     URI uri = new URI(url);
     // Parse the URL to get the question id.
     String[] segments = uri.getPath().split("/");
@@ -61,76 +61,79 @@ public final class StackOverflowClient {
     if (!Pattern.matches("[0-9]+", questionId)) {
       return null;
     }
+    return questionId;
+  }
+
+  /* Get the question title using question id */
+  private String getTitle(String questionId) {
     String searchUrl = String.format(SEARCH_URL_TEMPLATE, questionId);
     try {
-      JSONObject res = getResponse(searchUrl);
-      String title =
-          res.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(TITLE_PARAMETER).toString();
-      card.setLink(uri.toString());
-      // Store the id of the question in order to get the code body of the answer.
-      card.setCode(questionId);
-      card.setTitle(title);
+      String title = getResponse(searchUrl, TITLE_PARAMETER);
+      return title;
     } catch (IOException e) {
-      e.printStackTrace();
+      return null;
     }
-    return card;
   }
 
   /* Get the most voted answer's id and store it in the card. */
-  private Card getAnswerId(Card card) {
-    String questionUrl = String.format(QUESTION_URL_TEMPLATE, card.getCode());
+  private String getAnswerId(String questionId) {
+    String questionUrl = String.format(QUESTION_URL_TEMPLATE, questionId);
     try {
-      JSONObject res = getResponse(questionUrl);
-      String answerId =
-          res.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(ANSWER_ID_PARAMETER).toString();
+      String answerId = getResponse(questionUrl, ANSWER_ID_PARAMETER)
       // Replace the question id by the answer id in order to retrieve the code body next.
-      card.setCode(answerId);
+      return answerId;
     } catch (IOException e) {
-      e.printStackTrace();
+     return null;
     }
-    return card;
   }
 
   /* Get the content of the answer and store it in the card. */
-  private Card getAnswer(Card card) {
-    String answerUrl = String.format(ANSWER_URL_TEMPLATE, card.getCode());
+  private String getAnswerBody(String answerId) {
+    String answerUrl = String.format(ANSWER_URL_TEMPLATE, answerId);
     try {
-      JSONObject res = getResponse(answerUrl);
-      String body =
-          res.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(BODY_PARAMETER).toString();
-      Document doc = Jsoup.parse(body);
-      // Combine all description in the answer body.
-      Elements descriptionHtml = doc.select("p");
-      String description = "";
-      for (Element e : descriptionHtml) {
-        description += e.outerHtml();
-      }
-      if (description.length() >= 200) {
-        description = description.substring(0, DESCRIPTION_LENGTH_PARAMETER);
-      }
-      // Combine all code in the answer body.
-      Elements codeHtml = doc.select(CODE_PARAMETER);
-      String code = "";
-      for (Element e : codeHtml) {
-        code += e.outerHtml();
-      }
-      card.setDescription(description);
-      card.setCode(code);
+      String body = getResponse(answerUrl, BODY_PARAMETER);
+      return body;
     } catch (IOException e) {
-      e.printStackTrace();
+      return null;
     }
-    return card;
   }
 
-  private JSONObject getResponse(String url) throws IOException {
+  /* Get the description using return answer body. */
+  private String getDescription(String body) {
+    Document doc = Jsoup.parse(body);
+    // Combine all description in the answer body.
+    Elements descriptionHtml = doc.select("p");
+    String description = "";
+    for (Element e : descriptionHtml) {
+      description += e.outerHtml();
+    }
+    if (description.length() >= DESCRIPTION_LENGTH_PARAMETER) {
+      description = description.substring(0, DESCRIPTION_LENGTH_PARAMETER);
+    }
+    return description;
+  }
+
+  /* Get the code using return answer body. */
+  private String getCode(String body) {
+    Document doc = Jsoup.parse(body);
+    // Combine all code in the answer body.
+    Elements codeHtml = doc.select(CODE_PARAMETER);
+    String code = "";
+    for (Element e : codeHtml) {
+      code += e.outerHtml();
+    }
+    return code;
+  }
+
+  private String getResponse(String url, String fieldParam) throws IOException {
     CloseableHttpClient httpClient = HttpClients.createDefault();
     CloseableHttpResponse response = httpClient.execute(new HttpGet(url));
     if (response.getStatusLine().getStatusCode() != 200) {
-      return new JSONObject();
+      return null;
     }
     HttpEntity entity = response.getEntity();
     if (entity == null) {
-      return new JSONObject();
+      return null;
     }
     BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()));
     StringBuilder responseBody = new StringBuilder();
@@ -138,6 +141,8 @@ public final class StackOverflowClient {
     while ((line = reader.readLine()) != null) {
       responseBody.append(line);
     }
-    return new JSONObject(responseBody.toString());
+    JSONObject json = new JSONObject(responseBody.toString());
+    String res = json.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(fieldParam).toString();
+    return res;
   }
 }
