@@ -73,7 +73,8 @@ public final class StackOverflowClient {
   /* Return the question title using question id */
   private String getTitle(String questionId) {
     String searchUrl = String.format(SEARCH_URL_TEMPLATE, questionId);
-    return getResponse(searchUrl, TITLE_PARAMETER);;
+    return getResponse(searchUrl, TITLE_PARAMETER);
+
   }
 
   /* Return the most voted answer's id. */
