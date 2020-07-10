@@ -30,6 +30,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
+import com.google.step.YOUR_PROJECT_NAME_HERE.data.Card;
+import com.google.step.YOUR_PROJECT_NAME_HERE.external.StackOverflowClient;
+import com.google.step.YOUR_PROJECT_NAME_HERE.external.W3SchoolClient;
+import com.google.gson.Gson;
 
 /** Servlet that handles searches. */
 @WebServlet("/search")
@@ -42,7 +46,7 @@ public class SearchServlet extends HttpServlet {
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
 
   private final HttpClient httpClient =
-      HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
+          HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
 
   private static String encodeValue(String value) {
     try {
@@ -54,7 +58,7 @@ public class SearchServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws IOException, ServletException {
+          throws IOException, ServletException {
     String param = request.getParameter("q");
     if (param == null || encodeValue(param) == null) {
       response.setContentType("text/html;");
@@ -64,6 +68,7 @@ public class SearchServlet extends HttpServlet {
 
     String query = encodeValue(param);
     List<String> allLinks = new ArrayList<>();
+    List<Card> allCards = new ArrayList<>();
 
     // TODO: after implementing scraping, consider changing getLink calls to a
     // for-loop
@@ -75,6 +80,11 @@ public class SearchServlet extends HttpServlet {
     String w3Link = getLink(W3_CSE_ID, query);
     if (w3Link != null) {
       allLinks.add(w3Link);
+      W3SchoolClient w3Client = new W3SchoolClient();
+      Card w3Card = w3Client.search(w3Link);
+      if (w3Card != null) {
+        allCards.add(w3Card);
+      }
       // TODO: Call scraping function to return JSON card content
     }
 
@@ -85,6 +95,11 @@ public class SearchServlet extends HttpServlet {
     String stackLink = getLink(STACK_CSE_ID, query);
     if (stackLink != null) {
       allLinks.add(stackLink);
+      StackOverflowClient soClient = new StackOverflowClient();
+      Card soCard = soClient.search(stackLink);
+      if (soCard != null) {
+        allCards.add(soCard);
+      }
       // TODO: Call stackoverflow API to return JSON card content
     }
 
@@ -98,18 +113,21 @@ public class SearchServlet extends HttpServlet {
       // TODO: Call scraping function to return JSON card content
     }
 
-    response.setContentType("text/html;");
+    response.setContentType("application/json;");
     response.getWriter().println(allLinks);
+
+    String json = convertToJson(allCards);
+    response.getWriter().println(json);
   }
 
   private String getLink(String id, String query) {
     String cse_request = CSE_URL + "?key=" + API_KEY + "&cx=" + id + "&q=" + query;
     HttpRequest linkRequest =
-        HttpRequest.newBuilder()
-            .GET()
-            .uri(URI.create(cse_request))
-            .setHeader("User-Agent", "Java 11 HttpClient Bot")
-            .build();
+            HttpRequest.newBuilder()
+                    .GET()
+                    .uri(URI.create(cse_request))
+                    .setHeader("User-Agent", "Java 11 HttpClient Bot")
+                    .build();
     HttpResponse<String> linkResponse;
     try {
       linkResponse = httpClient.send(linkRequest, HttpResponse.BodyHandlers.ofString());
@@ -120,5 +138,10 @@ public class SearchServlet extends HttpServlet {
     JSONObject obj = new JSONObject(linkResponse.body());
     String link = obj.getJSONArray("items").getJSONObject(0).getString("link");
     return link;
+  }
+
+  private String convertToJson(List<Card> cards) {
+    Gson gson = new Gson();
+    return gson.toJson(cards);
   }
 }
