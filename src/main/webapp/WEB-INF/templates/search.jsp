@@ -6,7 +6,7 @@
 <html>
   <head>
     <t:head/>
-    <title>YOUR_PROJECT_NAME_HERE</title>
+    <title>Snippet</title>
   </head>
   <body>
     <t:base/>
