@@ -50,7 +50,7 @@ public final class StackOverflowClient {
     String title = getTitle(questionId);
     String answerId = getAnswerId(questionId);
     // If there is no answer to the question, return a null card
-    if(answerId == null) {
+    if (answerId == null) {
       return null;
     }
     String answerBody = getAnswerBody(answerId);
