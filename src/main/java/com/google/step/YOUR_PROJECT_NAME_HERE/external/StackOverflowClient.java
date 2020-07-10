@@ -34,6 +34,7 @@ public final class StackOverflowClient {
   private static final String BODY_PARAMETER = "body";
   private static final String CODE_PARAMETER = "code";
   private static final String ANSWER_ID_PARAMETER = "answer_id";
+  // Set 200 to be the maximum length of description for MVP.
   private static final int DESCRIPTION_LENGTH_PARAMETER = 200;
 
   public Card search(String url) {
@@ -79,7 +80,7 @@ public final class StackOverflowClient {
   private String getAnswerId(String questionId) {
     String questionUrl = String.format(QUESTION_URL_TEMPLATE, questionId);
     try {
-      String answerId = getResponse(questionUrl, ANSWER_ID_PARAMETER)
+      String answerId = getResponse(questionUrl, ANSWER_ID_PARAMETER);
       // Replace the question id by the answer id in order to retrieve the code body next.
       return answerId;
     } catch (IOException e) {
