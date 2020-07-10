@@ -1,6 +1,6 @@
-package com.google.step.YOUR_PROJECT_NAME_HERE.external;
+package com.google.step.snippet.external;
 
-import com.google.step.YOUR_PROJECT_NAME_HERE.data.Card;
+import com.google.step.snippet.data.Card;
 import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
