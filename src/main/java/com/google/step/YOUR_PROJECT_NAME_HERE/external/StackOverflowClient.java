@@ -49,7 +49,7 @@ public final class StackOverflowClient {
     }
     String title = getTitle(questionId);
     String answerId = getAnswerId(questionId);
-    // If there is no answer to the question, return a null card
+    // If there is no answer to the question, return a null card.
     if (answerId == null) {
       return null;
     }
@@ -120,6 +120,7 @@ public final class StackOverflowClient {
     return code;
   }
 
+  /* Get response from StackExchange API using certain url. */
   private String getResponse(String url, String fieldParam) {
     try {
       CloseableHttpClient httpClient = HttpClients.createDefault();
