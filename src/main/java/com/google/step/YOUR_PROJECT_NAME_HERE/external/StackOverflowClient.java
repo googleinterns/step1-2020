@@ -1,6 +1,6 @@
 package com.google.step.snippet.external;
 
-import com.google.step.YOUR_PROJECT_NAME_HERE.data.Card;
+import com.google.step.snippet.data.Card;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
