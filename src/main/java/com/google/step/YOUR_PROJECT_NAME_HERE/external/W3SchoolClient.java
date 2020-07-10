@@ -13,7 +13,6 @@ public final class W3SchoolClient {
   private static final String CARD_CODE_ID = "w3-code";
 
   public Card search(String w3Link) {
-
     Document doc;
     try {
       doc = Jsoup.connect(w3Link).get();
@@ -21,19 +20,21 @@ public final class W3SchoolClient {
       Elements descriptions = doc.getElementsByTag(CARD_DESC_ID);
       Elements snippets = doc.getElementsByClass(CARD_SNIPPET_ID);
 
-      String title = "";
-      String description = "";
-      String code = "";
+      if (titles.isEmpty() || titles.first().text().isEmpty()) {
+        return null;
+      }
+      if (descriptions.isEmpty() || descriptions.first().text().isEmpty()) {
+        return null;
+      }
+      if (snippets.isEmpty()
+          || snippets.first().getElementsByClass(CARD_CODE_ID).text().isEmpty()) {
+        return null;
+      }
+      String title = titles.first().text();
+      String description = descriptions.first().text();
+      String code = snippets.first().getElementsByClass(CARD_CODE_ID).text();
 
-      if (!titles.isEmpty() && !descriptions.isEmpty() && !snippets.isEmpty()) {
-        title = titles.first().text();
-        description = descriptions.first().text();
-        code = snippets.first().getElementsByClass(CARD_CODE_ID).text();
-      }
-      if (!title.isEmpty() && !description.isEmpty() && !code.isEmpty()) {
-        return new Card(title, code, w3Link, description);
-      }
-      return null;
+      return new Card(title, code, w3Link, description);
     } catch (IOException e) {
       return null;
     }
