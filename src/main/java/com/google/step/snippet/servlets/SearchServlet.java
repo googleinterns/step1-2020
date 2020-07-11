@@ -100,35 +100,48 @@ public class SearchServlet extends HttpServlet {
       // TODO: Call scraping function to return JSON card content
     }
 
-    response.setContentType("text/html;");
-    response.getWriter().println(allLinks);
+    request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
 
   private String getLink(String id, String query) {
     String url = CSE_URL + "?key=" + API_KEY + "&cx=" + id + "&q=" + query;
+    CloseableHttpClient httpClient = HttpClients.createDefault();
+    CloseableHttpResponse response;
     try {
-      CloseableHttpClient httpClient = HttpClients.createDefault();
-      CloseableHttpResponse response = httpClient.execute(new HttpGet(url));
-      HttpEntity entity = response.getEntity();
-      if (entity == null) {
-        return null;
-      }
-      BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()));
-      StringBuilder responseBody = new StringBuilder();
-      String line;
-      while ((line = reader.readLine()) != null) {
-        responseBody.append(line);
-      }
-      JSONObject json = new JSONObject(responseBody.toString());
-      if (!json.isNull(CSE_ITEMS) && !json.getJSONArray(CSE_ITEMS).isNull(0)) {
-        JSONObject obj = json.getJSONArray(CSE_ITEMS).getJSONObject(0);
-        if (!obj.isNull(CSE_LINK)) {
-          return obj.getString(CSE_LINK);
-        }
-      }
-      return null;
+      response = httpClient.execute(new HttpGet(url));
     } catch (IOException e) {
       return null;
     }
+    if (response.getStatusLine().getStatusCode() != 200) {
+      return null;
+    }
+    HttpEntity entity = response.getEntity();
+    if (entity == null) {
+      return null;
+    }
+    BufferedReader reader;
+    try {
+      reader = new BufferedReader(new InputStreamReader(entity.getContent()));
+    } catch (IOException e) {
+      return null;
+    }
+    StringBuilder responseBody = new StringBuilder();
+    String line;
+    try {
+      while ((line = reader.readLine()) != null) {
+        responseBody.append(line);
+      }
+      reader.close();
+    } catch (IOException e) {
+      return null;
+    }
+    JSONObject json = new JSONObject(responseBody.toString());
+    if (!json.isNull(CSE_ITEMS) && !json.getJSONArray(CSE_ITEMS).isNull(0)) {
+      JSONObject obj = json.getJSONArray(CSE_ITEMS).getJSONObject(0);
+      if (!obj.isNull(CSE_LINK)) {
+        return obj.getString(CSE_LINK);
+      }
+    }
+    return null;
   }
 }
