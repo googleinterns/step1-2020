@@ -37,16 +37,13 @@ public final class StackOverflowClient {
   private static final String CODE_PARAMETER = "code";
   private static final String ANSWER_ID_PARAMETER = "answer_id";
   // Set 200 to be the maximum length of description for MVP.
-  private static final int DESCRIPTION_LENGTH_PARAMETER = 200;
+  private static final int MAX_DESCRIPTION_LENGTH = 200;
 
   /* This method build the desired card after getting each field. */
   /* It will return a null card if no valid question is found */
   public Card search(String url) {
-    String questionId;
-    try {
-      questionId = getQuestionId(url);
-    } catch (URISyntaxException e) {
-      // Return null card if no valid card available.
+    String questionId = getQuestionId(url);
+    if (questionId == null) {
       return null;
     }
     String answerId = getAnswerId(questionId);
@@ -55,14 +52,23 @@ public final class StackOverflowClient {
     }
     String title = getTitle(questionId);
     String answerBody = getAnswerBody(answerId);
+    if (title == null || answerBody == null) {
+      return null;
+    }
+    // No description or code is allowed for StackOverflow.
     String description = getDescription(answerBody);
     String code = getCode(answerBody);
     return new Card(title, code, url, description);
   }
 
   /* Get the question id of passed in URL. */
-  private String getQuestionId(String url) throws URISyntaxException {
-    URI uri = new URI(url);
+  private String getQuestionId(String url) {
+    URI uri;
+    try {
+      uri = new URI(url);
+    } catch (URISyntaxException e) {
+      return null;
+    }
     // Parse the URL to get the question id.
     String[] segments = uri.getPath().split("/");
     String questionId = segments[ID_INDEX];
@@ -72,16 +78,16 @@ public final class StackOverflowClient {
     return questionId;
   }
 
-  /* Return the question title using question id */
-  private String getTitle(String questionId) {
-    String searchUrl = String.format(SEARCH_URL_TEMPLATE, questionId);
-    return getResponse(searchUrl, TITLE_PARAMETER);
-  }
-
   /* Return the most voted answer's id. */
   private String getAnswerId(String questionId) {
     String questionUrl = String.format(QUESTION_URL_TEMPLATE, questionId);
     return getResponse(questionUrl, ANSWER_ID_PARAMETER);
+  }
+
+  /* Return the question title using question id */
+  private String getTitle(String questionId) {
+    String searchUrl = String.format(SEARCH_URL_TEMPLATE, questionId);
+    return getResponse(searchUrl, TITLE_PARAMETER);
   }
 
   /* Get the content of the answer and store it in the card. */
@@ -98,9 +104,10 @@ public final class StackOverflowClient {
     String description = "";
     for (Element e : descriptionHtml) {
       description += e.outerHtml();
-    }
-    if (description.length() >= DESCRIPTION_LENGTH_PARAMETER) {
-      description = description.substring(0, DESCRIPTION_LENGTH_PARAMETER);
+      if (description.length() >= MAX_DESCRIPTION_LENGTH) {
+        description = description.substring(0, MAX_DESCRIPTION_LENGTH);
+        break;
+      }
     }
     return description;
   }
@@ -118,32 +125,41 @@ public final class StackOverflowClient {
   }
 
   private String getResponse(String url, String fieldParam) {
+    CloseableHttpClient httpClient = HttpClients.createDefault();
+    CloseableHttpResponse response;
     try {
-      CloseableHttpClient httpClient = HttpClients.createDefault();
-      CloseableHttpResponse response = httpClient.execute(new HttpGet(url));
-      if (response.getStatusLine().getStatusCode() != 200) {
-        return null;
-      }
-      HttpEntity entity = response.getEntity();
-      if (entity == null) {
-        return null;
-      }
-      BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()));
-      StringBuilder responseBody = new StringBuilder();
-      String line;
-      try {
-        while ((line = reader.readLine()) != null) {
-          responseBody.append(line);
-        }
-        reader.close();
-      } catch (IOException e) {
-        return null;
-      }
-      JSONObject json = new JSONObject(responseBody.toString());
-      String res = json.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(fieldParam).toString();
-      return res;
+      response = httpClient.execute(new HttpGet(url));
     } catch (IOException e) {
       return null;
     }
+    if (response.getStatusLine().getStatusCode() != 200) {
+      return null;
+    }
+    HttpEntity entity = response.getEntity();
+    if (entity == null) {
+      return null;
+    }
+    BufferedReader reader;
+    try {
+      reader = new BufferedReader(new InputStreamReader(entity.getContent()));
+    } catch (IOException e) {
+      return null;
+    }
+    StringBuilder responseBody = new StringBuilder();
+    String line;
+    try {
+      while ((line = reader.readLine()) != null) {
+        responseBody.append(line);
+      }
+      reader.close();
+    } catch (IOException e) {
+      return null;
+    }
+    JSONObject json = new JSONObject(responseBody.toString());
+    String res = json.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(fieldParam).toString();
+    if (response.getStatusLine().getStatusCode() != 200) {
+      return null;
+    }
+    return res;
   }
 }
