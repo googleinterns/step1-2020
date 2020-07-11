@@ -1,4 +1,4 @@
-package com.google.step.YOUR_PROJECT_NAME_HERE.data;
+package com.google.step.snippet.data;
 
 public final class Card {
   private String title;

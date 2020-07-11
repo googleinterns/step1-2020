@@ -1,10 +1,11 @@
-package com.google.step.YOUR_PROJECT_NAME_HERE.external;
+package com.google.step.snippet.external;
 
-import com.google.step.YOUR_PROJECT_NAME_HERE.data.Card;
+import com.google.step.snippet.data.Card;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.regex.Pattern;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -24,10 +25,12 @@ public final class StackOverflowClient {
   private static final String QUESTION_URL_TEMPLATE =
       "https://api.stackexchange.com/2.2/questions/%s/answers?"
           + "order=desc&sort=votes&site=stackoverflow";
-  // This url specify filter to generate answer body.
+  // This URL specifies a custom StackExchange API filter that generates answer body.
   private static final String ANSWER_URL_TEMPLATE =
       "https://api.stackexchange.com/2.2/answers/%s?order"
           + "=desc&sort=activity&site=stackoverflow&filter=!9_bDE(fI5";
+  // The URL is in the pattern of stackoverlow.com/questions/question_id/title.
+  // The ID_INDEX help retrieve the question_id from parsed URL.
   private static final int ID_INDEX = 2;
   private static final String ITEM_PARAMETER = "items";
   private static final String TITLE_PARAMETER = "title";
@@ -35,30 +38,38 @@ public final class StackOverflowClient {
   private static final String CODE_PARAMETER = "code";
   private static final String ANSWER_ID_PARAMETER = "answer_id";
   // Set 200 to be the maximum length of description for MVP.
-  private static final int DESCRIPTION_LENGTH_PARAMETER = 200;
+  private static final int MAX_DESCRIPTION_LENGTH = 200;
 
   /* This method build the desired card after getting each field. */
   /* It will return a null card if no valid question is found */
   public Card search(String url) {
-    String questionId;
-    try {
-      questionId = getQuestionId(url);
-    } catch (URISyntaxException e) {
-      // Return null card if no valid card available.
+    String questionId = getQuestionId(url);
+    if (questionId == null) {
+      return null;
+    }
+    String answerId = getAnswerId(questionId);
+    if (answerId == null) {
       return null;
     }
     String title = getTitle(questionId);
-    String answerId = getAnswerId(questionId);
     String answerBody = getAnswerBody(answerId);
+    if (title == null || answerBody == null) {
+      return null;
+    }
+    // No description or code is allowed for StackOverflow.
     String description = getDescription(answerBody);
     String code = getCode(answerBody);
-    Card card = new Card(title, code, url, description);
-    return card;
+    return new Card(title, code, url, description);
   }
 
   /* Get the question id of passed in URL. */
-  private String getQuestionId(String url) throws URISyntaxException {
-    URI uri = new URI(url);
+  private String getQuestionId(String url) {
+    URI uri;
+    try {
+      uri = new URI(url);
+    } catch (URISyntaxException e) {
+      return null;
+    }
     // Parse the URL to get the question id.
     String[] segments = uri.getPath().split("/");
     String questionId = segments[ID_INDEX];
@@ -68,29 +79,25 @@ public final class StackOverflowClient {
     return questionId;
   }
 
-  /* Get the question title using question id */
-  private String getTitle(String questionId) {
-    String searchUrl = String.format(SEARCH_URL_TEMPLATE, questionId);
-    String title = getResponse(searchUrl, TITLE_PARAMETER);
-    return title;
-  }
-
-  /* Get the most voted answer's id and store it in the card. */
+  /* Return the most voted answer's id. */
   private String getAnswerId(String questionId) {
     String questionUrl = String.format(QUESTION_URL_TEMPLATE, questionId);
-    String answerId = getResponse(questionUrl, ANSWER_ID_PARAMETER);
-    // Replace the question id by the answer id in order to retrieve the code body next.
-    return answerId;
+    return getResponse(questionUrl, ANSWER_ID_PARAMETER);
+  }
+
+  /* Return the question title using question id */
+  private String getTitle(String questionId) {
+    String searchUrl = String.format(SEARCH_URL_TEMPLATE, questionId);
+    return getResponse(searchUrl, TITLE_PARAMETER);
   }
 
   /* Get the content of the answer and store it in the card. */
   private String getAnswerBody(String answerId) {
     String answerUrl = String.format(ANSWER_URL_TEMPLATE, answerId);
-    String body = getResponse(answerUrl, BODY_PARAMETER);
-    return body;
+    return getResponse(answerUrl, BODY_PARAMETER);
   }
 
-  /* Get the description using return answer body. */
+  /* Return the description parsed from answer body. */
   private String getDescription(String body) {
     Document doc = Jsoup.parse(body);
     // Combine all description in the answer body.
@@ -98,14 +105,15 @@ public final class StackOverflowClient {
     String description = "";
     for (Element e : descriptionHtml) {
       description += e.outerHtml();
-    }
-    if (description.length() >= DESCRIPTION_LENGTH_PARAMETER) {
-      description = description.substring(0, DESCRIPTION_LENGTH_PARAMETER);
+      if (description.length() >= MAX_DESCRIPTION_LENGTH) {
+        description = description.substring(0, MAX_DESCRIPTION_LENGTH);
+        break;
+      }
     }
     return description;
   }
 
-  /* Get the code using return answer body. */
+  /* Return the code parsed from answer body. */
   private String getCode(String body) {
     Document doc = Jsoup.parse(body);
     // Combine all code in the answer body.
@@ -118,32 +126,41 @@ public final class StackOverflowClient {
   }
 
   private String getResponse(String url, String fieldParam) {
+    CloseableHttpClient httpClient = HttpClients.createDefault();
+    CloseableHttpResponse response;
     try {
-      CloseableHttpClient httpClient = HttpClients.createDefault();
-      CloseableHttpResponse response = httpClient.execute(new HttpGet(url));
-      if (response.getStatusLine().getStatusCode() != 200) {
-        return null;
-      }
-      HttpEntity entity = response.getEntity();
-      if (entity == null) {
-        return null;
-      }
-      BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()));
-      StringBuilder responseBody = new StringBuilder();
-      String line;
-      try {
-        while ((line = reader.readLine()) != null) {
-          responseBody.append(line);
-        }
-        reader.close();
-      } catch (IOException e) {
-        return null;
-      }
-      JSONObject json = new JSONObject(responseBody.toString());
-      String res = json.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(fieldParam).toString();
-      return res;
+      response = httpClient.execute(new HttpGet(url));
     } catch (IOException e) {
       return null;
     }
+    if (response.getStatusLine().getStatusCode() != 200) {
+      return null;
+    }
+    HttpEntity entity = response.getEntity();
+    if (entity == null) {
+      return null;
+    }
+    BufferedReader reader;
+    try {
+      reader = new BufferedReader(new InputStreamReader(entity.getContent()));
+    } catch (IOException e) {
+      return null;
+    }
+    StringBuilder responseBody = new StringBuilder();
+    String line;
+    try {
+      while ((line = reader.readLine()) != null) {
+        responseBody.append(line);
+      }
+      reader.close();
+    } catch (IOException e) {
+      return null;
+    }
+    JSONObject json = new JSONObject(responseBody.toString());
+    String res = json.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(fieldParam).toString();
+    if (response.getStatusLine().getStatusCode() != 200) {
+      return null;
+    }
+    return res;
   }
 }

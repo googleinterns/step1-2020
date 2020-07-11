@@ -3,8 +3,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <!-- TODO: set project name. -->
-  <groupId>com.google.step.YOUR_PROJECT_NAME_HERE</groupId>
+  <groupId>com.google.step.snippet</groupId>
   <artifactId>webapp</artifactId>
   <version>1</version>
   <packaging>war</packaging>
@@ -35,11 +34,6 @@
       <version>20200518</version>
     </dependency>
     <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.8.6</version>
-    </dependency>
-    <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
       <version>4.5.10</version>
@@ -60,8 +54,7 @@
         <artifactId>appengine-maven-plugin</artifactId>
         <version>2.2.0</version>
         <configuration>
-          <!-- TODO: set project ID. -->
-          <deploy.projectId>YOUR_PROJECT_ID_HERE</deploy.projectId>
+          <deploy.projectId>step1-2020</deploy.projectId>
           <deploy.version>1</deploy.version>
         </configuration>
       </plugin>
