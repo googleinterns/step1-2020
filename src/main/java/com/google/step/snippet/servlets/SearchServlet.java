@@ -109,9 +109,7 @@ public class SearchServlet extends HttpServlet {
       // TODO: Call scraping function to return JSON card content
     }
     */
-    Gson gson = new Gson();
-    response.setContentType("application/json");
-    response.getWriter().println(gson.toJson(cards));
+    request.setAttribute("card_list", cards);
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
 

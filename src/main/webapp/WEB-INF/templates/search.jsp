@@ -1,4 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="com.google.step.snippet.data.Card"%> 
+<%@page import="java.util.ArrayList"%> 
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
@@ -16,6 +18,7 @@
         <div class="gcse-searchresults-only"></div>
       </div>
       <div class="srp-child">
+        <%ArrayList<Card> cards =  (ArrayList<Card>)request.getAttribute("card_list");%>
       </div>
     </div>
   </body>
