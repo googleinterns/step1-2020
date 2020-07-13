@@ -14,6 +14,7 @@
 
 package com.google.step.YOUR_PROJECT_NAME_HERE.servlets;
 
+import com.google.gson.Gson;
 import com.google.step.YOUR_PROJECT_NAME_HERE.data.Card;
 import com.google.step.YOUR_PROJECT_NAME_HERE.external.StackOverflowClient;
 import java.io.IOException;
@@ -105,7 +106,7 @@ public class SearchServlet extends HttpServlet {
 
     Gson gson = new Gson();
     response.setContentType("application/json");
-    response.getWriter().println(gson.Json(cards));
+    response.getWriter().println(gson.toJson(cards));
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
 

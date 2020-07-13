@@ -5,3 +5,7 @@ h3 {
 .srp-container {
   display: flex;
 }
+
+.srp-child {
+  flex: 0 0 50%;
+}

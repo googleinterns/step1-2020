@@ -12,8 +12,11 @@
     <t:base/>
     <div class="gcse-searchbox-only" data-resultsUrl="/search"></div>
     <div class="srp-container">
-      <div class="gcse-searchresults-only"></div>
-      <div>test</div>
+      <div class="srp-child">
+        <div class="gcse-searchresults-only"></div>
+      </div>
+      <div class="srp-child">
+      </div>
     </div>
   </body>
 </html>
