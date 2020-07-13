@@ -68,7 +68,7 @@ public class SearchServlet extends HttpServlet {
 
     String query = encodeValue(param);
     //List<String> allLinks = new ArrayList<>();
-    List<Card> cards = new ArrayList<>();
+    List<Card> allCards = new ArrayList<>();
 
     // TODO: after implementing scraping, consider changing getLink calls to a
     // for-loop
@@ -81,7 +81,7 @@ public class SearchServlet extends HttpServlet {
     if (w3Link != null) {
       W3SchoolClient client = new W3SchoolClient();
       Card w3Card = client.search(w3Link);
-      cards.add(w3Card);
+      allCards.add(w3Card);
       // allLinks.add(w3Link);
       // TODO: Call scraping function to return JSON card content
     }
@@ -95,7 +95,7 @@ public class SearchServlet extends HttpServlet {
       // allLinks.add(stackLink);
       StackOverflowClient stackClient = new StackOverflowClient();
       Card stackCard = stackClient.search(stackLink);
-      cards.add(stackCard);
+      allCards.add(stackCard);
     }
 
     /*
@@ -109,7 +109,7 @@ public class SearchServlet extends HttpServlet {
       // TODO: Call scraping function to return JSON card content
     }
     */
-    request.setAttribute("card_list", cards);
+    request.setAttribute("card_list", allCards);
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
 
