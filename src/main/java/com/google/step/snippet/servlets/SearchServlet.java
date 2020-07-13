@@ -136,6 +136,11 @@ public class SearchServlet extends HttpServlet {
       return null;
     }
     JSONObject json = new JSONObject(responseBody.toString());
+
+    if (response.getStatusLine().getStatusCode() != 200) {
+      return null;
+    }
+
     if (!json.isNull(CSE_ITEMS) && !json.getJSONArray(CSE_ITEMS).isNull(0)) {
       JSONObject obj = json.getJSONArray(CSE_ITEMS).getJSONObject(0);
       if (!obj.isNull(CSE_LINK)) {
