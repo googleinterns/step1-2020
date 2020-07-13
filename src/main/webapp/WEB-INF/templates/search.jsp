@@ -29,6 +29,9 @@
               <p><%=cards.get(0).getDescription()%></p>
             </div>
           </div>
+          <!--
+          #TODO: Add two more cards to display.
+          -->
       </div>
     </div>
   </body>
