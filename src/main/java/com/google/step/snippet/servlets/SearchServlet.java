@@ -102,13 +102,8 @@ public class SearchServlet extends HttpServlet {
      * Send request to retrieve card content through GeeksForGeeks site link from
      * Google CSE
      */
-    /*
-    String geeksLink = getLink(GEEKS_CSE_ID, query);
-    if (geeksLink != null) {
-      allLinks.add(geeksLink);
-      // TODO: Call scraping function to return JSON card content
-    }
-    */
+    // String geeksLink = getLink(GEEKS_CSE_ID, query);
+    
     request.setAttribute("card_list", allCards);
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
