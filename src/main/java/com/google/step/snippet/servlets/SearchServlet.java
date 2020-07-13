@@ -66,7 +66,6 @@ public class SearchServlet extends HttpServlet {
     }
 
     String query = encodeValue(param);
-    //List<String> allLinks = new ArrayList<>();
     List<Card> allCards = new ArrayList<>();
 
     // TODO: after implementing scraping, consider changing getLink calls to a
@@ -102,9 +101,7 @@ public class SearchServlet extends HttpServlet {
      * Google CSE
      */
     String geeksLink = getLink(GEEKS_CSE_ID, query);
-    if (geeksLink != null) {
-      
-    }
+    if (geeksLink != null) {}
     
     request.setAttribute("card_list", allCards);
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
