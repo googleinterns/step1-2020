@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.step.YOUR_PROJECT_NAME_HERE.servlets;
+package com.google.step.snippet.servlets;
 
 import java.io.IOException;
 import java.util.Date;

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.step.YOUR_PROJECT_NAME_HERE.servlets;
+package com.google.step.snippet.servlets;
 
 import com.google.gson.Gson;
 import com.google.step.YOUR_PROJECT_NAME_HERE.data.Card;
@@ -107,7 +107,6 @@ public class SearchServlet extends HttpServlet {
     Gson gson = new Gson();
     response.setContentType("application/json");
     response.getWriter().println(gson.toJson(cards));
-    request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
 
   private String getLink(String id, String query) {
