@@ -15,8 +15,8 @@
 package com.google.step.snippet.servlets;
 
 import com.google.gson.Gson;
-import com.google.step.YOUR_PROJECT_NAME_HERE.data.Card;
-import com.google.step.YOUR_PROJECT_NAME_HERE.external.StackOverflowClient;
+import com.google.step.snippet.data.Card;
+import com.google.step.snippet.external.StackOverflowClient;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
