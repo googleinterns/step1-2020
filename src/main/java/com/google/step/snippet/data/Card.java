@@ -12,4 +12,20 @@ public final class Card {
     this.link = link;
     this.description = description;
   }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public String getCode() {
+    return code;
+  }
+
+  public String getLink() {
+    return link;
+  }
+
+  public String getDescription() {
+    return description;
+  }
 }
