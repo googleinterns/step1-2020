@@ -107,37 +107,37 @@ public class SearchServlet extends HttpServlet {
 
   private String getLink(String id, String query) {
     String url = CSE_URL + "?key=" + API_KEY + "&cx=" + id + "&q=" + query;
-    CloseableHttpClient httpClient = HttpClients.createDefault();
-    CloseableHttpResponse response;
-    try {
-      response = httpClient.execute(new HttpGet(url));
+    try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+      try (CloseableHttpResponse response = httpClient.execute(new HttpGet(url))) {
+
+        if (response.getStatusLine().getStatusCode() != 200) {
+          return null;
+        }
+        HttpEntity entity = response.getEntity();
+        if (entity == null) {
+          return null;
+        }
+        JsonParser parser = new JsonParser();
+        JsonObject obj;
+        try {
+          obj = parser.parse(new InputStreamReader(entity.getContent())).getAsJsonObject();
+        } catch (JsonIOException
+            | JsonSyntaxException
+            | UnsupportedOperationException
+            | IOException e) {
+          return null;
+        }
+        if (!obj.isJsonNull()
+            && !obj.get(CSE_ITEMS).getAsJsonArray().isJsonNull()
+            && obj.get(CSE_ITEMS).getAsJsonArray().size() > 0) {
+          JsonObject item = obj.get(CSE_ITEMS).getAsJsonArray().get(0).getAsJsonObject();
+          if (!item.isJsonNull() && !item.get(CSE_LINK).isJsonNull()) {
+            return item.get(CSE_LINK).getAsString();
+          }
+        }
+      }
     } catch (IOException e) {
       return null;
-    }
-    if (response.getStatusLine().getStatusCode() != 200) {
-      return null;
-    }
-    HttpEntity entity = response.getEntity();
-    if (entity == null) {
-      return null;
-    }
-    JsonParser parser = new JsonParser();
-    JsonObject obj;
-    try {
-      obj = parser.parse(new InputStreamReader(entity.getContent())).getAsJsonObject();
-    } catch (JsonIOException
-        | JsonSyntaxException
-        | UnsupportedOperationException
-        | IOException e) {
-      return null;
-    }
-    if (!obj.isJsonNull()
-        && !obj.get(CSE_ITEMS).getAsJsonArray().isJsonNull()
-        && obj.get(CSE_ITEMS).getAsJsonArray().size() > 0) {
-      JsonObject item = obj.get(CSE_ITEMS).getAsJsonArray().get(0).getAsJsonObject();
-      if (!item.isJsonNull() && !item.get(CSE_LINK).isJsonNull()) {
-        return item.get(CSE_LINK).getAsString();
-      }
     }
     return null;
   }
