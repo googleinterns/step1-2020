@@ -14,8 +14,10 @@
 
 package com.google.step.snippet.servlets;
 
+import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -119,19 +121,23 @@ public class SearchServlet extends HttpServlet {
     if (entity == null) {
       return null;
     }
+    JsonParser parser = new JsonParser();
+    JsonObject obj;
     try {
-      JsonParser parser = new JsonParser();
-      JsonObject obj = parser.parse(new InputStreamReader(entity.getContent())).getAsJsonObject();
-      if (!obj.isJsonNull()
-          && !obj.get(CSE_ITEMS).getAsJsonArray().isJsonNull()
-          && obj.get(CSE_ITEMS).getAsJsonArray().size() > 0) {
-        JsonObject item = obj.get(CSE_ITEMS).getAsJsonArray().get(0).getAsJsonObject();
-        if (item.isJsonNull() && !item.get(CSE_LINK).isJsonNull())
-          System.out.println(item.get(CSE_LINK).getAsString());
+      obj = parser.parse(new InputStreamReader(entity.getContent())).getAsJsonObject();
+    } catch (JsonIOException
+        | JsonSyntaxException
+        | UnsupportedOperationException
+        | IOException e) {
+      return null;
+    }
+    if (!obj.isJsonNull()
+        && !obj.get(CSE_ITEMS).getAsJsonArray().isJsonNull()
+        && obj.get(CSE_ITEMS).getAsJsonArray().size() > 0) {
+      JsonObject item = obj.get(CSE_ITEMS).getAsJsonArray().get(0).getAsJsonObject();
+      if (!item.isJsonNull() && !item.get(CSE_LINK).isJsonNull()) {
         return item.get(CSE_LINK).getAsString();
       }
-    } catch (IOException e) {
-      return null;
     }
     return null;
   }
