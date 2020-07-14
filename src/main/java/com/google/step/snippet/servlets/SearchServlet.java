@@ -14,7 +14,8 @@
 
 package com.google.step.snippet.servlets;
 
-import java.io.BufferedReader;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -32,7 +33,6 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.json.JSONObject;
 
 /** Servlet that handles searches. */
 @WebServlet("/search")
@@ -119,28 +119,19 @@ public class SearchServlet extends HttpServlet {
     if (entity == null) {
       return null;
     }
-    BufferedReader reader;
     try {
-      reader = new BufferedReader(new InputStreamReader(entity.getContent()));
+      JsonParser parser = new JsonParser();
+      JsonObject obj = parser.parse(new InputStreamReader(entity.getContent())).getAsJsonObject();
+      if (!obj.isJsonNull()
+          && !obj.get(CSE_ITEMS).getAsJsonArray().isJsonNull()
+          && obj.get(CSE_ITEMS).getAsJsonArray().size() > 0) {
+        JsonObject item = obj.get(CSE_ITEMS).getAsJsonArray().get(0).getAsJsonObject();
+        if (item.isJsonNull() && !item.get(CSE_LINK).isJsonNull())
+          System.out.println(item.get(CSE_LINK).getAsString());
+        return item.get(CSE_LINK).getAsString();
+      }
     } catch (IOException e) {
       return null;
-    }
-    StringBuilder responseBody = new StringBuilder();
-    String line;
-    try {
-      while ((line = reader.readLine()) != null) {
-        responseBody.append(line);
-      }
-      reader.close();
-    } catch (IOException e) {
-      return null;
-    }
-    JSONObject json = new JSONObject(responseBody.toString());
-    if (!json.isNull(CSE_ITEMS) && !json.getJSONArray(CSE_ITEMS).isNull(0)) {
-      JSONObject obj = json.getJSONArray(CSE_ITEMS).getJSONObject(0);
-      if (!obj.isNull(CSE_LINK)) {
-        return obj.getString(CSE_LINK);
-      }
     }
     return null;
   }
