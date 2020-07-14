@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="com.google.step.snippet.data.Card"%> 
+<%@page import="java.util.ArrayList"%> 
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
@@ -17,18 +18,20 @@
         <div class="gcse-searchresults-only"></div>
       </div>
       <div class="srp-child">
-        <c:forEach items='${requestScope["cardList"]}' var="knowledgeCard">
+        <%ArrayList<Card> cards = (ArrayList<Card>)request.getAttribute("cardList");%>
           <div class="card">
             <div class="card-content">
-              <a href="${knowledgeCard.getLink()}" title="card-source">
-                <span class="card-title">${knowledgeCard.getTitle()}</span>
+              <a href="<%=cards.get(0).getLink()%>" title="card-source">
+                <span class="card-title"><%=cards.get(0).getTitle()%></span>
               </a>
-              <p>${knowledgeCard.getCode()}</p>
+              <p><%=cards.get(0).getCode()%></p>
               <span class="card-title">Description</span>
-              <p>${knowledgeCard.getDescription()}</p>
+              <p><%=cards.get(0).getDescription()%></p>
             </div>
           </div>
-        </c:forEach>
+        <!--
+        #TODO: Add two more cards to display.
+        -->
       </div>
     </div>
   </body>
