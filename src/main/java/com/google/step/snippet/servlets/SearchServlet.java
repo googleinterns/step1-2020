@@ -15,6 +15,7 @@
 package com.google.step.snippet.servlets;
 
 import com.google.step.snippet.data.Card;
+import com.google.step.snippet.external.Client;
 import com.google.step.snippet.external.StackOverflowClient;
 import com.google.step.snippet.external.W3SchoolClient;
 import java.io.IOException;
@@ -38,10 +39,10 @@ import org.json.JSONObject;
 @WebServlet("/search")
 public class SearchServlet extends HttpServlet {
 
-  private static final String W3_CSE_ID = "INSERT_W3SCHOOL_CSE_ID";
-  private static final String STACK_CSE_ID = "INSERT_STACKOVERFLOW_CSE_ID";
-  private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CSE_ID";
-  private static final String API_KEY = "INSERT_API_KEY";
+  private static final String W3_CSE_ID = "005097877490363447003:jdql8egojso";
+  private static final String STACK_CSE_ID = "005097877490363447003:fcadxuehmy0";
+  private static final String GEEKS_CSE_ID = "005097877490363447003:5-hfrrccix4";
+  private static final String API_KEY = "AIzaSyCMg08fxt9IX8LOAdwJGR0DyphMFpXPe5k";
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
 
   private final HttpClient httpClient =
@@ -77,8 +78,8 @@ public class SearchServlet extends HttpServlet {
      */
     String w3Link = getLink(W3_CSE_ID, query);
     if (w3Link != null) {
-      W3SchoolClient client = new W3SchoolClient();
-      Card w3Card = client.search(w3Link);
+      Client w3Client = new W3SchoolClient();
+      Card w3Card = w3Client.search(w3Link);
       allCards.add(w3Card);
       // allLinks.add(w3Link);
       // TODO: Call scraping function to return JSON card content
@@ -91,7 +92,7 @@ public class SearchServlet extends HttpServlet {
     String stackLink = getLink(STACK_CSE_ID, query);
     if (stackLink != null) {
       // allLinks.add(stackLink);
-      StackOverflowClient stackClient = new StackOverflowClient();
+      Client stackClient = new StackOverflowClient();
       Card stackCard = stackClient.search(stackLink);
       allCards.add(stackCard);
     }

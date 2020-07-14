@@ -18,7 +18,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public final class StackOverflowClient {
+public final class StackOverflowClient implements Client {
   private static final String SEARCH_URL_TEMPLATE =
       "https://api.stackexchange.com/2.2/questions/%s?"
           + "order=desc&sort=activity&site=stackoverflow";
@@ -42,6 +42,7 @@ public final class StackOverflowClient {
 
   /* This method build the desired card after getting each field. */
   /* It will return a null card if no valid question is found */
+  @Override
   public Card search(String url) {
     String questionId = getQuestionId(url);
     if (questionId == null) {

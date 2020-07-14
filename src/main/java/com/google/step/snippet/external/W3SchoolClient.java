@@ -6,12 +6,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-public final class W3SchoolClient {
+public final class W3SchoolClient implements Client {
   private static final String TITLE_TAG = "h1";
   private static final String DESC_TAG = "p";
   private static final String SNIPPET_CLASS = "w3-example";
   private static final String CODE_CLASS = "w3-code";
 
+  @Override
   public Card search(String w3Link) {
     Document doc = null;
     try {
