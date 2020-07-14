@@ -11,6 +11,16 @@ public final class W3SchoolClient implements Client {
   private static final String DESC_TAG = "p";
   private static final String SNIPPET_CLASS = "w3-example";
   private static final String CODE_CLASS = "w3-code";
+  private String CSE_ID;
+
+  public W3SchoolClient(String CSE_ID) {
+    this.CSE_ID = CSE_ID;
+  }
+
+  @Override
+  public String getCSEId() {
+    return CSE_ID;
+  }
 
   @Override
   public Card search(String w3Link) {

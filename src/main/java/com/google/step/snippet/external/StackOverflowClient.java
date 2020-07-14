@@ -39,7 +39,16 @@ public final class StackOverflowClient implements Client {
   private static final String ANSWER_ID_PARAMETER = "answer_id";
   // Set 200 to be the maximum length of description for MVP.
   private static final int MAX_DESCRIPTION_LENGTH = 200;
+  private String CSE_ID;
 
+  public StackOverflowClient(String CSE_ID) {
+    this.CSE_ID = CSE_ID;
+  }
+
+  @Override
+  public String getCSEId() {
+    return CSE_ID;
+  }
   /* This method build the desired card after getting each field. */
   /* It will return a null card if no valid question is found */
   @Override

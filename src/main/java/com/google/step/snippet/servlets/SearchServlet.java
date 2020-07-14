@@ -39,10 +39,10 @@ import org.json.JSONObject;
 @WebServlet("/search")
 public class SearchServlet extends HttpServlet {
 
-  private static final String W3_CSE_ID = "INSERT_W3SCHOOL_CSE_ID";
-  private static final String STACK_CSE_ID = "INSERT_STACKOVERFLOW_CSE_ID";
-  private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CSE_ID";
-  private static final String API_KEY = "INSERT_API_KEY";
+  private static final String W3_CSE_ID = "005097877490363447003:jdql8egojso";
+  private static final String STACK_CSE_ID = "005097877490363447003:fcadxuehmy0";
+  private static final String GEEKS_CSE_ID = "005097877490363447003:5-hfrrccix4";
+  private static final String API_KEY = "AIzaSyCMg08fxt9IX8LOAdwJGR0DyphMFpXPe5k";
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
 
   private final HttpClient httpClient =
@@ -68,41 +68,16 @@ public class SearchServlet extends HttpServlet {
 
     String query = encodeValue(param);
     List<Card> allCards = new ArrayList<>();
-
-    // TODO: after implementing scraping, consider changing getLink calls to a
-    // for-loop
-
-    /*
-     * Send request to retrieve card content through w3School site link from Google
-     * CSE
-     */
-    String w3Link = getLink(W3_CSE_ID, query);
-    if (w3Link != null) {
-      Client w3Client = new W3SchoolClient();
-      Card w3Card = w3Client.search(w3Link);
-      allCards.add(w3Card);
-      // allLinks.add(w3Link);
-      // TODO: Call scraping function to return JSON card content
+    List<Client> clients = new ArrayList<>();
+    clients.add(new W3SchoolClient(W3_CSE_ID));
+    clients.add(new StackOverflowClient(STACK_CSE_ID));
+    // TODO: Add GFG client.
+    for (Client client : clients) {
+      String link = getLink(client.getCSEId(), query);
+      Card card = client.search(link);
+      allCards.add(card);
     }
 
-    /*
-     * Send request to retrieve card content through StackOverflow site link from
-     * Google CSE
-     */
-    String stackLink = getLink(STACK_CSE_ID, query);
-    if (stackLink != null) {
-      // allLinks.add(stackLink);
-      Client stackClient = new StackOverflowClient();
-      Card stackCard = stackClient.search(stackLink);
-      allCards.add(stackCard);
-    }
-
-    /*
-     * Send request to retrieve card content through GeeksForGeeks site link from
-     * Google CSE
-     */
-    String geeksLink = getLink(GEEKS_CSE_ID, query);
-    if (geeksLink != null) {}
     request.setAttribute("card_list", allCards);
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
