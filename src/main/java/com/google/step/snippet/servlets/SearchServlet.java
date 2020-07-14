@@ -102,7 +102,7 @@ public class SearchServlet extends HttpServlet {
      */
     String geeksLink = getLink(GEEKS_CSE_ID, query);
     if (geeksLink != null) {}
-    request.setAttribute("card_list", allCards);
+    request.setAttribute("cardList", allCards);
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
 
