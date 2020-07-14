@@ -41,7 +41,7 @@ public class SearchServlet extends HttpServlet {
 
   private static final String W3_CSE_ID = "INSERT_W3SCHOOL_CSE_ID";
   private static final String STACK_CSE_ID = "INSERT_STACKOVERFLOW_CSE_ID";
-  private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CES_ID";
+  private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CSE_ID";
   private static final String API_KEY = "INSERT_API_KEY";
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
 
