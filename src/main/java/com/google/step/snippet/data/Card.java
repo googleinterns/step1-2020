@@ -46,4 +46,28 @@ public final class Card {
   public String getDescription() {
     return this.description;
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) {
+      return false;
+    }
+    if (!Card.class.isAssignableFrom(obj.getClass())) {
+      return false;
+    }
+    final Card other = (Card) obj;
+    if (!this.title.equals(other.title)) {
+      return false;
+    }
+    if (!this.code.equals(other.code)) {
+      return false;
+    }
+    if (!this.link.equals(other.link)) {
+      return false;
+    }
+    if (!this.description.equals(other.description)) {
+      return false;
+    }
+    return true;
+  }
 }
