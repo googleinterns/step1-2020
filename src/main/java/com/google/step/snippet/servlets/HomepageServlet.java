@@ -29,8 +29,6 @@ public class HomepageServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    // Set some data on the request for the template to access.
-    request.setAttribute("date", new Date());
     // Forward the request to the template (which is a servlet itself).
     request.getRequestDispatcher("WEB-INF/templates/homepage.jsp").forward(request, response);
   }
