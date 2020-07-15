@@ -31,6 +31,9 @@ public final class Card {
 
   @Override
   public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
     if (obj == null) {
       return false;
     }
@@ -38,18 +41,10 @@ public final class Card {
       return false;
     }
     final Card other = (Card) obj;
-    if (!this.title.equals(other.title)) {
-      return false;
-    }
-    if (!this.code.equals(other.code)) {
-      return false;
-    }
-    if (!this.link.equals(other.link)) {
-      return false;
-    }
-    if (!this.description.equals(other.description)) {
-      return false;
-    }
-    return true;
+
+    return this.title.equals(other.title)
+        && this.code.equals(other.code)
+        && this.link.equals(other.link)
+        && this.description.equals(other.description);
   }
 }
