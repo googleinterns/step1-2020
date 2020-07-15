@@ -40,10 +40,10 @@ import org.json.JSONObject;
 @WebServlet("/search")
 public class SearchServlet extends HttpServlet {
 
-  private static final String W3_CSE_ID = "005097877490363447003:jdql8egojso";
-  private static final String STACK_CSE_ID = "005097877490363447003:fcadxuehmy0";
-  private static final String GEEKS_CSE_ID = "005097877490363447003:5-hfrrccix4";
-  private static final String API_KEY = "AIzaSyCMg08fxt9IX8LOAdwJGR0DyphMFpXPe5k";
+  private static final String W3_CSE_ID = "INSERT_W3SCHOOL_CSE_ID";
+  private static final String STACK_CSE_ID = "INSERT_STACKOVERFLOW_CSE_ID";
+  private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CES_ID";
+  private static final String API_KEY = "INSERT_API_KEY";
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
 
   private final HttpClient httpClient =
@@ -89,7 +89,7 @@ public class SearchServlet extends HttpServlet {
         HttpRequest.newBuilder()
             .GET()
             .uri(URI.create(cse_request))
-            .setHeader("User-Agent", "Java 11 HttpClient Bot")
+            .setHeader("User-Agent", "Java 8 HttpClient Bot")
             .build();
     HttpResponse<String> linkResponse;
     try {
