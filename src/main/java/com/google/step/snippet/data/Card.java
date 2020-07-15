@@ -6,8 +6,6 @@ public final class Card {
   private String link;
   private String description;
 
-  public Card() {}
-
   public Card(String title, String code, String link, String description) {
     this.title = title;
     this.code = code;
@@ -15,36 +13,20 @@ public final class Card {
     this.description = description;
   }
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
   public String getTitle() {
-    return this.title;
-  }
-
-  public void setCode(String code) {
-    this.code = code;
+    return title;
   }
 
   public String getCode() {
-    return this.code;
-  }
-
-  public void setLink(String link) {
-    this.link = link;
+    return code;
   }
 
   public String getLink() {
-    return this.link;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
+    return link;
   }
 
   public String getDescription() {
-    return this.description;
+    return description;
   }
 
   @Override
