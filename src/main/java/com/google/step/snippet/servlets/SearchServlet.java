@@ -16,6 +16,7 @@ package com.google.step.snippet.servlets;
 
 import com.google.step.snippet.data.Card;
 import com.google.step.snippet.external.Client;
+import com.google.step.snippet.external.GeeksForGeeksClient;
 import com.google.step.snippet.external.StackOverflowClient;
 import com.google.step.snippet.external.W3SchoolClient;
 import java.io.IOException;
@@ -39,10 +40,10 @@ import org.json.JSONObject;
 @WebServlet("/search")
 public class SearchServlet extends HttpServlet {
 
-  private static final String W3_CSE_ID = "INSERT_W3SCHOOL_CSE_ID";
-  private static final String STACK_CSE_ID = "INSERT_STACKOVERFLOW_CSE_ID";
-  private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CSE_ID";
-  private static final String API_KEY = "INSERT_API_KEY";
+  private static final String W3_CSE_ID = "005097877490363447003:jdql8egojso";
+  private static final String STACK_CSE_ID = "005097877490363447003:fcadxuehmy0";
+  private static final String GEEKS_CSE_ID = "005097877490363447003:5-hfrrccix4";
+  private static final String API_KEY = "AIzaSyCMg08fxt9IX8LOAdwJGR0DyphMFpXPe5k";
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
 
   private final HttpClient httpClient =
@@ -71,14 +72,14 @@ public class SearchServlet extends HttpServlet {
     List<Client> clients = new ArrayList<>();
     clients.add(new W3SchoolClient(W3_CSE_ID));
     clients.add(new StackOverflowClient(STACK_CSE_ID));
-    // TODO: Add GFG client.
+    clients.add(new GeeksForGeeksClient(GEEKS_CSE_ID));
     for (Client client : clients) {
       String link = getLink(client.getCSEId(), query);
       Card card = client.search(link);
       allCards.add(card);
     }
 
-    request.setAttribute("card_list", allCards);
+    request.setAttribute("cardList", allCards);
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
 
