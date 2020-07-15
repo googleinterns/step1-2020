@@ -14,10 +14,9 @@
 
 package com.google.step.snippet.servlets;
 
-import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -109,7 +108,6 @@ public class SearchServlet extends HttpServlet {
     String url = CSE_URL + "?key=" + API_KEY + "&cx=" + id + "&q=" + query;
     try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
       try (CloseableHttpResponse response = httpClient.execute(new HttpGet(url))) {
-
         if (response.getStatusLine().getStatusCode() != 200) {
           return null;
         }
@@ -117,24 +115,24 @@ public class SearchServlet extends HttpServlet {
         if (entity == null) {
           return null;
         }
-        JsonParser parser = new JsonParser();
         JsonObject obj;
         try {
+          JsonParser parser = new JsonParser();
           obj = parser.parse(new InputStreamReader(entity.getContent())).getAsJsonObject();
-        } catch (JsonIOException
-            | JsonSyntaxException
+        } catch (JsonParseException
+            | IllegalStateException
             | UnsupportedOperationException
             | IOException e) {
           return null;
         }
-        if (!obj.isJsonNull()
-            && !obj.get(CSE_ITEMS).getAsJsonArray().isJsonNull()
-            && obj.get(CSE_ITEMS).getAsJsonArray().size() > 0) {
-          JsonObject item = obj.get(CSE_ITEMS).getAsJsonArray().get(0).getAsJsonObject();
-          if (!item.isJsonNull() && !item.get(CSE_LINK).isJsonNull()) {
-            return item.get(CSE_LINK).getAsString();
+        if (obj.has(CSE_ITEMS) && obj.getAsJsonArray(CSE_ITEMS).size() > 0) {
+          JsonObject topResult = obj.getAsJsonArray(CSE_ITEMS).get(0).getAsJsonObject();
+          if (topResult.has(CSE_LINK)) {
+            return topResult.get(CSE_LINK).getAsString();
           }
         }
+      } catch (IOException | IllegalStateException | ClassCastException e) {
+        return null;
       }
     } catch (IOException e) {
       return null;
