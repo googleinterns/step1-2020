@@ -1,10 +1,10 @@
 package com.google.step.snippet.data;
 
 public final class Card {
-  private String title;
-  private String code;
-  private String link;
-  private String description;
+  private final String title;
+  private final String code;
+  private final String link;
+  private final String description;
 
   public Card(String title, String code, String link, String description) {
     this.title = title;
