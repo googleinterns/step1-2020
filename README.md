@@ -8,6 +8,8 @@ This project requires JDK 11.
 To run this project, do `mvn package appengine:run` in the project root
 directory.
 
+To run tests in this project do `mvn test` in the project root directory.
+
 ## GitHub Checks
 
 This repository runs checks on every pull request and commit. You can run these
