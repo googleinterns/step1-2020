@@ -6,11 +6,22 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-public final class GeeksForGeeksClient {
+public final class GeeksForGeeksClient implements Client{
   private static final String TITLE_TAG = "h1";
   private static final String DESC_TAG = "p";
   private static final String SNIPPET_CLASS = "code-block";
   private static final String CODE_CLASS = "code-container";
+
+  private final String cseId;
+
+  public GeeksForGeeksClient(String cseId) {
+    this.cseId = cseId;
+  }
+
+  @Override
+  public String getCseId() {
+    return cseId;
+  }
 
   public Card search(String geeksLink) {
     Document doc = null;
