@@ -40,8 +40,8 @@ public final class Card {
     if (!Card.class.isAssignableFrom(obj.getClass())) {
       return false;
     }
-    final Card other = (Card) obj;
 
+    final Card other = (Card) obj;
     return this.title.equals(other.title)
         && this.code.equals(other.code)
         && this.link.equals(other.link)
