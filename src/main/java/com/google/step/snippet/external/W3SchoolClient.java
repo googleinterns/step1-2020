@@ -11,6 +11,7 @@ public final class W3SchoolClient implements Client {
   private static final String DESC_TAG = "p";
   private static final String SNIPPET_CLASS = "w3-example";
   private static final String CODE_CLASS = "w3-code";
+
   private final String cseId;
 
   public W3SchoolClient(String cseId) {
@@ -22,6 +23,12 @@ public final class W3SchoolClient implements Client {
     return cseId;
   }
 
+  /**
+   * Create and return a {@code Card} for the given W3School URL.
+   *
+   * @param w3Link the URL of the W3School web page to create the card for.
+   * @return the created card, or {@code null} if a card could not be created.
+   */
   @Override
   public Card search(String w3Link) {
     Document doc = null;
