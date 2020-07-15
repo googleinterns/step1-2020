@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="com.google.step.snippet.data.Card"%> 
+<%@page import="org.apache.commons.lang3.StringEscapeUtils"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
@@ -23,7 +24,7 @@
               <a href="${knowledgeCard.getLink()}" title="card-source">
                 <span class="card-title">${knowledgeCard.getTitle()}</span>
               </a>
-              <p>${knowledgeCard.getCode()}</p>
+              ${StringEscapeUtils.escapeHtml4(knowledgeCard.getCode())}
               <span class="card-title">Description</span>
               <p>${knowledgeCard.getDescription()}</p>
             </div>

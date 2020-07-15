@@ -80,8 +80,6 @@ public class SearchServlet extends HttpServlet {
       W3SchoolClient client = new W3SchoolClient();
       Card w3Card = client.search(w3Link);
       allCards.add(w3Card);
-      // allLinks.add(w3Link);
-      // TODO: Call scraping function to return JSON card content
     }
 
     /*
@@ -90,7 +88,6 @@ public class SearchServlet extends HttpServlet {
      */
     String stackLink = getLink(STACK_CSE_ID, query);
     if (stackLink != null) {
-      // allLinks.add(stackLink);
       StackOverflowClient stackClient = new StackOverflowClient();
       Card stackCard = stackClient.search(stackLink);
       allCards.add(stackCard);
