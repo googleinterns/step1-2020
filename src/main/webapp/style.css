@@ -7,10 +7,23 @@ body, html {
   position: relative;
   transition: box-shadow .25s;
   border-radius: 2px;
+  margin-top: 30px;
+}
+
+.card-container {
+  width: auto;
+  margin-right: 30px;
+  margin-left: 30px;
+}
+
+.card .card-description {
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 32px;
 }
 
 .card .card-title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 300;
   cursor: pointer;
   line-height: 32px;
@@ -24,7 +37,7 @@ body, html {
 
 .card .card-content p {
   display: flex;
-  line-height: 32px;
+  flex-direction: column;
   margin: 0;
 }
 
@@ -32,10 +45,10 @@ h3 {
   text-align: center;
 }
 
-.srp-container {
-  display: flex;
+.srp {
+  width: 80%;
 }
 
-.srp-child {
-  flex: 0 0 50%;
+.srp-container {
+  display: flex;
 }

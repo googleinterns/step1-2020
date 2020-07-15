@@ -14,18 +14,18 @@
     <t:base/>
     <div class="gcse-searchbox-only" data-resultsUrl="/search"></div>
     <div class="srp-container">
-      <div class="srp-child">
+      <div class="srp">
         <div class="gcse-searchresults-only"></div>
       </div>
-      <div class="srp-child">
+      <div class="card-container">
         <c:forEach items='${requestScope["cardList"]}' var="knowledgeCard">
           <div class="card">
             <div class="card-content">
               <a href="${knowledgeCard.getLink()}" title="card-source">
                 <span class="card-title">${knowledgeCard.getTitle()}</span>
               </a>
-              ${StringEscapeUtils.escapeHtml4(knowledgeCard.getCode())}
-              <span class="card-title">Description</span>
+              <p>${StringEscapeUtils.escapeHtml4(knowledgeCard.getCode())}</p>
+              <span class="card-description">Description:</span>
               <p>${knowledgeCard.getDescription()}</p>
             </div>
           </div>
