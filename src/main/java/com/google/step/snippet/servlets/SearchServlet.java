@@ -17,6 +17,7 @@ package com.google.step.snippet.servlets;
 import com.google.step.snippet.data.Card;
 import com.google.step.snippet.external.Client;
 // TODO: Import GFG client class.
+import com.google.step.snippet.external.GeeksForGeeksClient;
 import com.google.step.snippet.external.StackOverflowClient;
 import com.google.step.snippet.external.W3SchoolClient;
 import java.io.IOException;
@@ -72,7 +73,7 @@ public class SearchServlet extends HttpServlet {
     List<Client> clients = new ArrayList<>();
     clients.add(new W3SchoolClient(W3_CSE_ID));
     clients.add(new StackOverflowClient(STACK_CSE_ID));
-    // TODO: Add GFG client.
+    clients.add(new GeeksForGeeksClient(GEEKS_CSE_ID));
     for (Client client : clients) {
       String link = getLink(client.getCseId(), query);
       Card card = client.search(link);
