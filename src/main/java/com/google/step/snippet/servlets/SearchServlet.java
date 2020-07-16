@@ -14,12 +14,12 @@
 
 package com.google.step.snippet.servlets;
 
-import com.google.step.snippet.data.Card;
-import com.google.step.snippet.external.StackOverflowClient;
-import com.google.step.snippet.external.W3SchoolClient;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+import com.google.step.snippet.data.Card;
+import com.google.step.snippet.external.StackOverflowClient;
+import com.google.step.snippet.external.W3SchoolClient;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
