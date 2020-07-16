@@ -111,6 +111,7 @@ public final class StackOverflowClient {
       }
     }
     Jsoup.parse(description).text();
+    description.trim();
     description += "...";
     return description;
   }
