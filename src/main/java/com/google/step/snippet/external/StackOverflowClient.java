@@ -110,7 +110,7 @@ public final class StackOverflowClient {
         break;
       }
     }
-    return description;
+    return Jsoup.parse(description).text();;
   }
 
   /* Return the code parsed from answer body. */
