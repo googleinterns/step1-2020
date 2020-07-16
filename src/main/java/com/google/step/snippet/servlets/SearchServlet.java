@@ -52,7 +52,8 @@ public class SearchServlet extends HttpServlet {
   private static final String CSE_ITEMS = "items";
   private static final String CSE_LINK = "link";
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
-  private static final List<Client> clients =
+
+  private final List<Client> clients =
       new ArrayList<>(
           Arrays.asList(
               new W3SchoolsClient(W3_CSE_ID),

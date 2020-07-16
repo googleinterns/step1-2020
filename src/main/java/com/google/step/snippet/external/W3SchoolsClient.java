@@ -24,10 +24,10 @@ public final class W3SchoolsClient implements Client {
   }
 
   /**
-   * Create and return a {@code Card} for the given W3School URL.
+   * Creates and returns a {@code Card} for the given W3School URL
    *
-   * @param w3Link the URL of the W3School web page to create the card for.
-   * @return the created card, or {@code null} if a card could not be created.
+   * @param w3Link the URL of the W3School web page to create the card for
+   * @return the created card, or {@code null} if a card could not be created
    */
   @Override
   public Card search(String w3Link) {

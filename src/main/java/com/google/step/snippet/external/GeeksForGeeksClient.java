@@ -24,11 +24,12 @@ public final class GeeksForGeeksClient implements Client {
   }
 
   /**
-   * Create and return a {@code Card} for the given W3School URL.
+   * Creates and returns a {@code Card} for the given W3School URL
    *
-   * @param geeksLink the URL of the W3School web page to create the card for.
-   * @return the created card, or {@code null} if a card could not be created.
+   * @param geeksLink the URL of the W3School web page to create the card for
+   * @return the created card, or {@code null} if a card could not be created
    */
+  @Override
   public Card search(String geeksLink) {
     Document doc = null;
     try {

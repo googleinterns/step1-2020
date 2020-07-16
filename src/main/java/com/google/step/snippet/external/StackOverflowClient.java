@@ -52,10 +52,10 @@ public final class StackOverflowClient implements Client {
   }
 
   /**
-   * Create and return a {@code Card} for the given StackOverflow URL.
+   * Creates and returns a {@code Card} for the given StackOverflow URL
    *
-   * @param url the URL of the StackOverflow question to create the card for.
-   * @return the created card, or {@code null} if a card could not be created.
+   * @param url the URL of the StackOverflow question to create the card for
+   * @return the created card, or {@code null} if a card could not be created
    */
   @Override
   public Card search(String url) {
