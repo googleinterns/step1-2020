@@ -14,6 +14,7 @@
 
 package com.google.step.snippet.servlets;
 
+import com.google.step.snippet.data.Auth;
 import com.google.step.snippet.data.Card;
 import com.google.step.snippet.external.StackOverflowClient;
 import com.google.step.snippet.external.W3SchoolClient;
@@ -58,6 +59,17 @@ public class SearchServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+    String redirectPath = request.getRequestURI() + "?" + request.getQueryString();
+
+    Auth authUser = new Auth();
+    if (authUser.isLoggedIn()) {
+      request.setAttribute("authUrl", authUser.getLogoutUrl(redirectPath));
+      request.setAttribute("authLabel", "Logout");
+    } else {
+      request.setAttribute("authUrl", authUser.getLoginUrl(redirectPath));
+      request.setAttribute("authLabel", "Login");
+    }
+
     String param = request.getParameter("q");
     if (param == null || encodeValue(param) == null) {
       response.setContentType("text/html;");
