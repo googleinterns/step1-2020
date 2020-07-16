@@ -79,7 +79,9 @@ public class SearchServlet extends HttpServlet {
     if (w3Link != null) {
       W3SchoolClient client = new W3SchoolClient();
       Card w3Card = client.search(w3Link);
-      allCards.add(w3Card);
+      if (w3Card != null) {
+        allCards.add(w3Card);
+      }
     }
 
     /*
@@ -90,7 +92,9 @@ public class SearchServlet extends HttpServlet {
     if (stackLink != null) {
       StackOverflowClient stackClient = new StackOverflowClient();
       Card stackCard = stackClient.search(stackLink);
-      allCards.add(stackCard);
+      if (stackCard != null) {
+        allCards.add(stackCard);
+      }
     }
 
     /*
