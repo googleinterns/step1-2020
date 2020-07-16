@@ -117,8 +117,8 @@ public class SearchServlet extends HttpServlet {
         }
         JsonObject obj;
         try {
-          JsonParser parser = new JsonParser();
-          obj = parser.parse(new InputStreamReader(entity.getContent())).getAsJsonObject();
+          obj =
+              JsonParser.parseReader(new InputStreamReader(entity.getContent())).getAsJsonObject();
         } catch (JsonParseException
             | IllegalStateException
             | UnsupportedOperationException
