@@ -15,7 +15,7 @@ public final class W3SchoolClientTest {
   private final W3SchoolClient client = new W3SchoolClient();
 
   @Test
-  public void htmlImage() {
+  public void htmlCodeCard() {
     Card actual = client.search("https://www.w3schools.com/tags/tag_img.asp");
     Card expected =
         new Card(
@@ -27,7 +27,7 @@ public final class W3SchoolClientTest {
   }
 
   @Test
-  public void jsJson() {
+  public void jsonCodeCard() {
     Card actual = client.search("https://www.w3schools.com/js/js_json_intro.asp");
     Card expected =
         new Card(
@@ -40,19 +40,19 @@ public final class W3SchoolClientTest {
   }
 
   @Test
-  public void incompleteCard() {
+  public void partiallyFilledCard() {
     Card actual = client.search("https://www.w3schools.com/html/html_quiz.asp");
     assertNull(actual);
   }
 
   @Test
-  public void invalidLink() {
+  public void nonexistentLink() {
     Card actual = client.search("https://www.w3schools.com/css/html.asp");
     assertNull(actual);
   }
 
   @Test
-  public void blankPage() {
+  public void blankPageLink() {
     Card actual = client.search("https://www.w3schools.com/");
     assertNull(actual);
   }
