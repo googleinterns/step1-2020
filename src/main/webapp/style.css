@@ -36,10 +36,12 @@ body, html {
   padding: 24px;
   border-radius: 0 0 2px 2px;
   width: 400px;
+  display: flex;
+  flex-direction: column;
 }
 
 .card .card-content p, code {
-  display: flex;
+  display: inline;
   flex-direction: column;
   margin: 0;
 }
