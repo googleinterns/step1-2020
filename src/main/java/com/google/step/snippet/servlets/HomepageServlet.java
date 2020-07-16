@@ -14,8 +14,8 @@
 
 package com.google.step.snippet.servlets;
 
+import com.google.step.snippet.data.Auth;
 import java.io.IOException;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,12 +26,24 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/")
 public class HomepageServlet extends HttpServlet {
 
+  private static final String AUTH_URL = "authUrl";
+  private static final String AUTH_LABEL = "authLabel";
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    // Set some data on the request for the template to access.
-    request.setAttribute("date", new Date());
-    // Forward the request to the template (which is a servlet itself).
+    String redirectPath = request.getRequestURI();
+    if (request.getQueryString() != null) {
+      redirectPath += "?" + request.getQueryString();
+    }
+    Auth authUser = new Auth();
+    if (authUser.isLoggedIn()) {
+      request.setAttribute(AUTH_URL, authUser.getLogoutUrl(redirectPath));
+      request.setAttribute(AUTH_LABEL, "Logout");
+    } else {
+      request.setAttribute(AUTH_URL, authUser.getLoginUrl(redirectPath));
+      request.setAttribute(AUTH_LABEL, "Login");
+    }
     request.getRequestDispatcher("WEB-INF/templates/homepage.jsp").forward(request, response);
   }
 }

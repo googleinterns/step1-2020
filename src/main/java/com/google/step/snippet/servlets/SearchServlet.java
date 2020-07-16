@@ -61,8 +61,10 @@ public class SearchServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    String redirectPath = request.getRequestURI() + "?" + request.getQueryString();
-
+    String redirectPath = request.getRequestURI();
+    if (request.getQueryString() != null) {
+      redirectPath += "?" + request.getQueryString();
+    }
     Auth authUser = new Auth();
     if (authUser.isLoggedIn()) {
       request.setAttribute(AUTH_URL, authUser.getLogoutUrl(redirectPath));

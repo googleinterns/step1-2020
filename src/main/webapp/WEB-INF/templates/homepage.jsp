@@ -10,5 +10,6 @@
   <body>
     <t:base/>
     <div class="gcse-searchbox-only" data-resultsUrl="/search"></div>
+    <a href="${authUrl}">${authLabel}</a>
   </body>
 </html>
