@@ -44,6 +44,8 @@ public class SearchServlet extends HttpServlet {
   private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CSE_ID";
   private static final String API_KEY = "INSERT_API_KEY";
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
+  private static final String AUTH_URL = "authUrl";
+  private static final String AUTH_LABEL = "authLabel";
 
   private final HttpClient httpClient =
       HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
@@ -63,11 +65,11 @@ public class SearchServlet extends HttpServlet {
 
     Auth authUser = new Auth();
     if (authUser.isLoggedIn()) {
-      request.setAttribute("authUrl", authUser.getLogoutUrl(redirectPath));
-      request.setAttribute("authLabel", "Logout");
+      request.setAttribute(AUTH_URL, authUser.getLogoutUrl(redirectPath));
+      request.setAttribute(AUTH_LABEL, "Logout");
     } else {
-      request.setAttribute("authUrl", authUser.getLoginUrl(redirectPath));
-      request.setAttribute("authLabel", "Login");
+      request.setAttribute(AUTH_URL, authUser.getLoginUrl(redirectPath));
+      request.setAttribute(AUTH_LABEL, "Login");
     }
 
     String param = request.getParameter("q");
