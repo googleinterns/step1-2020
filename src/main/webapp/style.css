@@ -38,7 +38,7 @@ body, html {
   width: 400px;
 }
 
-.card .card-content p {
+.card .card-content p, code {
   display: flex;
   flex-direction: column;
   margin: 0;
