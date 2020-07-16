@@ -44,6 +44,7 @@ public class HomepageServlet extends HttpServlet {
       request.setAttribute(AUTH_URL, authUser.getLoginUrl(redirectPath));
       request.setAttribute(AUTH_LABEL, "Login");
     }
+    // Forward the request to the template (which is a servlet itself).
     request.getRequestDispatcher("WEB-INF/templates/homepage.jsp").forward(request, response);
   }
 }
