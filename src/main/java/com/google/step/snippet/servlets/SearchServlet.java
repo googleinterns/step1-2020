@@ -28,6 +28,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -45,6 +46,12 @@ public class SearchServlet extends HttpServlet {
   private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CSE_ID";
   private static final String API_KEY = "INSERT_API_KEY";
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
+  private static final List<Client> clients =
+      new ArrayList<>(
+          Arrays.asList(
+              new W3SchoolClient(W3_CSE_ID),
+              new StackOverflowClient(STACK_CSE_ID),
+              new GeeksForGeeksClient(GEEKS_CSE_ID)));
 
   private final HttpClient httpClient =
       HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
@@ -66,19 +73,13 @@ public class SearchServlet extends HttpServlet {
       response.getWriter().println("Invalid Query");
       return;
     }
-
     String query = encodeValue(param);
     List<Card> allCards = new ArrayList<>();
-    List<Client> clients = new ArrayList<>();
-    clients.add(new W3SchoolClient(W3_CSE_ID));
-    clients.add(new StackOverflowClient(STACK_CSE_ID));
-    clients.add(new GeeksForGeeksClient(GEEKS_CSE_ID));
     for (Client client : clients) {
       String link = getLink(client.getCseId(), query);
       Card card = client.search(link);
       allCards.add(card);
     }
-
     request.setAttribute("cardList", allCards);
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
