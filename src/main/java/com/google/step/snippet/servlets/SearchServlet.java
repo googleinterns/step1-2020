@@ -16,7 +16,6 @@ package com.google.step.snippet.servlets;
 
 import com.google.step.snippet.data.Card;
 import com.google.step.snippet.external.Client;
-// TODO: Import GFG client class.
 import com.google.step.snippet.external.GeeksForGeeksClient;
 import com.google.step.snippet.external.StackOverflowClient;
 import com.google.step.snippet.external.W3SchoolClient;
