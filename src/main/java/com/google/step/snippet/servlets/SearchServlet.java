@@ -18,9 +18,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.step.snippet.data.Auth;
-import com.google.step.snippet.data.Card;
-import com.google.step.snippet.external.StackOverflowClient;
-import com.google.step.snippet.external.W3SchoolClient;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -68,14 +65,10 @@ public class SearchServlet extends HttpServlet {
     if (request.getQueryString() != null) {
       redirectPath += "?" + request.getQueryString();
     }
+
     Auth authUser = new Auth();
-    if (authUser.isLoggedIn()) {
-      request.setAttribute(AUTH_URL, authUser.getLogoutUrl(redirectPath));
-      request.setAttribute(AUTH_LABEL, "Logout");
-    } else {
-      request.setAttribute(AUTH_URL, authUser.getLoginUrl(redirectPath));
-      request.setAttribute(AUTH_LABEL, "Login");
-    }
+    request.setAttribute(AUTH_URL, authUser.getUrl(redirectPath));
+    request.setAttribute(AUTH_LABEL, authUser.getLabel());
 
     String param = request.getParameter("q");
     if (param == null || encodeValue(param) == null) {
@@ -85,7 +78,7 @@ public class SearchServlet extends HttpServlet {
     }
 
     String query = encodeValue(param);
-    List<Card> allCards = new ArrayList<>();
+    List<String> allLinks = new ArrayList<>();
 
     // TODO: after implementing scraping, consider changing getLink calls to a
     // for-loop
@@ -96,9 +89,8 @@ public class SearchServlet extends HttpServlet {
      */
     String w3Link = getLink(W3_CSE_ID, query);
     if (w3Link != null) {
-      W3SchoolClient client = new W3SchoolClient();
-      Card w3Card = client.search(w3Link);
-      allCards.add(w3Card);
+      allLinks.add(w3Link);
+      // TODO: Call scraping function to return JSON card content
     }
 
     /*
@@ -107,9 +99,8 @@ public class SearchServlet extends HttpServlet {
      */
     String stackLink = getLink(STACK_CSE_ID, query);
     if (stackLink != null) {
-      StackOverflowClient stackClient = new StackOverflowClient();
-      Card stackCard = stackClient.search(stackLink);
-      allCards.add(stackCard);
+      allLinks.add(stackLink);
+      // TODO: Call stackoverflow API to return JSON card content
     }
 
     /*
@@ -117,8 +108,11 @@ public class SearchServlet extends HttpServlet {
      * Google CSE
      */
     String geeksLink = getLink(GEEKS_CSE_ID, query);
-    if (geeksLink != null) {}
-    request.setAttribute("cardList", allCards);
+    if (geeksLink != null) {
+      allLinks.add(geeksLink);
+      // TODO: Call scraping function to return JSON card content
+    }
+
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
 

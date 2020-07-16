@@ -15,11 +15,17 @@ public class Auth {
     return this.userService.isUserLoggedIn();
   }
 
-  public String getLoginUrl(String redirectPath) {
+  public String getUrl(String redirectPath) {
+    if (isLoggedIn()) {
+      return this.userService.createLogoutURL(redirectPath);
+    }
     return this.userService.createLoginURL(redirectPath);
   }
 
-  public String getLogoutUrl(String redirectPath) {
-    return this.userService.createLogoutURL(redirectPath);
+  public String getLabel() {
+    if (isLoggedIn()) {
+      return "Logout";
+    }
+    return "Login";
   }
 }

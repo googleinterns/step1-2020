@@ -15,23 +15,7 @@
     <div class="gcse-searchbox-only" data-resultsUrl="/search"></div>
     <a href="${authUrl}">${authLabel}</a>
     <div class="srp-container">
-      <div class="srp">
-        <div class="gcse-searchresults-only"></div>
-      </div>
-      <div class="card-container">
-        <c:forEach items='${requestScope["cardList"]}' var="knowledgeCard">
-          <div class="card">
-            <div class="card-content">
-              <a href="${knowledgeCard.getLink()}" title="card-source">
-                <span class="card-title">${knowledgeCard.getTitle()}</span>
-              </a>
-              <p>${StringEscapeUtils.escapeHtml4(knowledgeCard.getCode())}</p>
-              <span class="card-description">Description:</span>
-              <p>${knowledgeCard.getDescription()}</p>
-            </div>
-          </div>
-        </c:forEach>
-      </div>
+      <div class="gcse-searchresults-only"></div>
     </div>
   </body>
 </html>
