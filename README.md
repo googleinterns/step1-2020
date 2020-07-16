@@ -5,7 +5,7 @@ in Google's Student Training in Engineering program.
 
 ## Set Up
 
-This project requires JDK 11.
+This project requires JDK 8.
 
 This project also requires an
 [API Key](https://developers.google.com/custom-search/v1/introduction) 
