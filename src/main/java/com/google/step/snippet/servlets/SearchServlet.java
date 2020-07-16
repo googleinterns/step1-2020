@@ -14,13 +14,13 @@
 
 package com.google.step.snippet.servlets;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import com.google.step.snippet.data.Auth;
 import com.google.step.snippet.data.Card;
 import com.google.step.snippet.external.StackOverflowClient;
 import com.google.step.snippet.external.W3SchoolClient;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -52,9 +52,6 @@ public class SearchServlet extends HttpServlet {
   private static final String CSE_LINK = "link";
   private static final String AUTH_URL = "authUrl";
   private static final String AUTH_LABEL = "authLabel";
-
-  private final HttpClient httpClient =
-      HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
 
   private static String encodeValue(String value) {
     try {
