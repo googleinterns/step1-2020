@@ -14,18 +14,18 @@
 
 package com.google.step.snippet.servlets;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import com.google.step.snippet.data.Card;
 import com.google.step.snippet.external.Client;
 import com.google.step.snippet.external.GeeksForGeeksClient;
 import com.google.step.snippet.external.StackOverflowClient;
 import com.google.step.snippet.external.W3SchoolClient;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.net.URLEncoder;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +35,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.json.JSONObject;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 
 /** Servlet that handles searches. */
 @WebServlet("/search")
@@ -45,6 +49,8 @@ public class SearchServlet extends HttpServlet {
   private static final String STACK_CSE_ID = "INSERT_STACKOVERFLOW_CSE_ID";
   private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CSE_ID";
   private static final String API_KEY = "INSERT_API_KEY";
+  private static final String CSE_ITEMS = "items";
+  private static final String CSE_LINK = "link";
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
   private static final List<Client> clients =
       new ArrayList<>(
@@ -52,9 +58,6 @@ public class SearchServlet extends HttpServlet {
               new W3SchoolClient(W3_CSE_ID),
               new StackOverflowClient(STACK_CSE_ID),
               new GeeksForGeeksClient(GEEKS_CSE_ID)));
-
-  private final HttpClient httpClient =
-      HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
 
   private static String encodeValue(String value) {
     try {
@@ -85,22 +88,38 @@ public class SearchServlet extends HttpServlet {
   }
 
   private String getLink(String id, String query) {
-    String cse_request = CSE_URL + "?key=" + API_KEY + "&cx=" + id + "&q=" + query;
-    HttpRequest linkRequest =
-        HttpRequest.newBuilder()
-            .GET()
-            .uri(URI.create(cse_request))
-            .setHeader("User-Agent", "Java 8 HttpClient Bot")
-            .build();
-    HttpResponse<String> linkResponse;
-    try {
-      linkResponse = httpClient.send(linkRequest, HttpResponse.BodyHandlers.ofString());
-    } catch (IOException | InterruptedException ex) {
+    String url = CSE_URL + "?key=" + API_KEY + "&cx=" + id + "&q=" + query;
+    try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+      try (CloseableHttpResponse response = httpClient.execute(new HttpGet(url))) {
+        if (response.getStatusLine().getStatusCode() != 200) {
+          return null;
+        }
+        HttpEntity entity = response.getEntity();
+        if (entity == null) {
+          return null;
+        }
+        JsonObject obj;
+        try {
+          obj =
+              JsonParser.parseReader(new InputStreamReader(entity.getContent())).getAsJsonObject();
+        } catch (JsonParseException
+            | IllegalStateException
+            | UnsupportedOperationException
+            | IOException e) {
+          return null;
+        }
+        if (obj.has(CSE_ITEMS) && obj.getAsJsonArray(CSE_ITEMS).size() > 0) {
+          JsonObject topResult = obj.getAsJsonArray(CSE_ITEMS).get(0).getAsJsonObject();
+          if (topResult.has(CSE_LINK)) {
+            return topResult.get(CSE_LINK).getAsString();
+          }
+        }
+      } catch (IOException | IllegalStateException | ClassCastException e) {
+        return null;
+      }
+    } catch (IOException e) {
       return null;
     }
-    /* Parse JSON of CSE SRP to retrieve link from only the first search result */
-    JSONObject obj = new JSONObject(linkResponse.body());
-    String link = obj.getJSONArray("items").getJSONObject(0).getString("link");
-    return link;
+    return null;
   }
 }
