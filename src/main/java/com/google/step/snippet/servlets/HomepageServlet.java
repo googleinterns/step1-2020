@@ -32,12 +32,8 @@ public class HomepageServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    String redirectPath = request.getRequestURI();
-    if (request.getQueryString() != null) {
-      redirectPath += "?" + request.getQueryString();
-    }
     Auth authUser = new Auth();
-    request.setAttribute(AUTH_URL, authUser.getUrl(redirectPath));
+    request.setAttribute(AUTH_URL, authUser.getUrl("/"));
     request.setAttribute(AUTH_LABEL, authUser.getLabel());
     // Forward the request to the template (which is a servlet itself).
     request.getRequestDispatcher("WEB-INF/templates/homepage.jsp").forward(request, response);
