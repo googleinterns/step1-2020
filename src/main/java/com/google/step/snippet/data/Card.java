@@ -5,11 +5,11 @@ public final class Card {
   private final String code;
   private final String link;
   private final String description;
-  private final int upvote;
-  private final int downvote;
+  private final long upvote;
+  private final long downvote;
 
   public Card(
-      String title, String code, String link, String description, int upvote, int downvote) {
+      String title, String code, String link, String description, long upvote, long downvote) {
     this.title = title;
     this.code = code;
     this.link = link;
@@ -34,11 +34,11 @@ public final class Card {
     return description;
   }
 
-  public int getUpvote() {
+  public long getUpvote() {
     return upvote;
   }
 
-  public int getDownvote() {
+  public long getDownvote() {
     return downvote;
   }
 

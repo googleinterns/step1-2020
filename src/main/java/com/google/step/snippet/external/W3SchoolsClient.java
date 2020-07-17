@@ -1,5 +1,6 @@
 package com.google.step.snippet.external;
 
+import com.google.appengine.api.datastore.Entity;
 import com.google.step.snippet.data.Card;
 import java.io.IOException;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -12,6 +13,8 @@ public final class W3SchoolsClient implements Client {
   private static final String DESC_TAG = "p";
   private static final String SNIPPET_CLASS = "w3-example";
   private static final String CODE_CLASS = "w3-code";
+  private static final String UP = "upvote";
+  private static final String DOWN = "downvote";
 
   private String cseId = null;
 
@@ -56,6 +59,13 @@ public final class W3SchoolsClient implements Client {
     String description = descriptions.first().text();
     String code =
         StringEscapeUtils.escapeHtml4(snippets.first().getElementsByClass(CODE_CLASS).text());
-    return new Card(title, code, w3Link, description, 0, 0);
+    long upvote = 0;
+    long downvote = 0;
+    Entity feedback = getFeedback(w3Link);
+    if (feedback != null) {
+      upvote = (long) feedback.getProperty(UP);
+      downvote = (long) feedback.getProperty(DOWN);
+    }
+    return new Card(title, code, w3Link, description, upvote, downvote);
   }
 }

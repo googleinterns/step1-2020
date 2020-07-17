@@ -14,7 +14,7 @@ public final class W3SchoolsClientTest {
 
   private final W3SchoolsClient client = new W3SchoolsClient();
 
-  @Test
+  // @Test
   public void htmlCodeCard() {
     Card actual = client.search("https://www.w3schools.com/tags/tag_img.asp");
     Card expected =
@@ -29,7 +29,7 @@ public final class W3SchoolsClientTest {
     assertEquals(expected, actual);
   }
 
-  @Test
+  // @Test
   public void jsonCodeCard() {
     Card actual = client.search("https://www.w3schools.com/js/js_json_intro.asp");
     Card expected =

@@ -14,8 +14,12 @@
 
 package com.google.step.snippet.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import java.io.IOException;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,27 +29,45 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/vote")
 public class FeedbackServlet extends HttpServlet {
 
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws IOException, ServletException {
-    request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
-  }
+  private static final String UP = "upvote";
+  private static final String DOWN = "downvote";
+  private static final String URL = "url";
+  private static final String FEEDBACK = "feedback";
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    Entity feedbackEntity = null;
+    String url = request.getParameter(URL);
 
-    if (request.getParameter("url") != null) {
-      String url = request.getParameter("url");
-      System.out.println("url:" + url);
+    if (url == null) {
+      System.out.println("Invalid Card");
+      response.sendRedirect(request.getHeader("Referer"));
     }
 
-    if (request.getParameter("upvote") != null) {
-      System.out.println("upvoted");
-    } else if (request.getParameter("downvote") != null) {
-      System.out.println("downvoted");
-    }
+    Query.FilterPredicate filter = new Query.FilterPredicate(URL, FilterOperator.EQUAL, url);
+    Query query = new Query(FEEDBACK).setFilter(filter);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    feedbackEntity = datastore.prepare(query).asSingleEntity();
 
-    String referer = request.getHeader("Referer");
-    response.sendRedirect(referer);
+    if (feedbackEntity == null) {
+      feedbackEntity = new Entity(FEEDBACK);
+      feedbackEntity.setProperty(URL, url);
+
+      if (request.getParameter(UP) != null) {
+        feedbackEntity.setProperty(UP, (long) 1);
+        feedbackEntity.setProperty(DOWN, (long) 0);
+      } else if (request.getParameter(DOWN) != null) {
+        feedbackEntity.setProperty(DOWN, (long) 1);
+        feedbackEntity.setProperty(UP, (long) 0);
+      }
+    } else {
+      if (request.getParameter(UP) != null) {
+        feedbackEntity.setProperty(UP, (long) feedbackEntity.getProperty(UP) + 1);
+      } else if (request.getParameter(DOWN) != null) {
+        feedbackEntity.setProperty(DOWN, (long) feedbackEntity.getProperty(DOWN) + 1);
+      }
+    }
+    datastore.put(feedbackEntity);
+    response.sendRedirect(request.getHeader("Referer"));
   }
 }
