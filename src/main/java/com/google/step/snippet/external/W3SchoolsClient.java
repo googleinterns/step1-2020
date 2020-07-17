@@ -12,7 +12,9 @@ public final class W3SchoolsClient implements Client {
   private static final String SNIPPET_CLASS = "w3-example";
   private static final String CODE_CLASS = "w3-code";
 
-  private final String cseId;
+  private String cseId = null;
+
+  public W3SchoolsClient() {}
 
   public W3SchoolsClient(String cseId) {
     this.cseId = cseId;
