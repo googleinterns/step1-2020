@@ -26,8 +26,11 @@
             <code>${knowledgeCard.getCode()}</code>
             <span class="card-description">Description:</span>
             <p>${knowledgeCard.getDescription()}</p>
-            <button>Upvote: ${knowledgeCard.getUpvote()}</button>
-            <button>Downvote: ${knowledgeCard.getDownvote()}</button>
+            <form action="/vote" method="POST">
+              <input type="hidden" name="url" value="${knowledgeCard.getLink()}" />
+              <input type="submit" name="upvote" value="Upvote: ${knowledgeCard.getUpvote()}">
+              <input type="submit" name="downvote" value="Downvote: ${knowledgeCard.getDownvote()}">
+            </form>
           </div>
         </c:forEach>
       </div>
