@@ -64,7 +64,7 @@ public class SearchServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
-  throws IOException, ServletException {
+      throws IOException, ServletException {
     String param = request.getParameter("q");
     if (param == null || encodeValue(param) == null) {
       response.setContentType("text/html;");
@@ -76,7 +76,7 @@ public class SearchServlet extends HttpServlet {
     List<Card> allCards = new ArrayList<>();
 
     ExecutorService executor = Executors.newFixedThreadPool(3);
-    List<Callable<Card>> cardCallbacks = 
+    List<Callable<Card>> cardCallbacks =
       Arrays.asList(
           () -> {
             String w3Link = getLink(W3_CSE_ID, query);
