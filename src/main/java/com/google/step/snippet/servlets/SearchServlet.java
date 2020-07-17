@@ -20,7 +20,7 @@ import com.google.gson.JsonParser;
 import com.google.step.snippet.data.Card;
 import com.google.step.snippet.external.GeeksForGeeksClient;
 import com.google.step.snippet.external.StackOverflowClient;
-import com.google.step.snippet.external.W3SchoolClient;
+import com.google.step.snippet.external.W3SchoolsClient;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -43,7 +43,7 @@ import org.apache.http.impl.client.HttpClients;
 @WebServlet("/search")
 public class SearchServlet extends HttpServlet {
 
-  private static final String W3_CSE_ID = "INSERT_W3SCHOOL_CSE_ID";
+  private static final String W3_CSE_ID = "INSERT_W3SCHOOLS_CSE_ID";
   private static final String STACK_CSE_ID = "INSERT_STACKOVERFLOW_CSE_ID";
   private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CSE_ID";
   private static final String API_KEY = "INSERT_API_KEY";
@@ -77,12 +77,12 @@ public class SearchServlet extends HttpServlet {
     // for-loop
 
     /*
-     * Send request to retrieve card content through w3School site link from Google
+     * Send request to retrieve card content through w3Schools site link from Google
      * CSE
      */
     String w3Link = getLink(W3_CSE_ID, query);
     if (w3Link != null) {
-      W3SchoolClient client = new W3SchoolClient();
+      W3SchoolsClient client = new W3SchoolsClient();
       Card w3Card = client.search(w3Link);
       if (w3Card != null) {
         allCards.add(w3Card);
