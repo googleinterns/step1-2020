@@ -18,9 +18,6 @@ import com.google.step.snippet.data.Card;
 import com.google.step.snippet.external.GeeksForGeeksClient;
 import com.google.step.snippet.external.StackOverflowClient;
 import com.google.step.snippet.external.W3SchoolClient;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -79,28 +76,32 @@ public class SearchServlet extends HttpServlet {
     List<Card> allCards = new ArrayList<>();
 
     ExecutorService executor = Executors.newFixedThreadPool(3);
-    List<Callable<Card>> cardCallbacks = Arrays.asList(() -> {
-      String w3Link = getLink(W3_CSE_ID, query);
-      if (w3Link != null) {
-        W3SchoolClient w3client = new W3SchoolClient();
-        return w3client.search(w3Link);
-      }
-      return null;
-    }, ()  -> {
-      String stackLink = getLink(STACK_CSE_ID, query);
-      if (stackLink != null) {
-        StackOverflowClient stackClient = new StackOverflowClient();
-        return stackClient.search(stackLink);
-      }
-      return null;
-    }, () -> {
-      String geeksLink = getLink(GEEKS_CSE_ID, query);
-      if (geeksLink != null) {
-        GeeksForGeeksClient geeksClient = new GeeksForGeeksClient();
-        return geeksClient.search(geeksLink);
-      }
-      return null;
-    });
+    List<Callable<Card>> cardCallbacks = 
+      Arrays.asList(
+          () -> {
+            String w3Link = getLink(W3_CSE_ID, query);
+            if (w3Link != null) {
+              W3SchoolClient w3client = new W3SchoolClient();
+              return w3client.search(w3Link);
+            }
+            return null;
+          },
+          ()  -> {
+            String stackLink = getLink(STACK_CSE_ID, query);
+            if (stackLink != null) {
+              StackOverflowClient stackClient = new StackOverflowClient();
+              return stackClient.search(stackLink);
+            }
+            return null;
+          },
+          () -> {
+            String geeksLink = getLink(GEEKS_CSE_ID, query);
+            if (geeksLink != null) {
+              GeeksForGeeksClient geeksClient = new GeeksForGeeksClient();
+              return geeksClient.search(geeksLink);
+            }
+            return null;
+          });
     try {
       executor.invokeAll(cardCallbacks).stream()
           .map(
@@ -118,7 +119,7 @@ public class SearchServlet extends HttpServlet {
                 }
               });
     } catch (InterruptedException | NullPointerException | RejectedExecutionException e) {
-      System.out.println(e);
+      return;
     }
 
     request.setAttribute(CARD_LIST_LABEL, allCards);
