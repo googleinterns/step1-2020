@@ -26,7 +26,7 @@ public final class W3SchoolsClient implements Client {
   /**
    * Creates and returns a {@code Card} for the given W3School URL
    *
-   * @param w3Link the URL of the W3School web page to create the card for
+   * @param w3Link the URL of the W3Schools web page to create the card for
    * @return the created card, or {@code null} if a card could not be created
    */
   @Override
