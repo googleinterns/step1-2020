@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -75,21 +76,30 @@ public class SearchServlet extends HttpServlet {
     }
 
     String query = encodeValue(param);
-    List<String> allLinks = new ArrayList<>();
+    List<Card> allCards = new ArrayList<>();
 
     ExecutorService executor = Executors.newFixedThreadPool(3);
     List<Callable<Card>> callables = Arrays.asList(() -> {
       String w3Link = getLink(W3_CSE_ID, query);
-      W3SchoolClient w3client = new W3SchoolClient();
-      return w3client.search(w3Link);
+      if (w3Link != null) {
+        W3SchoolClient w3client = new W3SchoolClient();
+        return w3client.search(w3Link);
+      }
+      return null;
     }, ()  -> {
       String stackLink = getLink(STACK_CSE_ID, query);
-      W3SchoolClient stackClient = new W3SchoolClient();
-      return stackClient.search(stackLink);
+      if (stackLink != null) {
+        StackOverflowClient stackClient = new StackOverflowClient();
+        return stackClient.search(stackLink);
+      }
+      return null;
     }, () -> {
       String geeksLink = getLink(GEEKS_CSE_ID, query);
-      W3SchoolClient geeksClient = new W3SchoolClient();
-      return geeksClient.search(geeksLink);
+      if (geeksLink != null) {
+        GeeksForGeeksClient geeksClient = new GeeksForGeeksClient();
+        return geeksClient.search(geeksLink);
+      }
+      return null;
     });
     try {
       executor.invokeAll(callables)
@@ -107,7 +117,6 @@ public class SearchServlet extends HttpServlet {
                | RejectedExecutionException e) {
       System.out.println(e);
     }
-
     // TODO: after implementing scraping, consider changing getLink calls to a
     // for-loop
 
