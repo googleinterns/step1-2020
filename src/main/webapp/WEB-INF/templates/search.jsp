@@ -4,15 +4,15 @@
 
 <!doctype html>
 <html>
-<head>
-  <t:head/>
-  <title>Snippet</title>
-</head>
-<body>
-<t:base/>
-<div class="gcse-searchbox-only" data-resultsUrl="/search"></div>
-<div class="srp-container">
-  <div class="gcse-searchresults-only"></div>
-</div>
-</body>
+  <head>
+    <t:head/>
+    <title>Snippet</title>
+  </head>
+  <body>
+    <t:base/>
+    <div class="gcse-searchbox-only" data-resultsUrl="/search"></div>
+    <div class="srp-container">
+      <div class="gcse-searchresults-only"></div>
+    </div>
+  </body>
 </html>
