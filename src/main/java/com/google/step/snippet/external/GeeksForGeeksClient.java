@@ -2,6 +2,7 @@ package com.google.step.snippet.external;
 
 import com.google.step.snippet.data.Card;
 import java.io.IOException;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -51,7 +52,8 @@ public final class GeeksForGeeksClient implements Client {
     }
     String title = titles.first().text();
     String description = descriptions.first().text();
-    String code = snippets.first().getElementsByClass(CODE_CLASS).text();
-    return new Card(title, code, geeksLink, description);
+    String code =
+        StringEscapeUtils.escapeHtml4(snippets.first().getElementsByClass(CODE_CLASS).text());
+    return new Card(title, code, geeksLink, description, 0, 0);
   }
 }

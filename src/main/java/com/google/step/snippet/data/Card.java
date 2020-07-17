@@ -5,12 +5,17 @@ public final class Card {
   private final String code;
   private final String link;
   private final String description;
+  private final int upvote;
+  private final int downvote;
 
-  public Card(String title, String code, String link, String description) {
+  public Card(
+      String title, String code, String link, String description, int upvote, int downvote) {
     this.title = title;
     this.code = code;
     this.link = link;
     this.description = description;
+    this.upvote = upvote;
+    this.downvote = downvote;
   }
 
   public String getTitle() {
@@ -27,6 +32,14 @@ public final class Card {
 
   public String getDescription() {
     return description;
+  }
+
+  public int getUpvote() {
+    return upvote;
+  }
+
+  public int getDownvote() {
+    return downvote;
   }
 
   @Override

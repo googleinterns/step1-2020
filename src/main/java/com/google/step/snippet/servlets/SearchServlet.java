@@ -58,6 +58,7 @@ public class SearchServlet extends HttpServlet {
           new W3SchoolsClient(W3_CSE_ID),
           new StackOverflowClient(STACK_CSE_ID),
           new GeeksForGeeksClient(GEEKS_CSE_ID));
+  private static final String CARD_LIST_LABEL = "cardList";
 
   private static String encodeValue(String value) {
     try {
@@ -86,7 +87,7 @@ public class SearchServlet extends HttpServlet {
       }
       allCards.add(card);
     }
-    request.setAttribute("cardList", allCards);
+    request.setAttribute(CARD_LIST_LABEL, allCards);
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
 

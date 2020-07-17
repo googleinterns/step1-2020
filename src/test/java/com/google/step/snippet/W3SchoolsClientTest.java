@@ -20,9 +20,12 @@ public final class W3SchoolsClientTest {
     Card expected =
         new Card(
             "HTML <img> Tag",
-            "<img src=\"img_girl.jpg\" alt=\"Girl in a jacket\" width=\"500\" height=\"600\">",
+            "&lt;img src=&quot;img_girl.jpg&quot; alt=&quot;Girl in a jacket&quot;"
+                + " width=&quot;500&quot; height=&quot;600&quot;&gt;",
             "https://www.w3schools.com/tags/tag_img.asp",
-            "How to insert an image:");
+            "How to insert an image:",
+            0,
+            0);
     assertEquals(expected, actual);
   }
 
@@ -32,10 +35,13 @@ public final class W3SchoolsClientTest {
     Card expected =
         new Card(
             "JSON - Introduction",
-            "var myObj = {name: \"John\", age: 31, city: \"New York\"}; var myJSON ="
-                + " JSON.stringify(myObj); window.location = \"demo_json.php?x=\" + myJSON;",
+            "var myObj = {name: &quot;John&quot;, age: 31, city: &quot;New York&quot;}; var myJSON"
+                + " = JSON.stringify(myObj); window.location = &quot;demo_json.php?x=&quot; +"
+                + " myJSON;",
             "https://www.w3schools.com/js/js_json_intro.asp",
-            "JSON: JavaScript Object Notation.");
+            "JSON: JavaScript Object Notation.",
+            0,
+            0);
     assertEquals(expected, actual);
   }
 

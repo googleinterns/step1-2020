@@ -75,7 +75,7 @@ public final class StackOverflowClient implements Client {
     // No description or code is allowed for StackOverflow.
     String description = getDescription(answerBody);
     String code = getCode(answerBody);
-    return new Card(title, code, url, description);
+    return new Card(title, code, url, description, 0, 0);
   }
 
   /* Get the question id of passed in URL. */
@@ -126,6 +126,9 @@ public final class StackOverflowClient implements Client {
         break;
       }
     }
+    Jsoup.parse(description).text();
+    description.trim();
+    description += "...";
     return description;
   }
 
