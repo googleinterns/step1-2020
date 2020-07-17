@@ -43,7 +43,7 @@ import org.apache.http.impl.client.HttpClients;
 @WebServlet("/search")
 public class SearchServlet extends HttpServlet {
 
-  private static final String W3_CSE_ID = "INSERT_W3SCHOOL_CSE_ID";
+  private static final String W3_CSE_ID = "INSERT_W3SCHOOLS_CSE_ID";
   private static final String STACK_CSE_ID = "INSERT_STACKOVERFLOW_CSE_ID";
   private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CSE_ID";
   private static final String API_KEY = "INSERT_API_KEY";
@@ -77,7 +77,7 @@ public class SearchServlet extends HttpServlet {
     // for-loop
 
     /*
-     * Send request to retrieve card content through w3School site link from Google
+     * Send request to retrieve card content through w3Schools site link from Google
      * CSE
      */
     String w3Link = getLink(W3_CSE_ID, query);
