@@ -14,6 +14,9 @@
 
 package com.google.step.snippet.servlets;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import com.google.step.snippet.data.Card;
 import com.google.step.snippet.external.GeeksForGeeksClient;
 import com.google.step.snippet.external.StackOverflowClient;
