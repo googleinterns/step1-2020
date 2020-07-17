@@ -86,7 +86,7 @@ public class SearchServlet extends HttpServlet {
                 }
                 return null;
               },
-              ()  -> {
+              () -> {
                 String stackLink = getLink(STACK_CSE_ID, query);
                 if (stackLink != null) {
                   StackOverflowClient stackClient = new StackOverflowClient();
