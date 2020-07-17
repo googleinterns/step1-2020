@@ -18,6 +18,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.step.snippet.data.Card;
+import com.google.step.snippet.external.GeeksForGeeksClient;
 import com.google.step.snippet.external.StackOverflowClient;
 import com.google.step.snippet.external.W3SchoolClient;
 import java.io.IOException;
@@ -42,10 +43,10 @@ import org.apache.http.impl.client.HttpClients;
 @WebServlet("/search")
 public class SearchServlet extends HttpServlet {
 
-  private static final String W3_CSE_ID = "INSERT_W3SCHOOL_CSE_ID";
-  private static final String STACK_CSE_ID = "INSERT_STACKOVERFLOW_CSE_ID";
-  private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CSE_ID";
-  private static final String API_KEY = "INSERT_API_KEY";
+  private static final String W3_CSE_ID = "005097877490363447003:jdql8egojso";
+  private static final String STACK_CSE_ID = "005097877490363447003:fcadxuehmy0";
+  private static final String GEEKS_CSE_ID = "005097877490363447003:5-hfrrccix4";
+  private static final String API_KEY = "AIzaSyCMg08fxt9IX8LOAdwJGR0DyphMFpXPe5k";
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
   private static final String CSE_ITEMS = "items";
   private static final String CSE_LINK = "link";
@@ -106,7 +107,13 @@ public class SearchServlet extends HttpServlet {
      * Google CSE
      */
     String geeksLink = getLink(GEEKS_CSE_ID, query);
-    if (geeksLink != null) {}
+    if (geeksLink != null) {
+      GeeksForGeeksClient geeksClient = new GeeksForGeeksClient();
+      Card geeksCard = geeksClient.search(geeksLink);
+      if (geeksCard != null) {
+        allCards.add(geeksCard);
+      }
+    }
     request.setAttribute(CARD_LIST_LABEL, allCards);
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }

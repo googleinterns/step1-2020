@@ -19,14 +19,12 @@
       <div class="card-container">
         <c:forEach items='${requestScope["cardList"]}' var="knowledgeCard">
           <div class="card">
-            <div class="card-content">
-              <a href="${knowledgeCard.getLink()}" title="card-source">
-                <span class="card-title">${knowledgeCard.getTitle()}</span>
-              </a>
-              <code>${knowledgeCard.getCode()}</code>
-              <span class="card-description">Description:</span>
-              <p>${knowledgeCard.getDescription()}</p>
-            </div>
+            <a href="${knowledgeCard.getLink()}" title="card-source">
+              <span class="card-title">${knowledgeCard.getTitle()}</span>
+            </a>
+            <code>${knowledgeCard.getCode()}</code>
+            <span class="card-description">Description:</span>
+            <p>${knowledgeCard.getDescription()}</p>
           </div>
         </c:forEach>
       </div>
