@@ -20,7 +20,7 @@ import com.google.gson.JsonParser;
 import com.google.step.snippet.data.Card;
 import com.google.step.snippet.external.GeeksForGeeksClient;
 import com.google.step.snippet.external.StackOverflowClient;
-import com.google.step.snippet.external.W3SchoolClient;
+import com.google.step.snippet.external.W3SchoolsClient;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -82,7 +82,7 @@ public class SearchServlet extends HttpServlet {
      */
     String w3Link = getLink(W3_CSE_ID, query);
     if (w3Link != null) {
-      W3SchoolClient client = new W3SchoolClient();
+      W3SchoolsClient client = new W3SchoolsClient();
       Card w3Card = client.search(w3Link);
       if (w3Card != null) {
         allCards.add(w3Card);
