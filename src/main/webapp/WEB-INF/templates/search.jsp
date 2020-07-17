@@ -7,7 +7,6 @@
 <html>
   <head>
     <t:head/>
-    <link href="css/srp-style.css" rel="stylesheet">
     <title>Snippet</title>
   </head>
   <body>
