@@ -56,6 +56,7 @@ public class SearchServlet extends HttpServlet {
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
   private static final String CSE_ITEMS = "items";
   private static final String CSE_LINK = "link";
+  private static final String CARD_LIST_LABEL = "cardList";
 
   private static String encodeValue(String value) {
     try {
@@ -79,7 +80,7 @@ public class SearchServlet extends HttpServlet {
     List<Card> allCards = new ArrayList<>();
 
     ExecutorService executor = Executors.newFixedThreadPool(3);
-    List<Callable<Card>> callables = Arrays.asList(() -> {
+    List<Callable<Card>> cardCallbacks = Arrays.asList(() -> {
       String w3Link = getLink(W3_CSE_ID, query);
       if (w3Link != null) {
         W3SchoolClient w3client = new W3SchoolClient();
@@ -102,7 +103,7 @@ public class SearchServlet extends HttpServlet {
       return null;
     });
     try {
-      executor.invokeAll(callables)
+      executor.invokeAll(cardCallbacks)
       .stream()
       .map(future -> {
         try {
@@ -111,46 +112,18 @@ public class SearchServlet extends HttpServlet {
           throw new IllegalStateException(e);
         }
       })
-      .forEach(System.out::println);
+      .forEach((c) -> {
+        if (c != null) {
+          allCards.add(c);
+        }
+      });
     } catch (InterruptedException
                | NullPointerException
                | RejectedExecutionException e) {
       System.out.println(e);
     }
-    // TODO: after implementing scraping, consider changing getLink calls to a
-    // for-loop
 
-    /*
-     * Send request to retrieve card content through w3School site link from Google
-     * CSE
-
-    String w3Link = getLink(W3_CSE_ID, query);
-    if (w3Link != null) {
-      allLinks.add(w3Link);
-      // TODO: Call scraping function to return JSON card content
-    }
-
-    /*
-     * Send request to retrieve card content through StackOverflow site link from
-     * Google CSE
-
-    String stackLink = getLink(STACK_CSE_ID, query);
-    if (stackLink != null) {
-      allLinks.add(stackLink);
-      // TODO: Call stackoverflow API to return JSON card content
-    }
-
-    /*
-     * Send request to retrieve card content through GeeksForGeeks site link from
-     * Google CSE
-
-    String geeksLink = getLink(GEEKS_CSE_ID, query);
-    if (geeksLink != null) {
-      allLinks.add(geeksLink);
-      // TODO: Call scraping function to return JSON card content
-    }
-
-    */
+    request.setAttribute(CARD_LIST_LABEL, allCards);
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
 
