@@ -12,7 +12,9 @@ public final class W3SchoolsClient implements Client {
   private static final String SNIPPET_CLASS = "w3-example";
   private static final String CODE_CLASS = "w3-code";
 
-  private final String cseId;
+  private String cseId = null;
+
+  public W3SchoolsClient() {}
 
   public W3SchoolsClient(String cseId) {
     this.cseId = cseId;
@@ -26,7 +28,7 @@ public final class W3SchoolsClient implements Client {
   /**
    * Creates and returns a {@code Card} for the given W3School URL
    *
-   * @param w3Link the URL of the W3School web page to create the card for
+   * @param w3Link the URL of the W3Schools web page to create the card for
    * @return the created card, or {@code null} if a card could not be created
    */
   @Override
