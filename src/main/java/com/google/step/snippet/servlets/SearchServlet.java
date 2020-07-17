@@ -14,10 +14,11 @@
 
 package com.google.step.snippet.servlets;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
-import com.google.step.snippet.data.Auth;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -66,9 +67,14 @@ public class SearchServlet extends HttpServlet {
       redirectPath += "?" + request.getQueryString();
     }
 
-    Auth authUser = new Auth();
-    request.setAttribute(AUTH_URL, authUser.getUrl(redirectPath));
-    request.setAttribute(AUTH_LABEL, authUser.getLabel());
+    UserService userService = UserServiceFactory.getUserService();
+    if (userService.isUserLoggedIn()) {
+      request.setAttribute(AUTH_URL, userService.createLogoutURL(redirectPath));
+      request.setAttribute(AUTH_LABEL, "Logout");
+    } else {
+      request.setAttribute(AUTH_URL, userService.createLoginURL(redirectPath));
+      request.setAttribute(AUTH_LABEL, "Login");
+    }
 
     String param = request.getParameter("q");
     if (param == null || encodeValue(param) == null) {
