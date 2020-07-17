@@ -17,6 +17,10 @@ package com.google.step.snippet.servlets;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+import com.google.step.snippet.data.Card;
+import com.google.step.snippet.external.GeeksForGeeksClient;
+import com.google.step.snippet.external.StackOverflowClient;
+import com.google.step.snippet.external.W3SchoolsClient;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -46,6 +50,7 @@ public class SearchServlet extends HttpServlet {
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
   private static final String CSE_ITEMS = "items";
   private static final String CSE_LINK = "link";
+  private static final String CARD_LIST_LABEL = "cardList";
 
   private static String encodeValue(String value) {
     try {
@@ -66,7 +71,7 @@ public class SearchServlet extends HttpServlet {
     }
 
     String query = encodeValue(param);
-    List<String> allLinks = new ArrayList<>();
+    List<Card> allCards = new ArrayList<>();
 
     // TODO: after implementing scraping, consider changing getLink calls to a
     // for-loop
@@ -77,8 +82,11 @@ public class SearchServlet extends HttpServlet {
      */
     String w3Link = getLink(W3_CSE_ID, query);
     if (w3Link != null) {
-      allLinks.add(w3Link);
-      // TODO: Call scraping function to return JSON card content
+      W3SchoolsClient client = new W3SchoolsClient();
+      Card w3Card = client.search(w3Link);
+      if (w3Card != null) {
+        allCards.add(w3Card);
+      }
     }
 
     /*
@@ -87,8 +95,11 @@ public class SearchServlet extends HttpServlet {
      */
     String stackLink = getLink(STACK_CSE_ID, query);
     if (stackLink != null) {
-      allLinks.add(stackLink);
-      // TODO: Call stackoverflow API to return JSON card content
+      StackOverflowClient stackClient = new StackOverflowClient();
+      Card stackCard = stackClient.search(stackLink);
+      if (stackCard != null) {
+        allCards.add(stackCard);
+      }
     }
 
     /*
@@ -97,10 +108,13 @@ public class SearchServlet extends HttpServlet {
      */
     String geeksLink = getLink(GEEKS_CSE_ID, query);
     if (geeksLink != null) {
-      allLinks.add(geeksLink);
-      // TODO: Call scraping function to return JSON card content
+      GeeksForGeeksClient geeksClient = new GeeksForGeeksClient();
+      Card geeksCard = geeksClient.search(geeksLink);
+      if (geeksCard != null) {
+        allCards.add(geeksCard);
+      }
     }
-
+    request.setAttribute(CARD_LIST_LABEL, allCards);
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
 
