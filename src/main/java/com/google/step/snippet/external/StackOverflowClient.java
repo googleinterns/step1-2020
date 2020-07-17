@@ -52,7 +52,7 @@ public final class StackOverflowClient implements Client {
   }
 
   /**
-   * Creates and returns a {@code Card} for the given StackOverflow URL
+   * Creates and returns a {@code Card} for the given StackOverflow URL.
    *
    * @param url the URL of the StackOverflow question to create the card for
    * @return the created card, or {@code null} if a card could not be created

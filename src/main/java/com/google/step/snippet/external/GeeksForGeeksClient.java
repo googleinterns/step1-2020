@@ -24,9 +24,9 @@ public final class GeeksForGeeksClient implements Client {
   }
 
   /**
-   * Creates and returns a {@code Card} for the given W3School URL
+   * Creates and returns a {@code Card} for the given GeeksForGeeks URL.
    *
-   * @param geeksLink the URL of the W3School web page to create the card for
+   * @param geeksLink the URL of the GeeksForGeeks web page to create the card for
    * @return the created card, or {@code null} if a card could not be created
    */
   @Override

@@ -54,11 +54,10 @@ public class SearchServlet extends HttpServlet {
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
 
   private final List<Client> clients =
-      new ArrayList<>(
-          Arrays.asList(
-              new W3SchoolsClient(W3_CSE_ID),
-              new StackOverflowClient(STACK_CSE_ID),
-              new GeeksForGeeksClient(GEEKS_CSE_ID)));
+      Arrays.asList(
+          new W3SchoolsClient(W3_CSE_ID),
+          new StackOverflowClient(STACK_CSE_ID),
+          new GeeksForGeeksClient(GEEKS_CSE_ID));
 
   private static String encodeValue(String value) {
     try {
@@ -82,6 +81,9 @@ public class SearchServlet extends HttpServlet {
     for (Client client : clients) {
       String link = getLink(client.getCseId(), query);
       Card card = client.search(link);
+      if (card == null) {
+        break;
+      }
       allCards.add(card);
     }
     request.setAttribute("cardList", allCards);
