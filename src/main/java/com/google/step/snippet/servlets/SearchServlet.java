@@ -15,9 +15,9 @@
 package com.google.step.snippet.servlets;
 
 import com.google.step.snippet.data.Card;
-import com.google.step.snippet.external.W3SchoolClient;
-import com.google.step.snippet.external.StackOverflowClient;
 import com.google.step.snippet.external.GeeksForGeeksClient;
+import com.google.step.snippet.external.StackOverflowClient;
+import com.google.step.snippet.external.W3SchoolClient;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
@@ -26,13 +26,12 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -103,23 +102,22 @@ public class SearchServlet extends HttpServlet {
       return null;
     });
     try {
-      executor.invokeAll(cardCallbacks)
-      .stream()
-      .map(future -> {
-        try {
-          return future.get();
-        } catch (Exception e) {
-          throw new IllegalStateException(e);
-        }
-      })
-      .forEach((c) -> {
-        if (c != null) {
-          allCards.add(c);
-        }
-      });
-    } catch (InterruptedException
-               | NullPointerException
-               | RejectedExecutionException e) {
+      executor.invokeAll(cardCallbacks).stream()
+          .map(
+              future -> {
+                try {
+                  return future.get();
+                } catch (Exception e) {
+                  throw new IllegalStateException(e);
+                }
+              })
+          .forEach(
+              (c) -> {
+                if (c != null) {
+                  allCards.add(c);
+                }
+              });
+    } catch (InterruptedException | NullPointerException | RejectedExecutionException e) {
       System.out.println(e);
     }
 
@@ -141,11 +139,11 @@ public class SearchServlet extends HttpServlet {
         JsonObject obj;
         try {
           obj =
-            JsonParser.parseReader(new InputStreamReader(entity.getContent())).getAsJsonObject();
+              JsonParser.parseReader(new InputStreamReader(entity.getContent())).getAsJsonObject();
         } catch (JsonParseException
-                   | IllegalStateException
-                   | UnsupportedOperationException
-                   | IOException e) {
+            | IllegalStateException
+            | UnsupportedOperationException
+            | IOException e) {
           return null;
         }
         if (obj.has(CSE_ITEMS) && obj.getAsJsonArray(CSE_ITEMS).size() > 0) {
