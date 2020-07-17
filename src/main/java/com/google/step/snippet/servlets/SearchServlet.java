@@ -14,6 +14,10 @@
 
 package com.google.step.snippet.servlets;
 
+import com.google.step.snippet.data.Card;
+import com.google.step.snippet.external.W3SchoolClient;
+import com.google.step.snippet.external.StackOverflowClient;
+import com.google.step.snippet.external.GeeksForGeeksClient;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
@@ -22,8 +26,13 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -57,7 +66,7 @@ public class SearchServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws IOException, ServletException {
+  throws IOException, ServletException {
     String param = request.getParameter("q");
     if (param == null || encodeValue(param) == null) {
       response.setContentType("text/html;");
@@ -68,13 +77,44 @@ public class SearchServlet extends HttpServlet {
     String query = encodeValue(param);
     List<String> allLinks = new ArrayList<>();
 
+    ExecutorService executor = Executors.newFixedThreadPool(3);
+    List<Callable<Card>> callables = Arrays.asList(() -> {
+      String w3Link = getLink(W3_CSE_ID, query);
+      W3SchoolClient w3client = new W3SchoolClient();
+      return w3client.search(w3Link);
+    }, ()  -> {
+      String stackLink = getLink(STACK_CSE_ID, query);
+      W3SchoolClient stackClient = new W3SchoolClient();
+      return stackClient.search(stackLink);
+    }, () -> {
+      String geeksLink = getLink(GEEKS_CSE_ID, query);
+      W3SchoolClient geeksClient = new W3SchoolClient();
+      return geeksClient.search(geeksLink);
+    });
+    try {
+      executor.invokeAll(callables)
+      .stream()
+      .map(future -> {
+        try {
+          return future.get();
+        } catch (Exception e) {
+          throw new IllegalStateException(e);
+        }
+      })
+      .forEach(System.out::println);
+    } catch (InterruptedException
+               | NullPointerException
+               | RejectedExecutionException e) {
+      System.out.println(e);
+    }
+
     // TODO: after implementing scraping, consider changing getLink calls to a
     // for-loop
 
     /*
      * Send request to retrieve card content through w3School site link from Google
      * CSE
-     */
+
     String w3Link = getLink(W3_CSE_ID, query);
     if (w3Link != null) {
       allLinks.add(w3Link);
@@ -84,7 +124,7 @@ public class SearchServlet extends HttpServlet {
     /*
      * Send request to retrieve card content through StackOverflow site link from
      * Google CSE
-     */
+
     String stackLink = getLink(STACK_CSE_ID, query);
     if (stackLink != null) {
       allLinks.add(stackLink);
@@ -94,13 +134,14 @@ public class SearchServlet extends HttpServlet {
     /*
      * Send request to retrieve card content through GeeksForGeeks site link from
      * Google CSE
-     */
+
     String geeksLink = getLink(GEEKS_CSE_ID, query);
     if (geeksLink != null) {
       allLinks.add(geeksLink);
       // TODO: Call scraping function to return JSON card content
     }
 
+    */
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
 
@@ -118,11 +159,11 @@ public class SearchServlet extends HttpServlet {
         JsonObject obj;
         try {
           obj =
-              JsonParser.parseReader(new InputStreamReader(entity.getContent())).getAsJsonObject();
+            JsonParser.parseReader(new InputStreamReader(entity.getContent())).getAsJsonObject();
         } catch (JsonParseException
-            | IllegalStateException
-            | UnsupportedOperationException
-            | IOException e) {
+                   | IllegalStateException
+                   | UnsupportedOperationException
+                   | IOException e) {
           return null;
         }
         if (obj.has(CSE_ITEMS) && obj.getAsJsonArray(CSE_ITEMS).size() > 0) {
