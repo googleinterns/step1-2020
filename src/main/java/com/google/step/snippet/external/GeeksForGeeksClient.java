@@ -34,7 +34,7 @@ public final class GeeksForGeeksClient {
     }
     String title = titles.first().text();
     String description = descriptions.first().text();
-    String code = 
+    String code =
         StringEscapeUtils.escapeHtml4(snippets.first().getElementsByClass(CODE_CLASS).text());
     return new Card(title, code, geeksLink, description);
   }
