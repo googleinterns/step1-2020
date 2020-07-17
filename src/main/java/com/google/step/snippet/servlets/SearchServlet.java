@@ -77,31 +77,31 @@ public class SearchServlet extends HttpServlet {
 
     ExecutorService executor = Executors.newFixedThreadPool(3);
     List<Callable<Card>> cardCallbacks =
-      Arrays.asList(
-          () -> {
-            String w3Link = getLink(W3_CSE_ID, query);
-            if (w3Link != null) {
-              W3SchoolClient w3client = new W3SchoolClient();
-              return w3client.search(w3Link);
-            }
-            return null;
-          },
-          ()  -> {
-            String stackLink = getLink(STACK_CSE_ID, query);
-            if (stackLink != null) {
-              StackOverflowClient stackClient = new StackOverflowClient();
-              return stackClient.search(stackLink);
-            }
-            return null;
-          },
-          () -> {
-            String geeksLink = getLink(GEEKS_CSE_ID, query);
-            if (geeksLink != null) {
-              GeeksForGeeksClient geeksClient = new GeeksForGeeksClient();
-              return geeksClient.search(geeksLink);
-            }
-            return null;
-          });
+          Arrays.asList(
+              () -> {
+                String w3Link = getLink(W3_CSE_ID, query);
+                if (w3Link != null) {
+                  W3SchoolClient w3client = new W3SchoolClient();
+                  return w3client.search(w3Link);
+                }
+                return null;
+              },
+              ()  -> {
+                String stackLink = getLink(STACK_CSE_ID, query);
+                if (stackLink != null) {
+                  StackOverflowClient stackClient = new StackOverflowClient();
+                  return stackClient.search(stackLink);
+                }
+                return null;
+              },
+              () -> {
+                String geeksLink = getLink(GEEKS_CSE_ID, query);
+                if (geeksLink != null) {
+                  GeeksForGeeksClient geeksClient = new GeeksForGeeksClient();
+                  return geeksClient.search(geeksLink);
+                }
+                return null;
+              });
     try {
       executor.invokeAll(cardCallbacks).stream()
           .map(
