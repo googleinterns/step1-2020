@@ -52,7 +52,8 @@ public class SearchServlet extends HttpServlet {
   private static final String CSE_ITEMS = "items";
   private static final String CSE_LINK = "link";
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
-
+  private static final String CARD_LIST_LABEL = "cardList";
+  
   private final List<Client> clients =
       Arrays.asList(
           new W3SchoolsClient(W3_CSE_ID),
@@ -86,7 +87,7 @@ public class SearchServlet extends HttpServlet {
       }
       allCards.add(card);
     }
-    request.setAttribute("cardList", allCards);
+    request.setAttribute(CARD_LIST_LABEL, allCards);
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
 
