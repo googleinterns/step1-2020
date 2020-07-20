@@ -1,5 +1,4 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="com.google.step.snippet.data.Card"%> 
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
@@ -7,7 +6,7 @@
 <html>
   <head>
     <t:head/>
-    <link href="css/srp-style.css" rel="stylesheet">
+    <link href="css/srp_style.css" rel="stylesheet">
     <title>Snippet</title>
   </head>
   <body>
