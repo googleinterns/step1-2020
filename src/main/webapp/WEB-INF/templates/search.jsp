@@ -9,6 +9,7 @@
     <t:head/>
     <link href="css/srp-style.css" rel="stylesheet">
     <title>Snippet</title>
+    <script type="text/javascript" src="${pageContext.request.contextPath}js/script.js"></script>
   </head>
   <body>
     <t:base/>
@@ -26,11 +27,12 @@
             <code>${knowledgeCard.getCode()}</code>
             <span class="card-description">Description:</span>
             <p>${knowledgeCard.getDescription()}</p>
-            <form action="/vote" method="POST">
-              <input type="hidden" name="url" value="${knowledgeCard.getLink()}" />
-              <input type="submit" name="upvote" value="Upvote: ${knowledgeCard.getUpvote()}">
-              <input type="submit" name="downvote" value="Downvote: ${knowledgeCard.getDownvote()}">
-            </form>
+            <button class="upvote" style="background-color: greenyellow;"value="${knowledgeCard.getLink()}">
+              ${knowledgeCard.getUpvote()}
+            </button>
+            <button class="downvote" style="background-color: rgb(184, 51, 51); color:white;" value="${knowledgeCard.getLink()}">
+              ${knowledgeCard.getDownvote()}
+            </button>
           </div>
         </c:forEach>
       </div>

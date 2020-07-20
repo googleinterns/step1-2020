@@ -48,26 +48,32 @@ public class FeedbackServlet extends HttpServlet {
     Query query = new Query(FEEDBACK).setFilter(filter);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     feedbackEntity = datastore.prepare(query).asSingleEntity();
+    long count = 0;
 
     if (feedbackEntity == null) {
       feedbackEntity = new Entity(FEEDBACK);
       feedbackEntity.setProperty(URL, url);
 
       if (request.getParameter(UP) != null) {
+        count = 1;
         feedbackEntity.setProperty(UP, (long) 1);
         feedbackEntity.setProperty(DOWN, (long) 0);
       } else if (request.getParameter(DOWN) != null) {
+        count = 1;
         feedbackEntity.setProperty(DOWN, (long) 1);
         feedbackEntity.setProperty(UP, (long) 0);
       }
     } else {
       if (request.getParameter(UP) != null) {
+        count = (long) feedbackEntity.getProperty(UP) + 1;
         feedbackEntity.setProperty(UP, (long) feedbackEntity.getProperty(UP) + 1);
       } else if (request.getParameter(DOWN) != null) {
+        count = (long) feedbackEntity.getProperty(DOWN) + 1;
         feedbackEntity.setProperty(DOWN, (long) feedbackEntity.getProperty(DOWN) + 1);
       }
     }
     datastore.put(feedbackEntity);
-    response.sendRedirect(request.getHeader("Referer"));
+    response.setContentType("text/plain");
+    response.getWriter().println(Long.toString(count));
   }
 }
