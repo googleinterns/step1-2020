@@ -18,9 +18,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.step.snippet.data.Card;
+import com.google.step.snippet.external.Client;
 import com.google.step.snippet.external.GeeksForGeeksClient;
 import com.google.step.snippet.external.StackOverflowClient;
-import com.google.step.snippet.external.W3SchoolClient;
+import com.google.step.snippet.external.W3SchoolsClient;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -50,14 +51,18 @@ import org.apache.http.impl.client.HttpClients;
 @WebServlet("/search")
 public class SearchServlet extends HttpServlet {
 
-  private static final String W3_CSE_ID = "INSERT_W3SCHOOL_CSE_ID";
+  private static final String W3_CSE_ID = "INSERT_W3SCHOOLS_CSE_ID";
   private static final String STACK_CSE_ID = "INSERT_STACKOVERFLOW_CSE_ID";
   private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CSE_ID";
   private static final String API_KEY = "INSERT_API_KEY";
-  private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
   private static final String CSE_ITEMS = "items";
   private static final String CSE_LINK = "link";
+  private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
   private static final String CARD_LIST_LABEL = "cardList";
+
+  private final Client w3Client = new W3SchoolsClient(W3_CSE_ID);
+  private final Client stackClient = new StackOverflowClient(W3_CSE_ID);
+  private final Client geeksClient = new GeeksForGeeksClient(W3_CSE_ID);
 
   private static String encodeValue(String value) {
     try {
@@ -76,33 +81,28 @@ public class SearchServlet extends HttpServlet {
       response.getWriter().println("Invalid Query");
       return;
     }
-
     String query = encodeValue(param);
     List<Card> allCards = new ArrayList<>();
-
     ExecutorService executor = Executors.newFixedThreadPool(3);
     List<Callable<Card>> cardCallbacks =
         Arrays.asList(
             () -> {
-              String w3Link = getLink(W3_CSE_ID, query);
+              String w3Link = getLink(w3Client.getCseId(), query);
               if (w3Link != null) {
-                W3SchoolClient w3client = new W3SchoolClient();
-                return w3client.search(w3Link);
+                return w3Client.search(w3Link);
               }
               return null;
             },
             () -> {
-              String stackLink = getLink(STACK_CSE_ID, query);
+              String stackLink = getLink(stackClient.getCseId(), query);
               if (stackLink != null) {
-                StackOverflowClient stackClient = new StackOverflowClient();
                 return stackClient.search(stackLink);
               }
               return null;
             },
             () -> {
-              String geeksLink = getLink(GEEKS_CSE_ID, query);
+              String geeksLink = getLink(geeksClient.getCseId(), query);
               if (geeksLink != null) {
-                GeeksForGeeksClient geeksClient = new GeeksForGeeksClient();
                 return geeksClient.search(geeksLink);
               }
               return null;

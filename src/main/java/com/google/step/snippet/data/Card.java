@@ -1,10 +1,10 @@
 package com.google.step.snippet.data;
 
 public final class Card {
-  private String title;
-  private String code;
-  private String link;
-  private String description;
+  private final String title;
+  private final String code;
+  private final String link;
+  private final String description;
 
   public Card(String title, String code, String link, String description) {
     this.title = title;
@@ -27,5 +27,24 @@ public final class Card {
 
   public String getDescription() {
     return description;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (!Card.class.isAssignableFrom(obj.getClass())) {
+      return false;
+    }
+
+    final Card other = (Card) obj;
+    return this.title.equals(other.title)
+        && this.code.equals(other.code)
+        && this.link.equals(other.link)
+        && this.description.equals(other.description);
   }
 }
