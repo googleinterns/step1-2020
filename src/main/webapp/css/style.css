@@ -8,7 +8,7 @@ h3 {
 
 h1 {
   text-align: center;
-  font-size: 40px;
+  font: 400 60px Roboto, Arial, sans-serif;
 }
 
 .srp-container {
