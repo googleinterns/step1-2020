@@ -82,10 +82,9 @@ public class SearchServlet extends HttpServlet {
     for (Client client : clients) {
       String link = getLink(client.getCseId(), query);
       Card card = client.search(link);
-      if (card == null) {
-        break;
+      if (card != null) {
+        allCards.add(card);
       }
-      allCards.add(card);
     }
     request.setAttribute(CARD_LIST_LABEL, allCards);
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
