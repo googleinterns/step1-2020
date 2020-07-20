@@ -61,8 +61,8 @@ public class SearchServlet extends HttpServlet {
   private static final String CARD_LIST_LABEL = "cardList";
 
   private final Client w3Client = new W3SchoolsClient(W3_CSE_ID);
-  private final Client stackClient = new StackOverflowClient(W3_CSE_ID);
-  private final Client geeksClient = new GeeksForGeeksClient(W3_CSE_ID);
+  private final Client stackClient = new StackOverflowClient(STACK_CSE_ID);
+  private final Client geeksClient = new GeeksForGeeksClient(GEEKS_CSE_ID);
 
   private static String encodeValue(String value) {
     try {
