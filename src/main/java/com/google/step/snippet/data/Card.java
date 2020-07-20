@@ -28,4 +28,23 @@ public final class Card {
   public String getDescription() {
     return description;
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (!Card.class.isAssignableFrom(obj.getClass())) {
+      return false;
+    }
+
+    final Card other = (Card) obj;
+    return this.title.equals(other.title)
+        && this.code.equals(other.code)
+        && this.link.equals(other.link)
+        && this.description.equals(other.description);
+  }
 }

@@ -1,9 +1,13 @@
+body, html {
+  font-family: Roboto, Arial, sans-serif;
+}
+
 h3 {
   text-align: center;
 }
 
-.srp-container {
-  display: flex;
+h3 {
+  text-align: center;
 }
 
 .header-container {
