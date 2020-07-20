@@ -11,6 +11,7 @@ public final class GeeksForGeeksClient implements Client {
   private static final String DESC_TAG = "p";
   private static final String SNIPPET_CLASS = "code-block";
   private static final String CODE_CLASS = "code-container";
+  private static final String IMG_PATH = "images/geeks.png";
 
   private final String cseId;
 
@@ -52,6 +53,6 @@ public final class GeeksForGeeksClient implements Client {
     String title = titles.first().text();
     String description = descriptions.first().text();
     String code = snippets.first().getElementsByClass(CODE_CLASS).text();
-    return new Card(title, code, geeksLink, description);
+    return new Card(title, code, geeksLink, description, IMG_PATH);
   }
 }

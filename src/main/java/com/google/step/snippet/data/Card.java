@@ -5,12 +5,14 @@ public final class Card {
   private final String code;
   private final String link;
   private final String description;
+  private final String icon;
 
-  public Card(String title, String code, String link, String description) {
+  public Card(String title, String code, String link, String description, String icon) {
     this.title = title;
     this.code = code;
     this.link = link;
     this.description = description;
+    this.icon = icon;
   }
 
   public String getTitle() {
@@ -27,6 +29,10 @@ public final class Card {
 
   public String getDescription() {
     return description;
+  }
+
+  public String getIcon() {
+    return icon;
   }
 
   @Override

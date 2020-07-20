@@ -38,3 +38,11 @@
   margin-top: 0;
   display: block;
 }
+
+.card-heading {
+  display: flex;
+}
+
+.icon {
+  margin-right: 5px;
+}
