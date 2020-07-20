@@ -18,7 +18,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public final class StackOverflowClient {
+public final class StackOverflowClient implements Client {
   private static final String SEARCH_URL_TEMPLATE =
       "https://api.stackexchange.com/2.2/questions/%s?"
           + "order=desc&sort=activity&site=stackoverflow";
@@ -40,8 +40,24 @@ public final class StackOverflowClient {
   // Set 200 to be the maximum length of description for MVP.
   private static final int MAX_DESCRIPTION_LENGTH = 200;
 
-  /* This method build the desired card after getting each field. */
-  /* It will return a null card if no valid question is found */
+  private final String cseId;
+
+  public StackOverflowClient(String cseId) {
+    this.cseId = cseId;
+  }
+
+  @Override
+  public String getCseId() {
+    return cseId;
+  }
+
+  /**
+   * Creates and returns a {@code Card} for the given StackOverflow URL.
+   *
+   * @param url the URL of the StackOverflow question to create the card for
+   * @return the created card, or {@code null} if a card could not be created
+   */
+  @Override
   public Card search(String url) {
     String questionId = getQuestionId(url);
     if (questionId == null) {
