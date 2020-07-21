@@ -25,7 +25,7 @@
             <c:if test="${knowledgeCard.getCode() != null}">
               <code>${knowledgeCard.getCode()}</code>
             </c:if>
-            <span class="card-description">Description:</span>
+            <div class="card-description">Description:</div>
             <p>${knowledgeCard.getDescription()}</p>
           </div>
         </c:forEach>
