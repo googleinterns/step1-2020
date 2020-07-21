@@ -7,12 +7,30 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-public final class GeeksForGeeksClient {
+public final class GeeksForGeeksClient implements Client {
   private static final String TITLE_TAG = "h1";
   private static final String DESC_TAG = "p";
   private static final String SNIPPET_CLASS = "code-block";
   private static final String CODE_CLASS = "code-container";
 
+  private final String cseId;
+
+  public GeeksForGeeksClient(String cseId) {
+    this.cseId = cseId;
+  }
+
+  @Override
+  public String getCseId() {
+    return cseId;
+  }
+
+  /**
+   * Creates and returns a {@code Card} for the given GeeksForGeeks URL.
+   *
+   * @param geeksLink the URL of the GeeksForGeeks web page to create the card for
+   * @return the created card, or {@code null} if a card could not be created
+   */
+  @Override
   public Card search(String geeksLink) {
     Document doc = null;
     try {

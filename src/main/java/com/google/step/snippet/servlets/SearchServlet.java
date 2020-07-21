@@ -18,6 +18,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.step.snippet.data.Card;
+import com.google.step.snippet.external.Client;
 import com.google.step.snippet.external.GeeksForGeeksClient;
 import com.google.step.snippet.external.StackOverflowClient;
 import com.google.step.snippet.external.W3SchoolsClient;
@@ -27,6 +28,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -47,10 +49,16 @@ public class SearchServlet extends HttpServlet {
   private static final String STACK_CSE_ID = "INSERT_STACKOVERFLOW_CSE_ID";
   private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CSE_ID";
   private static final String API_KEY = "INSERT_API_KEY";
-  private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
   private static final String CSE_ITEMS = "items";
   private static final String CSE_LINK = "link";
+  private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
   private static final String CARD_LIST_LABEL = "cardList";
+
+  private final List<Client> clients =
+      Arrays.asList(
+          new W3SchoolsClient(W3_CSE_ID),
+          new StackOverflowClient(STACK_CSE_ID),
+          new GeeksForGeeksClient(GEEKS_CSE_ID));
 
   private static String encodeValue(String value) {
     try {
@@ -69,49 +77,14 @@ public class SearchServlet extends HttpServlet {
       response.getWriter().println("Invalid Query");
       return;
     }
-
     String query = encodeValue(param);
     List<Card> allCards = new ArrayList<>();
 
-    // TODO: after implementing scraping, consider changing getLink calls to a
-    // for-loop
-
-    /*
-     * Send request to retrieve card content through w3Schools site link from Google
-     * CSE
-     */
-    String w3Link = getLink(W3_CSE_ID, query);
-    if (w3Link != null) {
-      W3SchoolsClient client = new W3SchoolsClient();
-      Card w3Card = client.search(w3Link);
-      if (w3Card != null) {
-        allCards.add(w3Card);
-      }
-    }
-
-    /*
-     * Send request to retrieve card content through StackOverflow site link from
-     * Google CSE
-     */
-    String stackLink = getLink(STACK_CSE_ID, query);
-    if (stackLink != null) {
-      StackOverflowClient stackClient = new StackOverflowClient();
-      Card stackCard = stackClient.search(stackLink);
-      if (stackCard != null) {
-        allCards.add(stackCard);
-      }
-    }
-
-    /*
-     * Send request to retrieve card content through GeeksForGeeks site link from
-     * Google CSE
-     */
-    String geeksLink = getLink(GEEKS_CSE_ID, query);
-    if (geeksLink != null) {
-      GeeksForGeeksClient geeksClient = new GeeksForGeeksClient();
-      Card geeksCard = geeksClient.search(geeksLink);
-      if (geeksCard != null) {
-        allCards.add(geeksCard);
+    for (Client client : clients) {
+      String link = getLink(client.getCseId(), query);
+      Card card = client.search(link);
+      if (card != null) {
+        allCards.add(card);
       }
     }
     request.setAttribute(CARD_LIST_LABEL, allCards);

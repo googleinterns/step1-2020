@@ -7,12 +7,30 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-public final class W3SchoolsClient {
+public final class W3SchoolsClient implements Client {
   private static final String TITLE_TAG = "h1";
   private static final String DESC_TAG = "p";
   private static final String SNIPPET_CLASS = "w3-example";
   private static final String CODE_CLASS = "w3-code";
 
+  private String cseId = null;
+
+  public W3SchoolsClient(String cseId) {
+    this.cseId = cseId;
+  }
+
+  @Override
+  public String getCseId() {
+    return cseId;
+  }
+
+  /**
+   * Creates and returns a {@code Card} for the given W3Schools URL.
+   *
+   * @param w3Link the URL of the W3Schools web page to create the card for
+   * @return the created card, or {@code null} if a card could not be created
+   */
+  @Override
   public Card search(String w3Link) {
     Document doc = null;
     try {
