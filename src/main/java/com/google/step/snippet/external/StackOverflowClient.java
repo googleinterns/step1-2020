@@ -16,15 +16,15 @@ import org.json.JSONObject;
 
 public final class StackOverflowClient implements Client {
   private static final String SEARCH_URL_TEMPLATE =
-      "https://api.stackexchange.com/2.2/questions/%s?"
-          + "order=desc&sort=activity&site=stackoverflow";
+          "https://api.stackexchange.com/2.2/questions/%s?"
+                  + "order=desc&sort=activity&site=stackoverflow";
   private static final String QUESTION_URL_TEMPLATE =
-      "https://api.stackexchange.com/2.2/questions/%s/answers?"
-          + "order=desc&sort=votes&site=stackoverflow";
+          "https://api.stackexchange.com/2.2/questions/%s/answers?"
+                  + "order=desc&sort=votes&site=stackoverflow";
   // This URL specifies a custom StackExchange API filter that generates answer body.
   private static final String ANSWER_URL_TEMPLATE =
-      "https://api.stackexchange.com/2.2/answers/%s?order"
-          + "=desc&sort=activity&site=stackoverflow&filter=!9_bDE(fI5";
+          "https://api.stackexchange.com/2.2/answers/%s?order"
+                  + "=desc&sort=activity&site=stackoverflow&filter=!9_bDE(fI5";
   // The URL is in the pattern of stackoverlow.com/questions/question_id/title.
   // The ID_INDEX help retrieve the question_id from parsed URL.
   private static final int ID_INDEX = 2;
@@ -32,6 +32,8 @@ public final class StackOverflowClient implements Client {
   private static final String TITLE_PARAMETER = "title";
   private static final String BODY_PARAMETER = "body";
   private static final String ANSWER_ID_PARAMETER = "answer_id";
+  private static final String QUESTION_PARAMETER = "questions";
+  private static final int QUESTION_INDEX = 1;
   // Set 300 to be the maximum length of description for MVP.
   private static final int MAX_ANSWER_LENGTH = 300;
 
@@ -83,6 +85,9 @@ public final class StackOverflowClient implements Client {
     }
     // Parse the URL to get the question id.
     String[] segments = uri.getPath().split("/");
+    if (segments.length <= ID_INDEX || !segments[QUESTION_INDEX].equals(QUESTION_PARAMETER)) {
+      return null;
+    }
     String questionId = segments[ID_INDEX];
     if (!Pattern.matches("[0-9]+", questionId)) {
       return null;
