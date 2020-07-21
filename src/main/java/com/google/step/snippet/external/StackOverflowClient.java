@@ -136,9 +136,6 @@ public final class StackOverflowClient implements Client {
         break;
       }
     }
-    Jsoup.parse(description).text();
-    description.trim();
-    description += "...";
     return description;
   }
 

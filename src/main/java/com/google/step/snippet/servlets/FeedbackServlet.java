@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that renders a basic homepage. */
 @WebServlet("/vote")
 public class FeedbackServlet extends HttpServlet {
 
