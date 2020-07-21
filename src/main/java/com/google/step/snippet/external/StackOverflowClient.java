@@ -174,10 +174,10 @@ public final class StackOverflowClient implements Client {
       return null;
     }
     JSONObject json = new JSONObject(responseBody.toString());
-    if(json.has(ITEM_PARAMETER) && json.getJSONArray(ITEM_PARAMETER).length() > 0) {
+    if (json.has(ITEM_PARAMETER) && json.getJSONArray(ITEM_PARAMETER).length() > 0) {
       JSONArray items = json.getJSONArray(ITEM_PARAMETER);
       JSONObject obj = items.getJSONObject(0);
-      if(obj.has(fieldParam)) {
+      if (obj.has(fieldParam)) {
         String result = obj.get(fieldParam).toString();
         return result;
       }
