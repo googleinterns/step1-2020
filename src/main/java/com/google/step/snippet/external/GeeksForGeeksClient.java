@@ -55,6 +55,8 @@ public final class GeeksForGeeksClient implements Client {
     String title = titles.first().text();
     String description = descriptions.first().text();
     String code = snippets.first().getElementsByClass(CODE_CLASS).text();
+
+    /* Retrieve feedback, if stored feedback exists */
     long upvote = 0;
     long downvote = 0;
     Entity feedback = getFeedback(geeksLink);

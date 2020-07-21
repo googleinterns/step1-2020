@@ -29,6 +29,7 @@ public class FeedbackServlet extends HttpServlet {
       response.sendRedirect(request.getHeader("Referer"));
     }
 
+    /* Query for card feedback by card URL */
     Query.FilterPredicate filter = new Query.FilterPredicate(URL, FilterOperator.EQUAL, url);
     Query query = new Query(FEEDBACK).setFilter(filter);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -38,7 +39,7 @@ public class FeedbackServlet extends HttpServlet {
     if (feedbackEntity == null) {
       feedbackEntity = new Entity(FEEDBACK);
       feedbackEntity.setProperty(URL, url);
-
+      /* Initialize vote count */
       if (request.getParameter(UP) != null) {
         totalVotes = 1;
         feedbackEntity.setProperty(UP, (long) 1);
@@ -49,16 +50,20 @@ public class FeedbackServlet extends HttpServlet {
         feedbackEntity.setProperty(UP, (long) 0);
       }
     } else {
+      /* Update with upvote count */
       if (request.getParameter(UP) != null) {
         totalVotes =
             (long) feedbackEntity.getProperty(UP) - (long) feedbackEntity.getProperty(DOWN) + 1;
         feedbackEntity.setProperty(UP, (long) feedbackEntity.getProperty(UP) + 1);
-      } else if (request.getParameter(DOWN) != null) {
+      }
+      /* Update with downvote count */
+      else if (request.getParameter(DOWN) != null) {
         totalVotes =
             (long) feedbackEntity.getProperty(UP) - (long) feedbackEntity.getProperty(DOWN) - 1;
         feedbackEntity.setProperty(DOWN, (long) feedbackEntity.getProperty(DOWN) + 1);
       }
     }
+    /* Convert vote count to response string */
     String totalStr;
     if (totalVotes < 0) {
       totalStr = "-" + Long.toString(Math.abs(totalVotes));

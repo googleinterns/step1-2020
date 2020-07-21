@@ -78,6 +78,8 @@ public final class StackOverflowClient implements Client {
     // No description or code is allowed for StackOverflow.
     String description = getDescription(answerBody);
     String code = getCode(answerBody);
+
+    /* Retrieve feedback, if stored feedback exists */
     long upvote = 0;
     long downvote = 0;
     Entity feedback = getFeedback(url);
