@@ -67,8 +67,7 @@ public final class StackOverflowClient implements Client {
     if (title == null || answerBody == null) {
       return null;
     }
-    // No description or code is allowed for StackOverflow.
-    String description = getAnswerBody(answerId);
+    String description = answerBody;
     String code = null;
     return new Card(title, code, url, description);
   }
@@ -106,7 +105,7 @@ public final class StackOverflowClient implements Client {
   private String getAnswerBody(String answerId) {
     String answerUrl = String.format(ANSWER_URL_TEMPLATE, answerId);
     String answerBody = getResponse(answerUrl, BODY_PARAMETER);
-    if (answerBody.length() > 300) {
+    if (answerBody != null && answerBody.length() > 300) {
       answerBody = answerBody.substring(0, MAX_ANSWER_LENGTH);
     }
     answerBody += "...";
