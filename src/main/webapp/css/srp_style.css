@@ -6,6 +6,17 @@
   flex-grow: 1;
 }
 
+.srp-heading {
+  display: flex;
+  align-items: center;
+}
+
+h1 {
+  text-align: center;
+  margin: 20px 20px 25px;
+  font: 400 28px Roboto, Arial, sans-serif;
+}
+
 .card-container {
   margin: 20px 30px 0px 30px;
 }
@@ -37,4 +48,8 @@
 .card p {
   margin-top: 0;
   display: block;
+}
+
+#___gcse_0 {
+  width: 60%;
 }

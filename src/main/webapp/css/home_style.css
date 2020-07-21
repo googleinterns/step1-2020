@@ -1,0 +1,17 @@
+h1 {
+  text-align: center;
+  margin: 20px 20px 25px;
+  font: 400 60px Roboto, Arial, sans-serif;
+}
+
+#___gcse_0 {
+  width: 60%;
+}
+
+.home-heading {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: center;
+	height: 50vh;
+}
