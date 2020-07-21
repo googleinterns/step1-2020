@@ -12,6 +12,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -173,7 +174,11 @@ public final class StackOverflowClient implements Client {
       return null;
     }
     JSONObject json = new JSONObject(responseBody.toString());
-    String res = json.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(fieldParam).toString();
+    JSONArray items = json.getJSONArray(ITEM_PARAMETER);
+    if (items == null || items.length() == 0) {
+      return null;
+    }
+    String res = items.getJSONObject(0).get(fieldParam).toString();
     if (response.getStatusLine().getStatusCode() != 200) {
       return null;
     }
