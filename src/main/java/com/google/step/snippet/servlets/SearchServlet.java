@@ -36,6 +36,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -108,7 +109,7 @@ public class SearchServlet extends HttpServlet {
               return null;
             });
     try {
-      executor.invokeAll(cardCallbacks).stream()
+      executor.invokeAll(cardCallbacks, 3L, TimeUnit.SECONDS).stream()
           .map(
               future -> {
                 try {
