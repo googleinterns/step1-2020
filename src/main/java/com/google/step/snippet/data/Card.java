@@ -5,14 +5,14 @@ public final class Card {
   private final String code;
   private final String link;
   private final String description;
-  private final String icon;
+  private final String source;
 
-  public Card(String title, String code, String link, String description, String icon) {
+  public Card(String title, String code, String link, String description, String source) {
     this.title = title;
     this.code = code;
     this.link = link;
     this.description = description;
-    this.icon = icon;
+    this.source = source;
   }
 
   public String getTitle() {
@@ -31,8 +31,8 @@ public final class Card {
     return description;
   }
 
-  public String getIcon() {
-    return icon;
+  public String getSource() {
+    return source;
   }
 
   @Override

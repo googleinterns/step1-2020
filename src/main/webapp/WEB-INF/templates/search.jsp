@@ -20,7 +20,7 @@
         <c:forEach items='${requestScope["cardList"]}' var="knowledgeCard">
           <div class="card">
             <span class="card-heading">
-              <img class="icon" src="${knowledgeCard.getIcon()}" width="25px" height="25px">
+              <img class="icon" src="images/${knowledgeCard.getSource()}.png" alt="${knowledgeCard.getSource()} site icon"width="25px" height="25px">
               <a href="${knowledgeCard.getLink()}" title="card-source"class="card-title">
                 ${knowledgeCard.getTitle()}
               </a>

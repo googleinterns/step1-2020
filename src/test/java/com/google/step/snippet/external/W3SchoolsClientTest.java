@@ -1,10 +1,9 @@
-package com.google.step.snippet;
+package com.google.step.snippet.external;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import com.google.step.snippet.data.Card;
-import com.google.step.snippet.external.W3SchoolsClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -23,7 +22,7 @@ public final class W3SchoolsClientTest {
             "<img src=\"img_girl.jpg\" alt=\"Girl in a jacket\" width=\"500\" height=\"600\">",
             "https://www.w3schools.com/tags/tag_img.asp",
             "How to insert an image:",
-            "images/w3.png");
+            "W3Schools");
     assertEquals(expected, actual);
   }
 
@@ -37,7 +36,7 @@ public final class W3SchoolsClientTest {
                 + " JSON.stringify(myObj); window.location = \"demo_json.php?x=\" + myJSON;",
             "https://www.w3schools.com/js/js_json_intro.asp",
             "JSON: JavaScript Object Notation.",
-            "images/w3.png");
+            "W3Schools");
     assertEquals(expected, actual);
   }
 
