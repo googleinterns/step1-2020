@@ -38,6 +38,8 @@ public final class StackOverflowClient implements Client {
   private static final String BODY_PARAMETER = "body";
   private static final String CODE_PARAMETER = "code";
   private static final String ANSWER_ID_PARAMETER = "answer_id";
+  private static final String QUESTION_PARAMETER = "questions";
+  private static final int QUESTION_INDEX = 1;
   // Set 200 to be the maximum length of description for MVP.
   private static final int MAX_DESCRIPTION_LENGTH = 200;
 
@@ -89,6 +91,9 @@ public final class StackOverflowClient implements Client {
     }
     // Parse the URL to get the question id.
     String[] segments = uri.getPath().split("/");
+    if (segments.length <= ID_INDEX || segments[QUESTION_INDEX] != QUESTION_PARAMETER) {
+      return null;
+    }
     String questionId = segments[ID_INDEX];
     if (!Pattern.matches("[0-9]+", questionId)) {
       return null;
