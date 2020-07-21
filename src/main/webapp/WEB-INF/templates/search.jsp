@@ -22,7 +22,9 @@
             <a href="${knowledgeCard.getLink()}" title="card-source"class="card-title">
               ${knowledgeCard.getTitle()}
             </a>
-            <code>${knowledgeCard.getCode()}</code>
+            <c:if test="${knowledgeCard.getCode() != null}">
+              <code>${knowledgeCard.getCode()}</code>
+            </c:if>
             <span class="card-description">Description:</span>
             <p>${knowledgeCard.getDescription()}</p>
           </div>

@@ -31,7 +31,6 @@ public final class StackOverflowClient implements Client {
   private static final String ITEM_PARAMETER = "items";
   private static final String TITLE_PARAMETER = "title";
   private static final String BODY_PARAMETER = "body";
-  private static final String CODE_PARAMETER = "code";
   private static final String ANSWER_ID_PARAMETER = "answer_id";
   // Set 300 to be the maximum length of description for MVP.
   private static final int MAX_ANSWER_LENGTH = 300;
@@ -107,7 +106,9 @@ public final class StackOverflowClient implements Client {
   private String getAnswerBody(String answerId) {
     String answerUrl = String.format(ANSWER_URL_TEMPLATE, answerId);
     String answerBody = getResponse(answerUrl, BODY_PARAMETER);
-    answerBody = answerBody.substring(0, MAX_ANSWER_LENGTH);
+    if (answerBody.length() > 300) {
+      answerBody = answerBody.substring(0, MAX_ANSWER_LENGTH);
+    }
     answerBody += "...";
     return answerBody;
   }
