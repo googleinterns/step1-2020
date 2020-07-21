@@ -63,11 +63,11 @@ public final class StackOverflowClient implements Client {
       return null;
     }
     String title = getTitle(questionId);
-    String answerBody = getAnswerBody(answerId);
-    if (title == null || answerBody == null) {
+    String description = getAnswerBody(answerId);
+    if (title == null || description == null) {
       return null;
     }
-    String description = answerBody;
+    // Code is intentionally set to null for better display.
     String code = null;
     return new Card(title, code, url, description);
   }
