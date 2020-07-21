@@ -37,8 +37,8 @@ public final class StackOverflowClient implements Client {
   private static final String BODY_PARAMETER = "body";
   private static final String CODE_PARAMETER = "code";
   private static final String ANSWER_ID_PARAMETER = "answer_id";
-  // Set 200 to be the maximum length of description for MVP.
-  private static final int MAX_DESCRIPTION_LENGTH = 200;
+  // Set 300 to be the maximum length of description for MVP.
+  private static final int MAX_ANSWER_LENGTH = 300;
 
   private final String cseId;
 
@@ -73,8 +73,8 @@ public final class StackOverflowClient implements Client {
       return null;
     }
     // No description or code is allowed for StackOverflow.
-    String description = getDescription(answerBody);
-    String code = getCode(answerBody);
+    String description = getAnswerBody(answerId);
+    String code = null;
     return new Card(title, code, url, description);
   }
 
@@ -110,35 +110,10 @@ public final class StackOverflowClient implements Client {
   /* Get the content of the answer and store it in the card. */
   private String getAnswerBody(String answerId) {
     String answerUrl = String.format(ANSWER_URL_TEMPLATE, answerId);
-    return getResponse(answerUrl, BODY_PARAMETER);
-  }
-
-  /* Return the description parsed from answer body. */
-  private String getDescription(String body) {
-    Document doc = Jsoup.parse(body);
-    // Combine all description in the answer body.
-    Elements descriptionHtml = doc.select("p");
-    String description = "";
-    for (Element e : descriptionHtml) {
-      description += e.outerHtml();
-      if (description.length() >= MAX_DESCRIPTION_LENGTH) {
-        description = description.substring(0, MAX_DESCRIPTION_LENGTH);
-        break;
-      }
-    }
-    return description;
-  }
-
-  /* Return the code parsed from answer body. */
-  private String getCode(String body) {
-    Document doc = Jsoup.parse(body);
-    // Combine all code in the answer body.
-    Elements codeHtml = doc.select(CODE_PARAMETER);
-    String code = "";
-    for (Element e : codeHtml) {
-      code += e.outerHtml();
-    }
-    return code;
+    String answerBody = getResponse(answerUrl, BODY_PARAMETER);
+    answerBody = answerBody.substring(0, MAX_ANSWER_LENGTH);
+    answerBody += "...";
+    return answerBody;
   }
 
   private String getResponse(String url, String fieldParam) {
