@@ -4,10 +4,6 @@ h1 {
   font: 400 60px Roboto, Arial, sans-serif;
 }
 
-#___gcse_0 {
-  width: 60%;
-}
-
 .heading {
 	display: flex;
 	flex-direction: column;
