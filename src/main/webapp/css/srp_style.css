@@ -17,6 +17,10 @@ h1 {
   font: 400 28px Roboto, Arial, sans-serif;
 }
 
+.logo {
+  text-decoration: none;
+}
+
 .card-container {
   margin: 20px 30px 0px 30px;
 }
