@@ -178,10 +178,10 @@ public final class StackOverflowClient implements Client {
     if (items == null || items.length() == 0) {
       return null;
     }
-    String res = items.getJSONObject(0).get(fieldParam).toString();
+    String result = items.getJSONObject(0).get(fieldParam).toString();
     if (response.getStatusLine().getStatusCode() != 200) {
       return null;
     }
-    return res;
+    return result;
   }
 }
