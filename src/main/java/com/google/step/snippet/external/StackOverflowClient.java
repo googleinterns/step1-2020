@@ -37,6 +37,7 @@ public final class StackOverflowClient implements Client {
   private static final String BODY_PARAMETER = "body";
   private static final String CODE_PARAMETER = "code";
   private static final String ANSWER_ID_PARAMETER = "answer_id";
+  private static final String SOURCE_NAME = "StackOverflow";
   // Set 200 to be the maximum length of description for MVP.
   private static final int MAX_DESCRIPTION_LENGTH = 200;
 
@@ -75,7 +76,7 @@ public final class StackOverflowClient implements Client {
     // No description or code is allowed for StackOverflow.
     String description = getDescription(answerBody);
     String code = getCode(answerBody);
-    return new Card(title, code, url, description, "StackOverflow");
+    return new Card(title, code, url, description, SOURCE_NAME);
   }
 
   /* Get the question id of passed in URL. */

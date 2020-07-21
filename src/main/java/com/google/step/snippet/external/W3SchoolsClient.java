@@ -11,6 +11,7 @@ public final class W3SchoolsClient implements Client {
   private static final String DESC_TAG = "p";
   private static final String SNIPPET_CLASS = "w3-example";
   private static final String CODE_CLASS = "w3-code";
+  private static final String SOURCE_NAME = "W3Schools";
 
   private String cseId = null;
 
@@ -52,6 +53,6 @@ public final class W3SchoolsClient implements Client {
     String title = titles.first().text();
     String description = descriptions.first().text();
     String code = snippets.first().getElementsByClass(CODE_CLASS).text();
-    return new Card(title, code, w3Link, description, "W3Schools");
+    return new Card(title, code, w3Link, description, SOURCE_NAME);
   }
 }
