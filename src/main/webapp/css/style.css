@@ -17,3 +17,7 @@ body, html {
 .green {
   color: #0F9D58;
 }
+
+.logo {
+  text-decoration: none;
+}

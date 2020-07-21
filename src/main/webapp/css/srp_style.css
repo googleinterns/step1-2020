@@ -6,7 +6,7 @@
   flex-grow: 1;
 }
 
-.srp-heading {
+.heading {
   display: flex;
   align-items: center;
 }
@@ -15,10 +15,6 @@ h1 {
   text-align: center;
   margin: 20px 20px 25px;
   font: 400 28px Roboto, Arial, sans-serif;
-}
-
-.logo {
-  text-decoration: none;
 }
 
 .card-container {

@@ -8,7 +8,7 @@ h1 {
   width: 60%;
 }
 
-.home-heading {
+.heading {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
