@@ -108,6 +108,9 @@ public class SearchServlet extends HttpServlet {
               }
               return null;
             });
+    /* thread process completion takes roughly 1.5 to 2.5 seconds, thus a timeout of
+     * 3 seconds was chosen.
+     */
     try {
       executor.invokeAll(cardCallbacks, 3L, TimeUnit.SECONDS).stream()
           .map(
