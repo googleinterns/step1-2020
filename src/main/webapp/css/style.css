@@ -2,8 +2,25 @@ body, html {
   font-family: Roboto, Arial, sans-serif;
 }
 
-h3 {
+h1 {
   text-align: center;
+  font: 400 60px Roboto, Arial, sans-serif;
+}
+
+.blue {
+  color: #4285F4;
+}
+
+.red {
+  color: #DB4437;
+}
+
+.yellow {
+  color: #F4B400;
+}
+
+.green {
+  color: #0F9D58;
 }
 
 .header-container {
