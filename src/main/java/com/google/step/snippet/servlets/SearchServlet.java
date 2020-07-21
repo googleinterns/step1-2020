@@ -52,13 +52,13 @@ public class SearchServlet extends HttpServlet {
   private static final String CSE_ITEMS = "items";
   private static final String CSE_LINK = "link";
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
+  private static final String CARD_LIST_LABEL = "cardList";
 
   private final List<Client> clients =
       Arrays.asList(
           new W3SchoolsClient(W3_CSE_ID),
           new StackOverflowClient(STACK_CSE_ID),
           new GeeksForGeeksClient(GEEKS_CSE_ID));
-  private static final String CARD_LIST_LABEL = "cardList";
 
   private static String encodeValue(String value) {
     try {
@@ -82,10 +82,9 @@ public class SearchServlet extends HttpServlet {
     for (Client client : clients) {
       String link = getLink(client.getCseId(), query);
       Card card = client.search(link);
-      if (card == null) {
-        break;
+      if (card != null) {
+        allCards.add(card);
       }
-      allCards.add(card);
     }
     request.setAttribute(CARD_LIST_LABEL, allCards);
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);

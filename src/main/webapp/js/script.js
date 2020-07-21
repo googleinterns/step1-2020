@@ -1,20 +1,20 @@
 window.addEventListener('DOMContentLoaded', (event) => {
-  const downVotes = document.getElementsByClassName('downvote');
-  for (const down of downVotes) {
-    down.addEventListener('click', function() {
-      renderVote(down, 'downvote');
-    });
-  }
-  const upVotes = document.getElementsByClassName('upvote');
-  for (const up of upVotes) {
+  const cards = document.getElementsByClassName('card');
+  for (const card of cards) {
+    const up = card.getElementsByClassName('upvote')[0];
     up.addEventListener('click', function() {
-      renderVote(up, 'upvote');
+      renderVote(card, up.value, 'upvote');
+    });
+    const down = card.getElementsByClassName('downvote')[0];
+    down.addEventListener('click', function() {
+      renderVote(card, down.value, 'downvote');
     });
   }
 });
 
-async function renderVote(elem, action) {
-  elem.innerHTML = await updateVote(elem.value, action);
+async function renderVote(card, url, action) {
+  const total = card.getElementsByClassName('totalvote')[0];
+  total.innerHTML = await updateVote(url, action);
 }
 
 async function updateVote(url, action) {

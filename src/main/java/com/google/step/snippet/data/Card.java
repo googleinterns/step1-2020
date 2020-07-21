@@ -42,6 +42,10 @@ public final class Card {
     return downvote;
   }
 
+  public long getTotalVote() {
+    return upvote - downvote;
+  }
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {

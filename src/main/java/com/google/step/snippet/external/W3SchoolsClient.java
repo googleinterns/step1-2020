@@ -18,8 +18,6 @@ public final class W3SchoolsClient implements Client {
 
   private String cseId = null;
 
-  public W3SchoolsClient() {}
-
   public W3SchoolsClient(String cseId) {
     this.cseId = cseId;
   }

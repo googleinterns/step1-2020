@@ -7,9 +7,10 @@
 <html>
   <head>
     <t:head/>
-    <link href="css/srp-style.css" rel="stylesheet">
+    <link href="css/srp_style.css" rel="stylesheet">
     <title>Snippet</title>
     <script type="text/javascript" src="${pageContext.request.contextPath}js/script.js"></script>
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
   </head>
   <body>
     <t:base/>
@@ -21,18 +22,23 @@
       <div class="card-container">
         <c:forEach items='${requestScope["cardList"]}' var="knowledgeCard">
           <div class="card">
-            <a href="${knowledgeCard.getLink()}" title="card-source"class="card-title">
-              ${knowledgeCard.getTitle()}
-            </a>
-            <code>${knowledgeCard.getCode()}</code>
-            <span class="card-description">Description:</span>
-            <p>${knowledgeCard.getDescription()}</p>
-            <button class="upvote" style="background-color: greenyellow;"value="${knowledgeCard.getLink()}">
-              ${knowledgeCard.getUpvote()}
-            </button>
-            <button class="downvote" style="background-color: rgb(184, 51, 51); color:white;" value="${knowledgeCard.getLink()}">
-              ${knowledgeCard.getDownvote()}
-            </button>
+            <div class="vote">
+              <button class="upvote" value="${knowledgeCard.getLink()}">
+                <i class="fas fa-chevron-up"></i>
+              </button>
+              <span class="totalvote">${knowledgeCard.getTotalVote()}</span>
+              <button class="downvote" value="${knowledgeCard.getLink()}">
+                <i class="fas fa-chevron-down"></i>
+              </button>
+            </div>
+            <div class="content">
+              <a href="${knowledgeCard.getLink()}" title="card-source"class="card-title">
+                ${knowledgeCard.getTitle()}
+              </a>
+              <code>${knowledgeCard.getCode()}</code>
+              <span class="card-description">Description:</span>
+              <p>${knowledgeCard.getDescription()}</p>
+            </div>
           </div>
         </c:forEach>
       </div>
