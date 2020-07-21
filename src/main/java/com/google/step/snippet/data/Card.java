@@ -34,14 +34,6 @@ public final class Card {
     return description;
   }
 
-  public long getUpvote() {
-    return upvote;
-  }
-
-  public long getDownvote() {
-    return downvote;
-  }
-
   public long getTotalVote() {
     return upvote - downvote;
   }

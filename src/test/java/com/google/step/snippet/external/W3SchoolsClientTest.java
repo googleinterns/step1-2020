@@ -3,6 +3,7 @@ package com.google.step.snippet.external;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import com.google.appengine.api.datastore.Entity;
 import com.google.step.snippet.data.Card;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,16 +12,20 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class W3SchoolsClientTest {
 
-  private final W3SchoolsClient client = new W3SchoolsClient("CSE_ID");
+  private final W3SchoolsClient client =
+      new W3SchoolsClient("CSE_ID") {
+        public Entity getFeedback(String url) {
+          return null;
+        }
+      };
 
-  // @Test
+  @Test
   public void htmlCodeCard() {
     Card actual = client.search("https://www.w3schools.com/tags/tag_img.asp");
     Card expected =
         new Card(
             "HTML <img> Tag",
-            "&lt;img src=&quot;img_girl.jpg&quot; alt=&quot;Girl in a jacket&quot;"
-                + " width=&quot;500&quot; height=&quot;600&quot;&gt;",
+            "<img src=\"img_girl.jpg\" alt=\"Girl in a jacket\" width=\"500\" height=\"600\">",
             "https://www.w3schools.com/tags/tag_img.asp",
             "How to insert an image:",
             0,
@@ -28,15 +33,14 @@ public final class W3SchoolsClientTest {
     assertEquals(expected, actual);
   }
 
-  // @Test
+  @Test
   public void jsonCodeCard() {
     Card actual = client.search("https://www.w3schools.com/js/js_json_intro.asp");
     Card expected =
         new Card(
             "JSON - Introduction",
-            "var myObj = {name: &quot;John&quot;, age: 31, city: &quot;New York&quot;}; var myJSON"
-                + " = JSON.stringify(myObj); window.location = &quot;demo_json.php?x=&quot; +"
-                + " myJSON;",
+            "var myObj = {name: \"John\", age: 31, city: \"New York\"}; var myJSON ="
+                + " JSON.stringify(myObj); window.location = \"demo_json.php?x=\" + myJSON;",
             "https://www.w3schools.com/js/js_json_intro.asp",
             "JSON: JavaScript Object Notation.",
             0,

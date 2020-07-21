@@ -3,18 +3,15 @@ package com.google.step.snippet.external;
 import com.google.appengine.api.datastore.Entity;
 import com.google.step.snippet.data.Card;
 import java.io.IOException;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-public final class W3SchoolsClient implements Client {
+public class W3SchoolsClient implements Client {
   private static final String TITLE_TAG = "h1";
   private static final String DESC_TAG = "p";
   private static final String SNIPPET_CLASS = "w3-example";
   private static final String CODE_CLASS = "w3-code";
-  private static final String UP = "upvote";
-  private static final String DOWN = "downvote";
 
   private String cseId = null;
 
@@ -55,8 +52,9 @@ public final class W3SchoolsClient implements Client {
     }
     String title = titles.first().text();
     String description = descriptions.first().text();
-    String code =
-        StringEscapeUtils.escapeHtml4(snippets.first().getElementsByClass(CODE_CLASS).text());
+    String code = snippets.first().getElementsByClass(CODE_CLASS).text();
+
+    /* Retrieve feedback, if stored feedback exists */
     long upvote = 0;
     long downvote = 0;
     Entity feedback = getFeedback(w3Link);

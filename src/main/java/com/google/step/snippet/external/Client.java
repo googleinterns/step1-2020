@@ -11,6 +11,8 @@ public interface Client {
 
   public static final String URL = "url";
   public static final String FEEDBACK = "feedback";
+  public static final String UP = "upvote";
+  public static final String DOWN = "downvote";
 
   Card search(String url);
 

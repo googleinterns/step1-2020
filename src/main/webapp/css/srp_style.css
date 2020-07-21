@@ -17,36 +17,24 @@
   transition: box-shadow .25s;
   border-radius: 2px;
   width: 400px;
-  display: flex;
 }
 
-.card .content .card-title {
+.card .card-title {
   font: 300 20px Roboto, Arial, sans-serif;
 }
 
-.card .content .card-description {
+.card .card-description {
   font: bold 16px Roboto, Arial, sans-serif;
   margin-top: 20px;
 }
 
-.card .content code {
+.card code {
   margin-top: 10px;
   margin-bottom: 10px;
   display: block;
 }
 
-.card .content p {
+.card p {
   margin-top: 0;
   display: block;
-}
-
-.vote {
-  margin-right: 10px;
-  text-align: center;
-}
-
-.vote button {
-  background: none;
-  border: none;
-  outline: none;
 }

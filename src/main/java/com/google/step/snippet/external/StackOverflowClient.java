@@ -38,8 +38,6 @@ public final class StackOverflowClient implements Client {
   private static final String BODY_PARAMETER = "body";
   private static final String CODE_PARAMETER = "code";
   private static final String ANSWER_ID_PARAMETER = "answer_id";
-  private static final String UP = "upvote";
-  private static final String DOWN = "downvote";
   // Set 200 to be the maximum length of description for MVP.
   private static final int MAX_DESCRIPTION_LENGTH = 200;
 
@@ -78,6 +76,8 @@ public final class StackOverflowClient implements Client {
     // No description or code is allowed for StackOverflow.
     String description = getDescription(answerBody);
     String code = getCode(answerBody);
+
+    /* Retrieve feedback, if stored feedback exists */
     long upvote = 0;
     long downvote = 0;
     Entity feedback = getFeedback(url);
@@ -136,9 +136,6 @@ public final class StackOverflowClient implements Client {
         break;
       }
     }
-    Jsoup.parse(description).text();
-    description.trim();
-    description += "...";
     return description;
   }
 
