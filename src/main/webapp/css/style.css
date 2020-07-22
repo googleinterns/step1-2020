@@ -23,22 +23,13 @@ h1 {
   color: #0F9D58;
 }
 
-.header-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; 
-  margin-left: 48%;
-}
-
 .auth-button {
-  right: 8px;
-  font: 400 13px Arial;
+  font: 400 15px Roboto, Arial, sans-serif;
   color: white;
   background: #4d90fe;
   border: 1px #3079ED solid;
   padding: 5px 10px;
-  border-radius: 2px;
-  text-align: center;
+  border-radius: 4px;
   text-decoration: none;
 }
 
