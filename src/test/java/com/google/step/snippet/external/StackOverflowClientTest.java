@@ -36,18 +36,19 @@ public final class StackOverflowClientTest {
     assertEquals(
         "https://stackoverflow.com/questions/22250067/how-to-get-address-of-a-pointer-in-c-c",
         actual.getLink());
-    assertEquals("<p>To get the address of p do:</p>\n\n"
-                    + "<pre><code>int **pp = &amp;p;\n"
-                    + "</code></pre>\n\n"
-                    + "<p>and you can go on:</p>\n\n"
-                    + "<pre><code>int ***ppp = &amp;pp;\n"
-                    + "int ****pppp = &amp;ppp;\n"
-                    + "...\n"
-                    + "</code></pre>\n\n"
-                    + "<p>or, only in C++11, you can do:</p>\n\n"
-                    + "<pre><code>auto pp = std::addressof(p);\n"
-                    + "</code></pre>\n\n"
-                    + "<p>To print the addre",
+    assertEquals(
+        "<p>To get the address of p do:</p>\n\n"
+            + "<pre><code>int **pp = &amp;p;\n"
+            + "</code></pre>\n\n"
+            + "<p>and you can go on:</p>\n\n"
+            + "<pre><code>int ***ppp = &amp;pp;\n"
+            + "int ****pppp = &amp;ppp;\n"
+            + "...\n"
+            + "</code></pre>\n\n"
+            + "<p>or, only in C++11, you can do:</p>\n\n"
+            + "<pre><code>auto pp = std::addressof(p);\n"
+            + "</code></pre>\n\n"
+            + "<p>To print the addre",
         actual.getDescription().substring(0, 300));
   }
 
@@ -61,10 +62,10 @@ public final class StackOverflowClientTest {
     assertEquals(
         "https://stackoverflow.com/questions/11928566/img-vs-image-tag-in-html", actual.getLink());
     assertEquals(
-        "<p>Yes and no. As you point out <code>&lt;image&gt;</code> has been a synonym for "
-            + "<code>&lt;img&gt;</code> for a long time. I believe it was an early Netscape browser "
-            + "that first did this, possibly to compensate for user error, or possibly because there "
-            + "was dispute at the time whether the element sho",
+        "<p>Yes and no. As you point out <code>&lt;image&gt;</code> has been a synonym for"
+            + " <code>&lt;img&gt;</code> for a long time. I believe it was an early Netscape browser"
+            + " that first did this, possibly to compensate for user error, or possibly because there"
+            + " was dispute at the time whether the element sho",
         actual.getDescription().substring(0, 300));
   }
 
