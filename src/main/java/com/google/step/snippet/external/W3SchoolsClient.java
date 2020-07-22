@@ -13,7 +13,7 @@ public final class W3SchoolsClient implements Client {
   private static final String CODE_CLASS = "w3-code";
   private static final String SOURCE_NAME = "W3Schools";
 
-  private String cseId = null;
+  private String cseId;
 
   public W3SchoolsClient(String cseId) {
     this.cseId = cseId;

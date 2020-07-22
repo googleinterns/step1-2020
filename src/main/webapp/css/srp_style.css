@@ -6,6 +6,11 @@
   flex-grow: 1;
 }
 
+.heading {
+  display: flex;
+  align-items: center;
+}
+
 .card-container {
   margin: 20px 30px 0px 30px;
 }
