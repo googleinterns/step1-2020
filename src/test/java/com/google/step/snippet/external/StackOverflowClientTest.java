@@ -63,9 +63,9 @@ public final class StackOverflowClientTest {
         "https://stackoverflow.com/questions/11928566/img-vs-image-tag-in-html", actual.getLink());
     assertEquals(
         "<p>Yes and no. As you point out <code>&lt;image&gt;</code> has been a synonym for"
-            + " <code>&lt;img&gt;</code> for a long time. I believe it was an early Netscape browser"
-            + " that first did this, possibly to compensate for user error, or possibly because there"
-            + " was dispute at the time whether the element sho",
+            + " <code>&lt;img&gt;</code> for a long time. I believe it was an early Netscape"
+            + " browser that first did this, possibly to compensate for user error, or possibly"
+            + " because there was dispute at the time whether the element sho",
         actual.getDescription().substring(0, 300));
   }
 
