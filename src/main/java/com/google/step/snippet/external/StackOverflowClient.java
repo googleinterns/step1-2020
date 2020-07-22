@@ -151,14 +151,13 @@ public final class StackOverflowClient implements Client {
       return null;
     }
     JSONObject json = new JSONObject(responseBody.toString());
-    JSONArray items = json.getJSONArray(ITEM_PARAMETER);
-    if (items == null || items.length() == 0) {
-      return null;
+    if (json.has(ITEM_PARAMETER) && json.getJSONArray(ITEM_PARAMETER).length() > 0) {
+      JSONArray items = json.getJSONArray(ITEM_PARAMETER);
+      JSONObject obj = items.getJSONObject(0);
+      if (obj.has(fieldParam)) {
+        return obj.get(fieldParam).toString();
+      }
     }
-    String res = items.getJSONObject(0).get(fieldParam).toString();
-    if (response.getStatusLine().getStatusCode() != 200) {
-      return null;
-    }
-    return res;
+    return null;
   }
 }
