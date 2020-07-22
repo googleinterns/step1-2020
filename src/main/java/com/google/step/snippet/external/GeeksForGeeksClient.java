@@ -55,13 +55,10 @@ public final class GeeksForGeeksClient implements Client {
     String code = snippets.first().getElementsByClass(CODE_CLASS).text();
 
     /* Retrieve feedback, if stored feedback exists */
-    long upvote = 0;
-    long downvote = 0;
     Entity feedback = getFeedback(geeksLink);
-    if (feedback != null) {
-      upvote = (long) feedback.getProperty(UP);
-      downvote = (long) feedback.getProperty(DOWN);
-    }
+    long upvote = (long) feedback.getProperty(UP);
+    long downvote = (long) feedback.getProperty(DOWN);
+
     return new Card(title, code, geeksLink, description, upvote, downvote);
   }
 }

@@ -55,13 +55,9 @@ public class W3SchoolsClient implements Client {
     String code = snippets.first().getElementsByClass(CODE_CLASS).text();
 
     /* Retrieve feedback, if stored feedback exists */
-    long upvote = 0;
-    long downvote = 0;
     Entity feedback = getFeedback(w3Link);
-    if (feedback != null) {
-      upvote = (long) feedback.getProperty(UP);
-      downvote = (long) feedback.getProperty(DOWN);
-    }
+    long upvote = (long) feedback.getProperty(UP);
+    long downvote = (long) feedback.getProperty(DOWN);
     return new Card(title, code, w3Link, description, upvote, downvote);
   }
 }

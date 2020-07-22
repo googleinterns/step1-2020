@@ -78,13 +78,9 @@ public final class StackOverflowClient implements Client {
     String code = getCode(answerBody);
 
     /* Retrieve feedback, if stored feedback exists */
-    long upvote = 0;
-    long downvote = 0;
     Entity feedback = getFeedback(url);
-    if (feedback != null) {
-      upvote = (long) feedback.getProperty(UP);
-      downvote = (long) feedback.getProperty(DOWN);
-    }
+    long upvote = (long) feedback.getProperty(UP);
+    long downvote = (long) feedback.getProperty(DOWN);
     return new Card(title, code, url, description, upvote, downvote);
   }
 

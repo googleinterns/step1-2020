@@ -25,7 +25,6 @@ public class FeedbackServlet extends HttpServlet {
     String url = request.getParameter(URL);
 
     if (url == null) {
-      System.out.println("Invalid Card");
       response.sendRedirect(request.getHeader("Referer"));
     }
 

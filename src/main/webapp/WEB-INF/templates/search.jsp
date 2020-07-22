@@ -11,7 +11,6 @@
   </head>
   <body>
     <t:base/>
-    <div class="gcse-searchbox-only" data-resultsUrl="/search"></div>
     <div class="srp-container">
       <div class="srp">
         <div class="gcse-searchresults-only"></div>

@@ -24,4 +24,20 @@ public interface Client {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     return datastore.prepare(query).asSingleEntity();
   }
+
+  default long getUpvote(Entity feedback) {
+    if (feedback != null) {
+      return (long) feedback.getProperty(UP);
+    } else {
+      return 0;
+    }
+  }
+
+  default long getDownvote(Entity feedback) {
+    if (feedback != null) {
+      return (long) feedback.getProperty(DOWN);
+    } else {
+      return 0;
+    }
+  }
 }
