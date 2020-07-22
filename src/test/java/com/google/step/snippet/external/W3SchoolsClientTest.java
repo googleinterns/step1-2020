@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import com.google.step.snippet.data.Card;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -32,8 +33,9 @@ public final class W3SchoolsClientTest {
     Card expected =
         new Card(
             "JSON - Introduction",
-            "var myObj = {name: \"John\", age: 31, city: \"New York\"}; var myJSON ="
-                + " JSON.stringify(myObj); window.location = \"demo_json.php?x=\" + myJSON;",
+            "var myObj = {name: &quot;John&quot;, age: 31, city: &quot;New York&quot;}; var myJSON"
+                + " = JSON.stringify(myObj); window.location = &quot;demo_json.php?x=&quot; +"
+                + " myJSON;",
             "https://www.w3schools.com/js/js_json_intro.asp",
             "JSON: JavaScript Object Notation.");
     assertEquals(expected, actual);
