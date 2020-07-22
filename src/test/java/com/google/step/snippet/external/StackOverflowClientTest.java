@@ -36,11 +36,18 @@ public final class StackOverflowClientTest {
     assertEquals(
         "https://stackoverflow.com/questions/22250067/how-to-get-address-of-a-pointer-in-c-c",
         actual.getLink());
-    assertEquals(
-        "<p>To get the address of p do:</p>\n\n<pre><code>int **pp = &amp;p;\n</code></pre>\n\n<p>and"
-            + " you can go on:</p>\n\n<pre><code>int ***ppp = &amp;pp;\nint ****pppp = &amp;ppp;\n...\n</code>"
-            + "</pre>\n\n<p>or, only in C++11, you can do:</p>\n\n<pre><code>auto pp = std::addressof(p);\n</co"
-            + "de></pre>\n\n<p>To print the addre",
+    assertEquals("<p>To get the address of p do:</p>\n\n"
+                    + "<pre><code>int **pp = &amp;p;\n"
+                    + "</code></pre>\n\n"
+                    + "<p>and you can go on:</p>\n\n"
+                    + "<pre><code>int ***ppp = &amp;pp;\n"
+                    + "int ****pppp = &amp;ppp;\n"
+                    + "...\n"
+                    + "</code></pre>\n\n"
+                    + "<p>or, only in C++11, you can do:</p>\n\n"
+                    + "<pre><code>auto pp = std::addressof(p);\n"
+                    + "</code></pre>\n\n"
+                    + "<p>To print the addre",
         actual.getDescription().substring(0, 300));
   }
 
@@ -64,13 +71,16 @@ public final class StackOverflowClientTest {
   @Test
   public void noAnswerTest() {
     Card actual =
-            client.search("https://stackoverflow.com/questions/44686609/implementing-a-neural-network-in-haskell");
+        client.search(
+            "https://stackoverflow.com/questions/44686609/implementing-a-neural-network-in-haskell");
     assertNull(actual);
   }
 
   @Test
   public void fakeLinkTest() {
-    Card actual = client.search("https://softwareengineering.stackexchange.com/questions/100/what-website-are-yo");
+    Card actual =
+        client.search(
+            "https://softwareengineering.stackexchange.com/questions/100/what-website-are-yo");
     assertNull(actual);
   }
 }
