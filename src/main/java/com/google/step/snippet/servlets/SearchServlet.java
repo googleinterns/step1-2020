@@ -60,6 +60,7 @@ public class SearchServlet extends HttpServlet {
   private static final String CSE_LINK = "link";
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
   private static final String CARD_LIST_LABEL = "cardList";
+  private static final int THREAD_COUNT = 3;
 
   private final Client w3Client = new W3SchoolsClient(W3_CSE_ID);
   private final Client stackClient = new StackOverflowClient(STACK_CSE_ID);
@@ -84,7 +85,7 @@ public class SearchServlet extends HttpServlet {
     }
     String query = encodeValue(param);
     List<Card> allCards = new ArrayList<>();
-    ExecutorService executor = Executors.newFixedThreadPool(3);
+    ExecutorService executor = Executors.newFixedThreadPool(THREAD_COUNT);
     List<Callable<Card>> cardCallbacks =
         Arrays.asList(
             () -> {
@@ -122,13 +123,13 @@ public class SearchServlet extends HttpServlet {
                 }
               })
           .forEach(
-              (c) -> {
+              (card) -> {
                 if (c != null) {
-                  allCards.add(c);
+                  allCards.add(card);
                 }
               });
     } catch (InterruptedException | NullPointerException | RejectedExecutionException e) {
-      return;
+      request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
     }
 
     request.setAttribute(CARD_LIST_LABEL, allCards);
