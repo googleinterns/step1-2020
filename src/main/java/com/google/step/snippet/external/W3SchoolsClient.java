@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
+import org.jsoup.safety.Cleaner;
+import org.jsoup.safety.Whitelist;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
@@ -57,20 +59,20 @@ public final class W3SchoolsClient implements Client {
     if (snippets.isEmpty() || snippets.first().getElementsByClass(CODE_CLASS).text().isEmpty()) {
       return null;
     }
-    String title = titles.first().text();
+    String title = StringEscapeUtils.escapeHtml4(titles.first().text());
     String description = descriptions.first().text();
-    String code = snippets.first().getElementsByClass(CODE_CLASS).text();
+    String code = Jsoup.clean(snippets.first().getElementsByClass(CODE_CLASS).text(), Whitelist.basicWithImages());
     if (containsHtml(code)) {
-      System.out.println("hello");
       code = StringEscapeUtils.escapeHtml4(code);
     }
+    System.out.println(code);
     return new Card(title, code, w3Link, description);
   }
 
   public boolean containsHtml(String toValidate) {
     Pattern htmlPattern =
         Pattern.compile(
-            "(" + START_TAG + ".*" + END_TAG + ")|(" + SELF_CLOSE_TAG + ")|(" + HTML_ENTITY + ")",
+            "(" + START_TAG + ".*" + END_TAG + ")|(" + SELF_CLOSE_TAG + ")|(" + HTML_ENTITY + ")|(" + START_TAG + ")",
             Pattern.DOTALL);
     return htmlPattern.matcher(toValidate).find();
   }
