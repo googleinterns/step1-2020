@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import com.google.step.snippet.data.Card;
-import com.google.step.snippet.external.StackOverflowClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -27,7 +26,7 @@ public final class StackOverflowClientTest {
   }
 
   @Test
-  public void validCardTest() {
+  public void validCardTest1() {
     Card actual =
         client.search(
             "https://stackoverflow.com/questions/22250067/how-to-get-address-of-a-pointer-in-c-c");
@@ -43,5 +42,39 @@ public final class StackOverflowClientTest {
             + "</pre>\n\n<p>or, only in C++11, you can do:</p>\n\n<pre><code>auto pp = std::addressof(p);\n</co"
             + "de></pre>\n\n<p>To print the addre",
         actual.getDescription().substring(0, 300));
+  }
+
+  @Test
+  public void validCardTest2() {
+    Card actual =
+        client.search("https://stackoverflow.com/questions/11928566/img-vs-image-tag-in-html");
+
+    assertEquals("&lt;img&gt; vs &lt;image&gt; tag in HTML", actual.getTitle());
+    assertNull(actual.getCode());
+    assertEquals(
+        "https://stackoverflow.com/questions/11928566/img-vs-image-tag-in-html", actual.getLink());
+    assertEquals(
+        "<p>Yes and no. As you point out <code>&lt;image&gt;</code> has been a synonym for "
+            + "<code>&lt;img&gt;</code> for a long time. I believe it was an early Netscape browser "
+            + "that first did this, possibly to compensate for user error, or possibly because there "
+            + "was dispute at the time whether the element sho",
+        actual.getDescription().substring(0, 300));
+  }
+
+  @Test
+  public void  validCardTest3() {
+
+  }
+  @Test
+  public void noAnswerTest() {
+    Card actual =
+            client.search("https://stackoverflow.com/questions/44686609/implementing-a-neural-network-in-haskell");
+    assertNull(actual);
+  }
+
+  @Test
+  public void fakeLinkTest() {
+    Card actual = client.search("https://softwareengineering.stackexchange.com/questions/100/what-website-are-yo");
+    assertNull(actual);
   }
 }
