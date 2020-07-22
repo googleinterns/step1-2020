@@ -11,10 +11,13 @@
   align-items: center;
 }
 
+.logo {
+  margin: 0 20px;
+  text-decoration: none;
+}
+
 h1 {
-  text-align: center;
-  margin: 20px 20px 25px;
-  font: 400 28px Roboto, Arial, sans-serif;
+  font: 400 30px Roboto, Arial, sans-serif;
 }
 
 .card-container {

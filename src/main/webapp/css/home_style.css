@@ -7,7 +7,9 @@
 }
 
 h1 {
-  text-align: center;
-  margin: 20px 20px 25px;
   font: 400 60px Roboto, Arial, sans-serif;
+}
+
+.logo {
+  text-decoration: none;
 }

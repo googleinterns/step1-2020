@@ -18,10 +18,8 @@ body, html {
   color: #0F9D58;
 }
 
-.logo {
-  text-decoration: none;
-}
-
-#___gcse_0 {
+.searchbox {
   width: 60%;
+  min-width: 400px;
+  max-width: 1000px;
 }
