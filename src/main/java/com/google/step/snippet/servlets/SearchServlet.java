@@ -124,7 +124,7 @@ public class SearchServlet extends HttpServlet {
               })
           .forEach(
               (card) -> {
-                if (c != null) {
+                if (card != null) {
                   allCards.add(card);
                 }
               });
