@@ -178,8 +178,7 @@ public final class StackOverflowClient implements Client {
       JSONArray items = json.getJSONArray(ITEM_PARAMETER);
       JSONObject obj = items.getJSONObject(0);
       if (obj.has(fieldParam)) {
-        String result = obj.get(fieldParam).toString();
-        return result;
+        return obj.get(fieldParam).toString();
       }
     }
     return null;
