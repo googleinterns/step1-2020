@@ -2,7 +2,6 @@ package com.google.step.snippet.external;
 
 import com.google.step.snippet.data.Card;
 import java.io.IOException;
-import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,12 +13,6 @@ public final class W3SchoolsClient implements Client {
   private static final String DESC_TAG = "p";
   private static final String SNIPPET_CLASS = "w3-example";
   private static final String CODE_CLASS = "w3-code";
-  private static final String START_TAG =
-      "\\<\\w+((\\s+\\w+(\\s*\\=\\s*(?:\".*?\"|'.*?'|[^'\"\\>\\s]+))?)+\\s*|\\s*)\\>";
-  public static final String END_TAG = "\\</\\w+\\>";
-  public static final String SELF_CLOSE_TAG =
-      "\\<\\w+((\\s+\\w+(\\s*\\=\\s*(?:\".*?\"|'.*?'|[^'\"\\>\\s]+))?)+\\s*|\\s*)/\\>";
-  public static final String HTML_ENTITY = "&[a-zA-Z][a-zA-Z0-9]+;";
 
   private String cseId = null;
 
@@ -61,29 +54,10 @@ public final class W3SchoolsClient implements Client {
     String title = StringEscapeUtils.escapeHtml4(titles.first().text());
     String description = descriptions.first().text();
     String code =
-        Jsoup.clean(
-            snippets.first().getElementsByClass(CODE_CLASS).text(), Whitelist.basicWithImages());
-    if (containsHtml(code)) {
-      code = StringEscapeUtils.escapeHtml4(code);
-    }
+        StringEscapeUtils.escapeHtml4(
+            Jsoup.clean(
+                snippets.first().getElementsByClass(CODE_CLASS).text(),
+                Whitelist.basicWithImages()));
     return new Card(title, code, w3Link, description);
-  }
-
-  public boolean containsHtml(String toValidate) {
-    Pattern htmlPattern =
-        Pattern.compile(
-            "("
-                + START_TAG
-                + ".*"
-                + END_TAG
-                + ")|("
-                + SELF_CLOSE_TAG
-                + ")|("
-                + HTML_ENTITY
-                + ")|("
-                + START_TAG
-                + ")",
-            Pattern.DOTALL);
-    return htmlPattern.matcher(toValidate).find();
   }
 }
