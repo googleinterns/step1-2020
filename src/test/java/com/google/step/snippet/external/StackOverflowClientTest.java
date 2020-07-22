@@ -62,10 +62,6 @@ public final class StackOverflowClientTest {
   }
 
   @Test
-  public void  validCardTest3() {
-
-  }
-  @Test
   public void noAnswerTest() {
     Card actual =
             client.search("https://stackoverflow.com/questions/44686609/implementing-a-neural-network-in-haskell");
