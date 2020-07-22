@@ -9,6 +9,5 @@
   </head>
   <body>
     <t:base/>
-    <div class="gcse-searchbox-only" data-resultsUrl="/search"></div>
   </body>
 </html>
