@@ -1,10 +1,9 @@
-package com.google.step.snippet;
+package com.google.step.snippet.external;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import com.google.step.snippet.data.Card;
-import com.google.step.snippet.external.W3SchoolsClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
