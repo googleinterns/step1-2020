@@ -67,8 +67,10 @@ public final class GeeksForGeeksClient implements Client {
   }
 
   public boolean containsHtml(String toValidate) {
-    Pattern htmlPattern = Pattern.compile("("+START_TAG+".*"+END_TAG+")|("+SELF_CLOSE_TAG+")|("+HTML_ENTITY+")",
-        Pattern.DOTALL);
+    Pattern htmlPattern =
+        Pattern.compile(
+            "(" + START_TAG + ".*" + END_TAG + ")|(" + SELF_CLOSE_TAG + ")|(" + HTML_ENTITY + ")",
+            Pattern.DOTALL);
     return htmlPattern.matcher(toValidate).find();
   }
 }
