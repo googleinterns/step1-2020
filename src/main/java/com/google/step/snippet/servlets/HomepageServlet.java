@@ -14,6 +14,8 @@
 
 package com.google.step.snippet.servlets;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,9 +27,21 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/")
 public class HomepageServlet extends HttpServlet {
 
+  private static final String AUTH_URL = "authUrl";
+  private static final String AUTH_LABEL = "authLabel";
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+    UserService userService = UserServiceFactory.getUserService();
+    if (userService.isUserLoggedIn()) {
+      request.setAttribute(AUTH_URL, userService.createLogoutURL("/"));
+      request.setAttribute(AUTH_LABEL, "Logout");
+    } else {
+      request.setAttribute(AUTH_URL, userService.createLoginURL("/"));
+      request.setAttribute(AUTH_LABEL, "Login");
+    }
+
     // Forward the request to the template (which is a servlet itself).
     request.getRequestDispatcher("WEB-INF/templates/homepage.jsp").forward(request, response);
   }
