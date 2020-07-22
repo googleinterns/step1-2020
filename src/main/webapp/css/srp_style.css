@@ -21,6 +21,7 @@
 
 .card .card-title {
   font: 300 20px Roboto, Arial, sans-serif;
+  word-wrap: break-word;
 }
 
 .card .card-description {
@@ -31,7 +32,7 @@
 .card code {
   margin-top: 10px;
   margin-bottom: 10px;
-  display: block;
+  display: inline;
 }
 
 .card p {
