@@ -19,7 +19,8 @@ public final class W3SchoolsClientTest {
     Card expected =
         new Card(
             "HTML &lt;img&gt; Tag",
-            "&lt;img alt=&quot;Girl in a jacket&quot; width=&quot;500&quot; height=&quot;600&quot;&gt;",
+            "&lt;img alt=&quot;Girl in a jacket&quot; width=&quot;500&quot;"
+                + " height=&quot;600&quot;&gt;",
             "https://www.w3schools.com/tags/tag_img.asp",
             "How to insert an image:");
     assertEquals(expected, actual);
