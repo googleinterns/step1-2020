@@ -56,8 +56,8 @@ public final class GeeksForGeeksClient implements Client {
 
     /* Retrieve feedback, if stored feedback exists */
     Entity feedback = getFeedback(geeksLink);
-    long upvote = (long) getUpvote(feedback);
-    long downvote = (long) getDownvote(feedback);
+    long upvote = getUpvote(feedback);
+    long downvote = getDownvote(feedback);
     return new Card(title, code, geeksLink, description, upvote, downvote);
   }
 }

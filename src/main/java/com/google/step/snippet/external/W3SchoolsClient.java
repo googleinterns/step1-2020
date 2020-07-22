@@ -56,8 +56,8 @@ public class W3SchoolsClient implements Client {
 
     /* Retrieve feedback, if stored feedback exists */
     Entity feedback = getFeedback(w3Link);
-    long upvote = (long) getUpvote(feedback);
-    long downvote = (long) getDownvote(feedback);
+    long upvote = getUpvote(feedback);
+    long downvote = getDownvote(feedback);
     return new Card(title, code, w3Link, description, upvote, downvote);
   }
 }
