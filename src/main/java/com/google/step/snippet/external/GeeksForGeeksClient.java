@@ -58,7 +58,7 @@ public final class GeeksForGeeksClient implements Client {
     if (snippets.isEmpty() || snippets.first().getElementsByClass(CODE_CLASS).text().isEmpty()) {
       return null;
     }
-    String title = titles.first().text();
+    String title = StringEscapeUtils.escapeHtml4(titles.first().text());
     String description = descriptions.first().text();
     String code =
         Jsoup.clean(
