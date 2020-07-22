@@ -23,3 +23,23 @@ body, html {
   min-width: 400px;
   max-width: 1000px;
 }
+
+.auth-button {
+  font: 400 15px Roboto, Arial, sans-serif;
+  color: white;
+  background: #4d90fe;
+  border: 1px #3079ED solid;
+  padding: 5px 10px;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.auth-button:hover {
+  border: 1px #2F5BB7 solid;
+  box-shadow: 0 1px 1px #EAEAEA, inset 0 1px 0 #5A94F1;
+  background: #3F83F1;
+}
+
+.auth-button:active {
+  box-shadow: inset 0 2px 5px #2370FE;   
+}

@@ -14,6 +14,8 @@
 
 package com.google.step.snippet.servlets;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
@@ -51,6 +53,8 @@ public class SearchServlet extends HttpServlet {
   private static final String API_KEY = "INSERT_API_KEY";
   private static final String CSE_ITEMS = "items";
   private static final String CSE_LINK = "link";
+  private static final String AUTH_URL = "authUrl";
+  private static final String AUTH_LABEL = "authLabel";
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
   private static final String CARD_LIST_LABEL = "cardList";
 
@@ -71,6 +75,20 @@ public class SearchServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+    String redirectPath = request.getRequestURI();
+    if (request.getQueryString() != null) {
+      redirectPath += "?" + request.getQueryString();
+    }
+
+    UserService userService = UserServiceFactory.getUserService();
+    if (userService.isUserLoggedIn()) {
+      request.setAttribute(AUTH_URL, userService.createLogoutURL(redirectPath));
+      request.setAttribute(AUTH_LABEL, "Logout");
+    } else {
+      request.setAttribute(AUTH_URL, userService.createLoginURL(redirectPath));
+      request.setAttribute(AUTH_LABEL, "Login");
+    }
+
     String param = request.getParameter("q");
     if (param == null || encodeValue(param) == null) {
       response.setContentType("text/html;");

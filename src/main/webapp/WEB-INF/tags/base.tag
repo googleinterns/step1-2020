@@ -6,4 +6,5 @@
 		</h1>
 	</a>
 	<div class="searchbox"><div class="gcse-searchbox-only" data-resultsUrl="/search"></div></div>
+	<a class="auth-button" href="${authUrl}">${authLabel}</a>
 </div>
