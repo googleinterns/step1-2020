@@ -64,7 +64,6 @@ public final class W3SchoolsClient implements Client {
     if (query.contains("html")) {
       code = StringEscapeUtils.escapeHtml4(code);
     }
-    
     return new Card(title, code, w3Link, description);
   }
 }
