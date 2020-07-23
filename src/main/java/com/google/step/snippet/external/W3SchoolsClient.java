@@ -1,13 +1,12 @@
 package com.google.step.snippet.external;
 
-import com.google.appengine.api.datastore.Entity;
 import com.google.step.snippet.data.Card;
 import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-public class W3SchoolsClient implements Client {
+public class W3SchoolsClient extends Client {
   private static final String TITLE_TAG = "h1";
   private static final String DESC_TAG = "p";
   private static final String SNIPPET_CLASS = "w3-example";
@@ -53,11 +52,7 @@ public class W3SchoolsClient implements Client {
     String title = titles.first().text();
     String description = descriptions.first().text();
     String code = snippets.first().getElementsByClass(CODE_CLASS).text();
-
-    /* Retrieve feedback, if stored feedback exists */
-    Entity feedback = getFeedback(w3Link);
-    long upvote = getUpvote(feedback);
-    long downvote = getDownvote(feedback);
-    return new Card(title, code, w3Link, description, upvote, downvote);
+    long votes = getVotes(w3Link);
+    return new Card(title, code, w3Link, description, votes);
   }
 }

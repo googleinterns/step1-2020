@@ -1,13 +1,12 @@
 package com.google.step.snippet.external;
 
-import com.google.appengine.api.datastore.Entity;
 import com.google.step.snippet.data.Card;
 import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-public final class GeeksForGeeksClient implements Client {
+public final class GeeksForGeeksClient extends Client {
   private static final String TITLE_TAG = "h1";
   private static final String DESC_TAG = "p";
   private static final String SNIPPET_CLASS = "code-block";
@@ -53,11 +52,7 @@ public final class GeeksForGeeksClient implements Client {
     String title = titles.first().text();
     String description = descriptions.first().text();
     String code = snippets.first().getElementsByClass(CODE_CLASS).text();
-
-    /* Retrieve feedback, if stored feedback exists */
-    Entity feedback = getFeedback(geeksLink);
-    long upvote = getUpvote(feedback);
-    long downvote = getDownvote(feedback);
-    return new Card(title, code, geeksLink, description, upvote, downvote);
+    long votes = getVotes(geeksLink);
+    return new Card(title, code, geeksLink, description, votes);
   }
 }

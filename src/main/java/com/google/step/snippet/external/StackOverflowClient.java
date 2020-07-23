@@ -1,6 +1,5 @@
 package com.google.step.snippet.external;
 
-import com.google.appengine.api.datastore.Entity;
 import com.google.step.snippet.data.Card;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +19,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public final class StackOverflowClient implements Client {
+public final class StackOverflowClient extends Client {
   private static final String SEARCH_URL_TEMPLATE =
       "https://api.stackexchange.com/2.2/questions/%s?"
           + "order=desc&sort=activity&site=stackoverflow";
@@ -60,8 +59,8 @@ public final class StackOverflowClient implements Client {
    * @return the created card, or {@code null} if a card could not be created
    */
   @Override
-  public Card search(String url) {
-    String questionId = getQuestionId(url);
+  public Card search(String stackLink) {
+    String questionId = getQuestionId(stackLink);
     if (questionId == null) {
       return null;
     }
@@ -77,12 +76,8 @@ public final class StackOverflowClient implements Client {
     // No description or code is allowed for StackOverflow.
     String description = getDescription(answerBody);
     String code = getCode(answerBody);
-
-    /* Retrieve feedback, if stored feedback exists */
-    Entity feedback = getFeedback(url);
-    long upvote = getUpvote(feedback);
-    long downvote = getDownvote(feedback);
-    return new Card(title, code, url, description, upvote, downvote);
+    long votes = getVotes(stackLink);
+    return new Card(title, code, stackLink, description, votes);
   }
 
   /* Get the question id of passed in URL. */
