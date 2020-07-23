@@ -12,6 +12,8 @@ public final class W3SchoolsClient implements Client {
   private static final String SNIPPET_CLASS = "w3-example";
   private static final String CODE_CLASS = "w3-code";
   private static final String SOURCE_NAME = "W3Schools";
+  private static final String ICON_LINK =
+      "https://image.winudf.com/v2/image1/Y29tLlczc2Nob29sLkFuYnVfaWNvbl8xNTYyMDU5NzE3XzAwMw/icon.png?w=170&fakeurl=1";
 
   private String cseId;
 
@@ -53,6 +55,6 @@ public final class W3SchoolsClient implements Client {
     String title = titles.first().text();
     String description = descriptions.first().text();
     String code = snippets.first().getElementsByClass(CODE_CLASS).text();
-    return new Card(title, code, w3Link, description, SOURCE_NAME);
+    return new Card(title, code, w3Link, description, SOURCE_NAME, ICON_LINK);
   }
 }

@@ -22,7 +22,8 @@ public final class W3SchoolsClientTest {
             "<img src=\"img_girl.jpg\" alt=\"Girl in a jacket\" width=\"500\" height=\"600\">",
             "https://www.w3schools.com/tags/tag_img.asp",
             "How to insert an image:",
-            "W3Schools");
+            "W3Schools",
+            "https://image.winudf.com/v2/image1/Y29tLlczc2Nob29sLkFuYnVfaWNvbl8xNTYyMDU5NzE3XzAwMw/icon.png?w=170&fakeurl=1");
     assertEquals(expected, actual);
   }
 
@@ -36,7 +37,8 @@ public final class W3SchoolsClientTest {
                 + " JSON.stringify(myObj); window.location = \"demo_json.php?x=\" + myJSON;",
             "https://www.w3schools.com/js/js_json_intro.asp",
             "JSON: JavaScript Object Notation.",
-            "W3Schools");
+            "W3Schools",
+            "https://image.winudf.com/v2/image1/Y29tLlczc2Nob29sLkFuYnVfaWNvbl8xNTYyMDU5NzE3XzAwMw/icon.png?w=170&fakeurl=1");
     assertEquals(expected, actual);
   }
 
