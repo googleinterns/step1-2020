@@ -19,9 +19,9 @@ body, html {
 }
 
 .searchbox {
-  width: 60%;
+  width: 100vh;
   min-width: 400px;
-  max-width: 1000px;
+  max-width: 580px;
 }
 
 .auth-button:hover {
