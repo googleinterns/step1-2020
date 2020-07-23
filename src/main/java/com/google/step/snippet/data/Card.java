@@ -5,17 +5,14 @@ public final class Card {
   private final String code;
   private final String link;
   private final String description;
-  private final long upvote;
-  private final long downvote;
+  private final long votes;
 
-  public Card(
-      String title, String code, String link, String description, long upvote, long downvote) {
+  public Card(String title, String code, String link, String description, long votes) {
     this.title = title;
     this.code = code;
     this.link = link;
     this.description = description;
-    this.upvote = upvote;
-    this.downvote = downvote;
+    this.votes = votes;
   }
 
   public String getTitle() {
@@ -34,16 +31,8 @@ public final class Card {
     return description;
   }
 
-  public long getUpvote() {
-    return upvote;
-  }
-
-  public long getDownvote() {
-    return downvote;
-  }
-
-  public long getTotalVote() {
-    return upvote - downvote;
+  public long getVotes() {
+    return votes;
   }
 
   @Override
@@ -62,6 +51,7 @@ public final class Card {
     return this.title.equals(other.title)
         && this.code.equals(other.code)
         && this.link.equals(other.link)
-        && this.description.equals(other.description);
+        && this.description.equals(other.description)
+        && this.votes == other.votes;
   }
 }

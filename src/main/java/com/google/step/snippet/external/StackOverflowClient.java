@@ -1,6 +1,5 @@
 package com.google.step.snippet.external;
 
-import com.google.appengine.api.datastore.Entity;
 import com.google.step.snippet.data.Card;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,13 +12,14 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public final class StackOverflowClient implements Client {
+public final class StackOverflowClient extends Client {
   private static final String SEARCH_URL_TEMPLATE =
       "https://api.stackexchange.com/2.2/questions/%s?"
           + "order=desc&sort=activity&site=stackoverflow";
@@ -38,8 +38,6 @@ public final class StackOverflowClient implements Client {
   private static final String BODY_PARAMETER = "body";
   private static final String CODE_PARAMETER = "code";
   private static final String ANSWER_ID_PARAMETER = "answer_id";
-  private static final String UP = "upvote";
-  private static final String DOWN = "downvote";
   // Set 200 to be the maximum length of description for MVP.
   private static final int MAX_DESCRIPTION_LENGTH = 200;
 
@@ -61,8 +59,8 @@ public final class StackOverflowClient implements Client {
    * @return the created card, or {@code null} if a card could not be created
    */
   @Override
-  public Card search(String url) {
-    String questionId = getQuestionId(url);
+  public Card search(String stackLink) {
+    String questionId = getQuestionId(stackLink);
     if (questionId == null) {
       return null;
     }
@@ -78,16 +76,8 @@ public final class StackOverflowClient implements Client {
     // No description or code is allowed for StackOverflow.
     String description = getDescription(answerBody);
     String code = getCode(answerBody);
-
-    /* Retrieve feedback, if stored feedback exists */
-    long upvote = 0;
-    long downvote = 0;
-    Entity feedback = getFeedback(url);
-    if (feedback != null) {
-      upvote = (long) feedback.getProperty(UP);
-      downvote = (long) feedback.getProperty(DOWN);
-    }
-    return new Card(title, code, url, description, upvote, downvote);
+    long votes = getVotes(stackLink);
+    return new Card(title, code, stackLink, description, votes);
   }
 
   /* Get the question id of passed in URL. */
@@ -185,10 +175,13 @@ public final class StackOverflowClient implements Client {
       return null;
     }
     JSONObject json = new JSONObject(responseBody.toString());
-    String res = json.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(fieldParam).toString();
-    if (response.getStatusLine().getStatusCode() != 200) {
-      return null;
+    if (json.has(ITEM_PARAMETER) && json.getJSONArray(ITEM_PARAMETER).length() > 0) {
+      JSONArray items = json.getJSONArray(ITEM_PARAMETER);
+      JSONObject obj = items.getJSONObject(0);
+      if (obj.has(fieldParam)) {
+        return obj.get(fieldParam).toString();
+      }
     }
-    return res;
+    return null;
   }
 }

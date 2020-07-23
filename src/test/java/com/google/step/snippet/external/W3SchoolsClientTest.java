@@ -11,9 +11,14 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class W3SchoolsClientTest {
 
-  private final W3SchoolsClient client = new W3SchoolsClient("CSE_ID");
+  private final W3SchoolsClient client =
+      new W3SchoolsClient("CSE_ID") {
+        public long getVotes(String url) {
+          return 0;
+        }
+      };
 
-  // @Test
+  @Test
   public void htmlCodeCard() {
     Card actual = client.search("https://www.w3schools.com/tags/tag_img.asp");
     Card expected =
@@ -22,12 +27,11 @@ public final class W3SchoolsClientTest {
             "<img src=\"img_girl.jpg\" alt=\"Girl in a jacket\" width=\"500\" height=\"600\">",
             "https://www.w3schools.com/tags/tag_img.asp",
             "How to insert an image:",
-            0,
             0);
     assertEquals(expected, actual);
   }
 
-  // @Test
+  @Test
   public void jsonCodeCard() {
     Card actual = client.search("https://www.w3schools.com/js/js_json_intro.asp");
     Card expected =
@@ -37,7 +41,6 @@ public final class W3SchoolsClientTest {
                 + " JSON.stringify(myObj); window.location = \"demo_json.php?x=\" + myJSON;",
             "https://www.w3schools.com/js/js_json_intro.asp",
             "JSON: JavaScript Object Notation.",
-            0,
             0);
     assertEquals(expected, actual);
   }
