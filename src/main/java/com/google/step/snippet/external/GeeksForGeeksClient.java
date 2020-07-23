@@ -59,12 +59,10 @@ public final class GeeksForGeeksClient implements Client {
             Jsoup.clean(descriptions.first().text(), Whitelist.basicWithImages()));
     String code =
         Jsoup.clean(
-            snippets.first().getElementsByClass(CODE_CLASS).text(),
-            Whitelist.basicWithImages());
+            snippets.first().getElementsByClass(CODE_CLASS).text(), Whitelist.basicWithImages());
     if (query.contains("html")) {
       code = StringEscapeUtils.escapeHtml4(code);
     }
-
     return new Card(title, code, geeksLink, description);
   }
 }
