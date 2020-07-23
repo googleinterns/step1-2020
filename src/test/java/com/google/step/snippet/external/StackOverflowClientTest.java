@@ -75,8 +75,8 @@ public final class StackOverflowClientTest {
             + "<pre><code>int x;\n"
             + "x = 10;\n"
             + "</code></pre>\n\n"
-            + "<p>In this example, the variable <code>x</code> i",
-        answer_body1);
+            + "<p>In this example, the variable <code>x</code> is an <",
+        answer_body1.substring(0, 300));
     assertNull(answer_body2);
   }
 
@@ -91,18 +91,18 @@ public final class StackOverflowClientTest {
             null,
             "https://stackoverflow.com/questions/22250067/how-to-get-address-of-a-pointer-in-c-c",
             "<p>To get the address of p do:</p>\n\n"
-                + "<pre><code>int **pp = &amp;p;\n"
+                + "<pre><code>int **pp = &p;\n"
                 + "</code></pre>\n\n"
                 + "<p>and you can go on:</p>\n\n"
-                + "<pre><code>int ***ppp = &amp;pp;\n"
-                + "int ****pppp = &amp;ppp;\n"
-                + "...\n"
-                + "</code></pre>\n\n"
+                + "<pre><code>int ***ppp = &pp;\n"
+                + "int ****pppp = &ppp;\n...\n</code></pre>\n\n"
                 + "<p>or, only in C++11, you can do:</p>\n\n"
                 + "<pre><code>auto pp = std::addressof(p);\n"
-                + "</code></pre>\n\n"
-                + "<p>To print the addre"
-                + "...");
+                + "</code></pre>\n\n<p>To print the address in C, most compilers support"
+                + " <code>%p</code>, so you can simply do:</p>\n\n<pre><code>printf(\"addr: %p\""
+                + ", pp);\n</code></pre>\n\n<p>otherwise you need to cast it (assuming a 32 bit platform)"
+                + "</p>\n\n<pre><code>printf(\"addr: 0x%u\", (unsigned)pp);\n</code></pre>\n\n"
+                + "<p>In C++ you can do:</p>\n\n<pre><code>cout << \"addr: \" << pp;\n</code></pre>\n");
     assertEquals(expected, actual);
   }
 
@@ -115,11 +115,23 @@ public final class StackOverflowClientTest {
             "&lt;img&gt; vs &lt;image&gt; tag in HTML",
             null,
             "https://stackoverflow.com/questions/11928566/img-vs-image-tag-in-html",
-            "<p>Yes and no. As you point out <code>&lt;image&gt;</code> has been a synonym for"
-                + " <code>&lt;img&gt;</code> for a long time. I believe it was an early Netscape"
-                + " browser that first did this, possibly to compensate for user error, or possibly"
-                + " because there was dispute at the time whether the element sho"
-                + "...");
+            "<p>Yes and no. As you point out <code><image></code> has been a synonym for <code>"
+                + "<img></code> for a long time. I believe it was an early Netscape browser that first "
+                + "did this, possibly to compensate for user error, or possibly because there was dispute "
+                + "at the time whether the element should actually be called <code><image></code> or <code>"
+                + "<img></code>.</p>\n\n<p>Anyway, as pst points out, once it was implemented in a browser"
+                + " that dominated the market of the time, web pages came to rely on it. Its persistence "
+                + "is then down to commercial pressure on the browser manufacturers. If all the major "
+                + "browsers support it, then Browser A decides that although it supported it in Version V, "
+                + "t won't support it in version V+1, as soon as version V+1 is released, they get lots of "
+                + "messages saying \"Site S is broken in your latest browser. You browser is rubbish. I'm going "
+                + "to switch to browser B\".</p>\n\n<p>The HTML5 parsing spec requires that the <code><image>"
+                + "</code> tag is mapped to the <code>img</code> element at the tree construction stage, so "
+                + "there can never be any justification for using it.</p>\n\n<p>I would be less concerned "
+                + "about browsers, than other HTML consumers, such as the lesser known search engines. I "
+                + "believe that the <code>image</code> for <code>img</code> synonym is not widely known, and"
+                + " the many such tools would therefore fail to pick up <code><image></code> as referencing "
+                + "an image resource. </p>\n");
     assertEquals(expected, actual);
   }
 
