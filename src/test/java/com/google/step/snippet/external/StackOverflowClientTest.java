@@ -75,7 +75,8 @@ public final class StackOverflowClientTest {
             + "<pre><code>int x;\n"
             + "x = 10;\n"
             + "</code></pre>\n\n"
-            + "<p>In this example, the variable <code>x</code> i",
+            + "<p>In this example, the variable <code>x</code> is an <"
+            + "...",
         answer_body1);
     assertNull(answer_body2);
   }
