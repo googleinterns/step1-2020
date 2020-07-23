@@ -35,7 +35,6 @@ public final class StackOverflowClient implements Client {
   private static final String ANSWER_ID_PARAMETER = "answer_id";
   private static final String QUESTION_PARAMETER = "questions";
   private static final int QUESTION_INDEX = 1;
-  
   private final String cseId;
 
   public StackOverflowClient(String cseId) {
