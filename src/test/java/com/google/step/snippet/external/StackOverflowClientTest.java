@@ -13,61 +13,74 @@ public final class StackOverflowClientTest {
   private final StackOverflowClient client = new StackOverflowClient("CSE_ID");
 
   @Test
-  public void getQuestionIdTest() {
-    // Invalid question id because of wrong URL format.
-    String id1 = client.getQuestionId("https://stackoverflow.com/questions");
-    String id2 = client.getQuestionId("https://stackoverflow.com/questions/dhwiurgewi");
-    String id3 = client.getQuestionId("https://stackoverflow.com/tagged/java");
-    String id4 = client.getQuestionId("https://stackoverflow.com/answer/2841892");
-    // Valid URL.
-    String id5 =
+  public void noQuestionIdTest() {
+    String question_id = client.getQuestionId("https://stackoverflow.com/questions");
+    assertNull(question_id);
+  }
+
+  @Test
+  public void getQuestionIdRegexTest() {
+    String question_id = client.getQuestionId("https://stackoverflow.com/questions/dhwiurgewi");
+    assertNull(question_id);
+  }
+
+  @Test
+  public void wrongQuestionDomainTest1() {
+    String question_id = client.getQuestionId("https://stackoverflow.com/tagged/java");
+    assertNull(question_id);
+  }
+
+  @Test
+  public void wrongQuestionDomainTest2() {
+    String question_id = client.getQuestionId("https://stackoverflow.com/answer/2841892");
+    assertNull(question_id);
+  }
+
+  @Test
+  public void validQuestionIdTest() {
+     String question_id =
         client.getQuestionId(
             "https://stackoverflow.com/questions/12912048/how-to-maintain-aspect-ratio-using-html-img-tag");
-
-    assertNull(id1);
-    assertNull(id2);
-    assertNull(id3);
-    assertNull(id4);
-    assertEquals("12912048", id5);
+      assertEquals("12912048", question_id);
   }
 
   @Test
-  public void getAnswerIdTest() {
+  public void validAnswerIdTest() {
     // Valid question id.
-    String question_id1 = "12912048";
+    String question_id = "12912048";
+    String answer_id = client.getAnswerId(question_id);
+    assertEquals("12912224", answer_id);
+  }
+
+  @Test
+  public void invalidAnswerIdTest() {
     // Test for unanswered question.
-    String question_id2 = "44686609";
-
-    String answer_id1 = client.getAnswerId(question_id1);
-    String answer_id2 = client.getAnswerId(question_id2);
-
-    assertEquals("12912224", answer_id1);
-    assertNull(answer_id2);
+    String question_id = "44686609";
+    String answer_id = client.getAnswerId(question_id);
+    assertNull(answer_id);
   }
-
+  
   @Test
-  public void getTitleTest() {
+  public void validTitleTest() {
     // Valid question id.
-    String question_id1 = "12912048";
-    // Id number that doesn't point to a question.
-    String question_id2 = "12912224";
-
-    String title1 = client.getTitle(question_id1);
-    String title2 = client.getTitle(question_id2);
-
-    assertEquals("How to maintain aspect ratio using HTML IMG tag", title1);
+    String question_id = "12912048";
+    String title = client.getTitle(question_id);
+    assertEquals("How to maintain aspect ratio using HTML IMG tag", title);
   }
 
   @Test
-  public void getAnswerBodyTest() {
+  public void invalidTitleTest() {
+    // Id number that doesn't point to a question.
+    String question_id = "12912224";
+    String title = client.getTitle(question_id);
+    assertNull(title);
+  }
+
+  @Test
+  public void validAnswerBodyTest() {
     // Valid answer id.
-    String answer_id1 = "218510";
-    // Invalid answer id.
-    String answer_id2 = "12912048";
-
-    String answer_body1 = client.getAnswerBody(answer_id1);
-    String answer_body2 = client.getAnswerBody(answer_id2);
-
+    String answer_id = "218510";
+    String answer_body = client.getAnswerBody(answer_id);
     assertEquals(
         "<p>When you declare a reference variable (i.e. an object) you are really creating a"
             + " pointer to an object. Consider the following code where you declare a variable of"
@@ -76,12 +89,18 @@ public final class StackOverflowClientTest {
             + "x = 10;\n"
             + "</code></pre>\n\n"
             + "<p>In this example, the variable <code>x</code> is an <",
-        answer_body1.substring(0, 300));
-    assertNull(answer_body2);
+        answer_body.substring(0, 300));
+  }
+  @Test
+  public void invalidAnswerBodyTest() {
+    // Invalid answer id.
+    String answer_id = "12912048";
+    String answer_body = client.getAnswerBody(answer_id);
+    assertNull(answer_body);
   }
 
   @Test
-  public void noAnswerTest() {
+  public void noAnswerSearchTest() {
     Card actual =
         client.search(
             "https://stackoverflow.com/questions/44686609/implementing-a-neural-network-in-haskell");
@@ -89,7 +108,7 @@ public final class StackOverflowClientTest {
   }
 
   @Test
-  public void fakeLinkTest() {
+  public void fakeLinkSearchTest() {
     Card actual =
         client.search(
             "https://softwareengineering.stackexchange.com/questions/100/what-website-are-yo");
