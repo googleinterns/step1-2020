@@ -32,7 +32,7 @@ public final class GeeksForGeeksClient implements Client {
    * @return the created card, or {@code null} if a card could not be created
    */
   @Override
-  public Card search(String geeksLink) {
+  public Card search(String geeksLink, String query) {
     Document doc = null;
     try {
       doc = Jsoup.connect(geeksLink).get();
@@ -51,13 +51,17 @@ public final class GeeksForGeeksClient implements Client {
     if (snippets.isEmpty() || snippets.first().getElementsByClass(CODE_CLASS).text().isEmpty()) {
       return null;
     }
-    String title = StringEscapeUtils.escapeHtml4(titles.first().text());
-    String description = descriptions.first().text();
-    String code =
+    String title =
         StringEscapeUtils.escapeHtml4(
-            Jsoup.clean(
-                snippets.first().getElementsByClass(CODE_CLASS).text(),
-                Whitelist.basicWithImages()));
+            Jsoup.clean(titles.first().text(), Whitelist.basicWithImages()));
+    String description =
+        StringEscapeUtils.escapeHtml4(
+            Jsoup.clean(descriptions.first().text(), Whitelist.basicWithImages()));
+    String code =
+        Jsoup.clean(
+            snippets.first().getElementsByClass(CODE_CLASS).text(),
+            Whitelist.basicWithImages());
+
     return new Card(title, code, geeksLink, description);
   }
 }

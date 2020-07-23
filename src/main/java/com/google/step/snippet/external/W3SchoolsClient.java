@@ -32,7 +32,7 @@ public final class W3SchoolsClient implements Client {
    * @return the created card, or {@code null} if a card could not be created
    */
   @Override
-  public Card search(String w3Link) {
+  public Card search(String w3Link, String query) {
     Document doc = null;
     try {
       doc = Jsoup.connect(w3Link).get();
@@ -51,13 +51,24 @@ public final class W3SchoolsClient implements Client {
     if (snippets.isEmpty() || snippets.first().getElementsByClass(CODE_CLASS).text().isEmpty()) {
       return null;
     }
-    String title = StringEscapeUtils.escapeHtml4(titles.first().text());
-    String description = descriptions.first().text();
-    String code =
+    String title =
         StringEscapeUtils.escapeHtml4(
-            Jsoup.clean(
-                snippets.first().getElementsByClass(CODE_CLASS).text(),
-                Whitelist.basicWithImages()));
+            Jsoup.clean(titles.first().text(), Whitelist.basicWithImages()));
+    String description =
+        StringEscapeUtils.escapeHtml4(
+            Jsoup.clean(descriptions.first().text(), Whitelist.basicWithImages()));
+    String code =
+        Jsoup.clean(
+            snippets.first().getElementsByClass(CODE_CLASS).text(),
+            Whitelist.basicWithImages());
+    if (query.contains("html")) {
+      code = StringEscapeUtils.escapeHtml4(code);
+    }
+    System.out.println(title);
+    System.out.println(code);
+    System.out.println(w3Link);
+    System.out.println(description);
+    
     return new Card(title, code, w3Link, description);
   }
 }

@@ -99,7 +99,7 @@ public class SearchServlet extends HttpServlet {
     List<Card> allCards = new ArrayList<>();
     for (Client client : clients) {
       String link = getLink(client.getCseId(), query);
-      Card card = client.search(link);
+      Card card = client.search(link, query);
       if (card != null) {
         allCards.add(card);
       }

@@ -58,7 +58,7 @@ public final class StackOverflowClient implements Client {
    * @return the created card, or {@code null} if a card could not be created
    */
   @Override
-  public Card search(String url) {
+  public Card search(String url, String query) {
     String questionId = getQuestionId(url);
     if (questionId == null) {
       return null;
