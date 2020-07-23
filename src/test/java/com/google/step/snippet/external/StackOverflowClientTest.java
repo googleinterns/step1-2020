@@ -69,8 +69,8 @@ public final class StackOverflowClientTest {
     String answer_body2 = client.getAnswerBody(answer_id2);
 
     assertEquals(
-        "<p>When you declare a reference variable (i.e. an object) you are really"
-            + " creating a pointer to an object. Consider the following code where you declare a variable of"
+        "<p>When you declare a reference variable (i.e. an object) you are really creating a"
+            + " pointer to an object. Consider the following code where you declare a variable of"
             + " primitive type <code>int</code>:</p>\n\n"
             + "<pre><code>int x;\n"
             + "x = 10;\n"
