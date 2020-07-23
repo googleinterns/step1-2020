@@ -35,9 +35,7 @@ public final class StackOverflowClient implements Client {
   private static final String ANSWER_ID_PARAMETER = "answer_id";
   private static final String QUESTION_PARAMETER = "questions";
   private static final int QUESTION_INDEX = 1;
-  // Set 300 to be the maximum length of description for MVP.
-  private static final int MAX_ANSWER_LENGTH = 300;
-
+  
   private final String cseId;
 
   public StackOverflowClient(String cseId) {
