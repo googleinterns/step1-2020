@@ -100,6 +100,9 @@ public class SearchServlet extends HttpServlet {
     for (Client client : clients) {
       String link = getLink(client.getCseId(), query);
       Card card = client.search(link, query);
+      if (link == null) {
+        break;
+      }
       if (card != null) {
         allCards.add(card);
       }
