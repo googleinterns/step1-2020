@@ -44,24 +44,17 @@ public class FeedbackServlet extends HttpServlet {
 
     long upVotes = (long) feedbackEntity.getProperty(UP);
     long downVotes = (long) feedbackEntity.getProperty(DOWN);
-    
+
     if (request.getParameter(UP) != null) {
-        totalVotes = upVotes - downVotes + 1;
-        feedbackEntity.setProperty(UP, upVotes + 1);
-    }
-    else if (request.getParameter(DOWN) != null) {
+      totalVotes = upVotes - downVotes + 1;
+      feedbackEntity.setProperty(UP, upVotes + 1);
+    } else if (request.getParameter(DOWN) != null) {
       totalVotes = upVotes - downVotes - 1;
       feedbackEntity.setProperty(DOWN, downVotes + 1);
     }
-    /* Convert vote count to response string */
-    String totalStr;
-    if (totalVotes < 0) {
-      totalStr = "-" + Long.toString(Math.abs(totalVotes));
-    } else {
-      totalStr = Long.toString(totalVotes);
-    }
+
     datastore.put(feedbackEntity);
     response.setContentType("text/plain");
-    response.getWriter().println(totalStr);
+    response.getWriter().println(Long.toString(totalVotes));
   }
 }
