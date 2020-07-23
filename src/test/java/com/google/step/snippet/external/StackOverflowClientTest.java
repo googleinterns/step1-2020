@@ -10,19 +10,52 @@ import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public final class StackOverflowClientTest {
-  private final Client client = new StackOverflowClient("CSE_ID");
+  private final StackOverflowClient client = new StackOverflowClient("CSE_ID");
 
   @Test
-  public void questionIdTest() {
-    Card card1 = client.search("https://stackoverflow.com/questions");
-    Card card2 = client.search("https://stackoverflow.com/questions/dhwiurgewi");
-    Card card3 = client.search("https://stackoverflow.com/tagged/java");
-    Card card4 = client.search("https://stackoverflow.com/answer/2841892");
+  public void getQuestionIdTest() {
+    // Invalid question id because of wrong URL format.
+    String id1 = client.getQuestionId("https://stackoverflow.com/questions");
+    String id2 = client.getQuestionId("https://stackoverflow.com/questions/dhwiurgewi");
+    String id3 = client.getQuestionId("https://stackoverflow.com/tagged/java");
+    String id4 = client.getQuestionId("https://stackoverflow.com/answer/2841892");
+    // Valid URL.
+    String id5 =
+        client.getQuestionId(
+            "https://stackoverflow.com/questions/12912048/how-to-maintain-aspect-ratio-using-html-img-tag");
 
-    assertNull(card1);
-    assertNull(card2);
-    assertNull(card3);
-    assertNull(card4);
+    assertNull(id1);
+    assertNull(id2);
+    assertNull(id3);
+    assertNull(id4);
+    assertEquals("12912048", id5);
+  }
+
+  @Test
+  public void getAnswerIdTest() {
+    // Valid question id.
+    String question_id1 = "12912048";
+    // Test for unanswered question.
+    String question_id2 = "44686609";
+
+    String answer_id1 = client.getAnswerId(question_id1);
+    String answer_id2 = client.getAnswerId(question_id2);
+
+    assertEquals("12912224", answer_id1);
+    assertNull(answer_id2);
+  }
+
+  @Test
+  public void getTitleTest() {
+    // Valid question id.
+    String question_id1 = "12912048";
+    // Id number that doesn't point to a question.
+    String question_id2 = "12912224";
+
+    String title1 = client.getTitle(question_id1);
+    String title2 = client.getTitle(question_id2);
+
+    assertEquals("How to maintain aspect ratio using HTML IMG tag", title1);
   }
 
   @Test
