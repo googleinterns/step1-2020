@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import com.google.step.snippet.data.Card;
-import org.junit.Test;
 import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -13,20 +13,21 @@ import org.junit.runners.JUnit4;
 public final class W3SchoolsClientTest {
 
   private final W3SchoolsClient client = new W3SchoolsClient("CSE_ID");
+
   @Ignore
   @Test
   public void htmlCodeCard() {
     Card actual = client.search("https://www.w3schools.com/tags/tag_img.asp", "html img");
     Card expected =
         new Card(
-            "HTML\n&lt;img&gt; Tag",
-            "&lt;img alt=&quot;Girl in a jacket&quot; width=&quot;500&quot; height=&quot;600&quot;&gt;",
+            "HTML &lt;img&gt; Tag",
+            "&lt;img alt=&quot;Girl in a jacket&quot; width=&quot;500&quot;"
+                + " height=&quot;600&quot;&gt;",
             "https://www.w3schools.com/tags/tag_img.asp",
             "How to insert an image:");
     assertEquals(expected, actual);
   }
 
-  @Ignore
   @Test
   public void jsonCodeCard() {
     Card actual = client.search("https://www.w3schools.com/js/js_json_intro.asp", "json");
