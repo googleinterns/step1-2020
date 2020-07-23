@@ -13,7 +13,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 });
 
 async function renderVote(card, url, action) {
-  const total = card.getElementsByClassName('totalvote')[0];
+  const total = card.getElementsByClassName('total-votes')[0];
   total.innerHTML = await updateVote(url, action);
 }
 

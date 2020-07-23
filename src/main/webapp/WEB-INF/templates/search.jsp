@@ -24,7 +24,7 @@
               <button class="upvote" value="${knowledgeCard.getLink()}">
                 <i class="fas fa-chevron-up"></i>
               </button>
-              <span class="totalvote">${knowledgeCard.getVotes()}</span>
+              <span class="total-votes">${knowledgeCard.getVotes()}</span>
               <button class="downvote" value="${knowledgeCard.getLink()}">
                 <i class="fas fa-chevron-down"></i>
               </button>
