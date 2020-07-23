@@ -38,10 +38,10 @@ public final class StackOverflowClientTest {
 
   @Test
   public void validQuestionIdTest() {
-     String question_id =
+    String question_id =
         client.getQuestionId(
             "https://stackoverflow.com/questions/12912048/how-to-maintain-aspect-ratio-using-html-img-tag");
-      assertEquals("12912048", question_id);
+    assertEquals("12912048", question_id);
   }
 
   @Test
@@ -91,6 +91,7 @@ public final class StackOverflowClientTest {
             + "<p>In this example, the variable <code>x</code> is an <",
         answer_body.substring(0, 300));
   }
+  
   @Test
   public void invalidAnswerBodyTest() {
     // Invalid answer id.
