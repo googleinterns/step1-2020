@@ -2,6 +2,8 @@ package com.google.step.snippet.external;
 
 import com.google.step.snippet.data.Card;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,7 +16,8 @@ public final class W3SchoolsClient implements Client {
   private static final String SNIPPET_CLASS = "w3-example";
   private static final String CODE_CLASS = "w3-code";
 
-  private String cseId;
+  private final String cseId;
+  private final List<String> escapeFilters = Arrays.asList("html", "svg", "icons", "css");
 
   public W3SchoolsClient(String cseId) {
     this.cseId = cseId;
@@ -60,9 +63,18 @@ public final class W3SchoolsClient implements Client {
     String code =
         Jsoup.clean(
             snippets.first().getElementsByClass(CODE_CLASS).text(), Whitelist.basicWithImages());
-    if (query.contains("html")) {
+    if (doEscape(query.toLowerCase()) || doEscape(w3Link) || doEscape(title.toLowerCase())) {
       code = StringEscapeUtils.escapeHtml4(code);
     }
     return new Card(title, code, w3Link, description);
+  }
+
+  private boolean doEscape(String possibleHtml) {
+    for (String filterWord : escapeFilters) {
+      if (possibleHtml.contains(filterWord)) {
+        return true;
+      }
+    }
+    return false;
   }
 }

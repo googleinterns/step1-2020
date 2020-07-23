@@ -2,6 +2,8 @@ package com.google.step.snippet.external;
 
 import com.google.step.snippet.data.Card;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,6 +17,7 @@ public final class GeeksForGeeksClient implements Client {
   private static final String CODE_CLASS = "code-container";
 
   private final String cseId;
+  private final List<String> escapeFilters = Arrays.asList("html", "svg", "icons", "css");
 
   public GeeksForGeeksClient(String cseId) {
     this.cseId = cseId;
@@ -60,12 +63,21 @@ public final class GeeksForGeeksClient implements Client {
     String code =
         Jsoup.clean(
             snippets.first().getElementsByClass(CODE_CLASS).text(), Whitelist.basicWithImages());
-    if (query.contains("html")) {
+    if (doEscape(query.toLowerCase()) || doEscape(geeksLink) || doEscape(title.toLowerCase())) {
       code = StringEscapeUtils.escapeHtml4(code);
     }
     System.out.println(title);
     System.out.println(code);
     System.out.println(description);
     return new Card(title, code, geeksLink, description);
+  }
+
+  private boolean doEscape(String possibleHtml) {
+    for (String filterWord : escapeFilters) {
+      if (possibleHtml.contains(filterWord)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
