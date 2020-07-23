@@ -114,8 +114,8 @@ public final class StackOverflowClient implements Client {
     String answerBody = getResponse(answerUrl, BODY_PARAMETER);
     if (answerBody != null && answerBody.length() > 300) {
       answerBody = answerBody.substring(0, MAX_ANSWER_LENGTH);
+      answerBody += "...";
     }
-    answerBody += "...";
     return answerBody;
   }
 
