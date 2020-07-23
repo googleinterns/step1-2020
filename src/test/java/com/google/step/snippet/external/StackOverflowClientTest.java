@@ -95,4 +95,17 @@ public final class StackOverflowClientTest {
             "https://softwareengineering.stackexchange.com/questions/100/what-website-are-yo");
     assertNull(actual);
   }
+
+  @Test
+  public void validSearchTest() {
+    Card actual = 
+        client.search(
+            "https://stackoverflow.com/questions/63057965/custom-dropdown-to-page-size-on-reacttable");
+    Card expected = new Card("Custom dropdown to page size on ReactTable", 
+                              null, 
+                              "https://stackoverflow.com/questions/63057965/custom-dropdown-to-page-size-on-reacttable", 
+                              "<p>I found the solution and was add in the properties this line</p>\n" 
+                              + "<pre><code>pageSizeOptions= {[10, 15, 20]}\n</code></pre>\n");
+    assertEquals(expected, actual);
+  }
 }
