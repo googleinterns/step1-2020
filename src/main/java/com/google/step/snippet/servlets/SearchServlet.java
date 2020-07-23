@@ -27,8 +27,8 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
@@ -37,6 +37,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -62,9 +63,11 @@ public class SearchServlet extends HttpServlet {
   private static final String CARD_LIST_LABEL = "cardList";
   private static final int THREAD_COUNT = 3;
 
-  private final Client w3Client = new W3SchoolsClient(W3_CSE_ID);
-  private final Client stackClient = new StackOverflowClient(STACK_CSE_ID);
-  private final Client geeksClient = new GeeksForGeeksClient(GEEKS_CSE_ID);
+  private final List<Client> clients =
+      Arrays.asList(
+          new W3SchoolsClient(W3_CSE_ID),
+          new StackOverflowClient(STACK_CSE_ID),
+          new GeeksForGeeksClient(GEEKS_CSE_ID));
 
   private static String encodeValue(String value) {
     try {
@@ -84,52 +87,39 @@ public class SearchServlet extends HttpServlet {
       return;
     }
     String query = encodeValue(param);
-    List<Card> allCards = new ArrayList<>();
+    List<Card> allCards;
     ExecutorService executor = Executors.newFixedThreadPool(THREAD_COUNT);
     List<Callable<Card>> cardCallbacks =
-        Arrays.asList(
-            () -> {
-              String w3Link = getLink(w3Client.getCseId(), query);
-              if (w3Link != null) {
-                return w3Client.search(w3Link);
-              }
-              return null;
-            },
-            () -> {
-              String stackLink = getLink(stackClient.getCseId(), query);
-              if (stackLink != null) {
-                return stackClient.search(stackLink);
-              }
-              return null;
-            },
-            () -> {
-              String geeksLink = getLink(geeksClient.getCseId(), query);
-              if (geeksLink != null) {
-                return geeksClient.search(geeksLink);
-              }
-              return null;
-            });
+        clients.stream()
+            .map(
+                client ->
+                    ((Callable<Card>)
+                        () -> {
+                          String link = getLink(client.getCseId(), query);
+                          if (link != null) {
+                            return client.search(link);
+                          }
+                          return null;
+                        }))
+            .collect(Collectors.toList());
     /* thread process completion takes roughly 1.5 to 2.5 seconds, thus a timeout of
      * 3 seconds was chosen.
      */
     try {
-      executor.invokeAll(cardCallbacks, 3L, TimeUnit.SECONDS).stream()
-          .map(
-              future -> {
-                try {
-                  return future.get();
-                } catch (CancellationException | ExecutionException | InterruptedException e) {
-                  return null;
-                }
-              })
-          .forEach(
-              (card) -> {
-                if (card != null) {
-                  allCards.add(card);
-                }
-              });
-    } catch (InterruptedException | NullPointerException | RejectedExecutionException e) {
-      request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
+      allCards =
+          executor.invokeAll(cardCallbacks, 3L, TimeUnit.SECONDS).stream()
+              .map(
+                  future -> {
+                    try {
+                      return future.get();
+                    } catch (CancellationException | ExecutionException | InterruptedException e) {
+                      return null;
+                    }
+                  })
+              .filter(card -> card != null)
+              .collect(Collectors.toList());
+    } catch (InterruptedException | RejectedExecutionException e) {
+      allCards = Collections.emptyList();
     }
 
     request.setAttribute(CARD_LIST_LABEL, allCards);
