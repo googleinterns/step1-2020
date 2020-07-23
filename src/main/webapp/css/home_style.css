@@ -3,13 +3,28 @@
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  height: 45vh;
+  height: 50vh;
 }
 
 h1 {
   font: 400 60px Roboto, Arial, sans-serif;
+  margin: 0px 0px;
 }
 
 .logo {
+  text-decoration: none;
+  margin: 30px 0px;
+}
+
+.auth-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font: 400 15px Roboto, Arial, sans-serif;
+  color: white;
+  background: #4d90fe;
+  border: 1px #3079ED solid;
+  padding: 5px 10px;
+  border-radius: 4px;
   text-decoration: none;
 }

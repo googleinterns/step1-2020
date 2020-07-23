@@ -9,15 +9,17 @@
 .heading {
   display: flex;
   align-items: center;
+  margin: 30px 0px 10px 0px;
 }
 
 .logo {
-  margin: 0 20px;
+  margin: 0px 20px 5px;
   text-decoration: none;
 }
 
 h1 {
   font: 400 30px Roboto, Arial, sans-serif;
+  margin: 0px 0px;
 }
 
 .card-container {
@@ -51,4 +53,18 @@ h1 {
 .card p {
   margin-top: 0;
   display: block;
+}
+
+.auth-button {
+  position: absolute;
+  top: 35px;
+  right: 30px;
+  margin-bottom: 5px;
+  font: 400 15px Roboto, Arial, sans-serif;
+  color: white;
+  background: #4d90fe;
+  border: 1px #3079ED solid;
+  padding: 5px 10px;
+  border-radius: 4px;
+  text-decoration: none;
 }
