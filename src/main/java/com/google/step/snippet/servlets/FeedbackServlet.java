@@ -25,7 +25,7 @@ public class FeedbackServlet extends HttpServlet {
     String url = request.getParameter(URL);
 
     if (url == null) {
-      response.sendRedirect(request.getHeader("Referer"));
+      return;
     }
 
     /* Query for card feedback by card URL */
@@ -38,39 +38,23 @@ public class FeedbackServlet extends HttpServlet {
     if (feedbackEntity == null) {
       feedbackEntity = new Entity(FEEDBACK);
       feedbackEntity.setProperty(URL, url);
-      /* Initialize vote count */
-      if (request.getParameter(UP) != null) {
-        totalVotes = 1;
-        feedbackEntity.setProperty(UP, (long) 1);
-        feedbackEntity.setProperty(DOWN, (long) 0);
-      } else if (request.getParameter(DOWN) != null) {
-        totalVotes = -1;
-        feedbackEntity.setProperty(DOWN, (long) 1);
-        feedbackEntity.setProperty(UP, (long) 0);
-      }
-    } else {
-      /* Update with upvote count */
-      if (request.getParameter(UP) != null) {
-        totalVotes =
-            (long) feedbackEntity.getProperty(UP) - (long) feedbackEntity.getProperty(DOWN) + 1;
-        feedbackEntity.setProperty(UP, (long) feedbackEntity.getProperty(UP) + 1);
-      }
-      /* Update with downvote count */
-      else if (request.getParameter(DOWN) != null) {
-        totalVotes =
-            (long) feedbackEntity.getProperty(UP) - (long) feedbackEntity.getProperty(DOWN) - 1;
-        feedbackEntity.setProperty(DOWN, (long) feedbackEntity.getProperty(DOWN) + 1);
-      }
+      feedbackEntity.setProperty(UP, (long) 0);
+      feedbackEntity.setProperty(DOWN, (long) 0);
     }
-    /* Convert vote count to response string */
-    String totalStr;
-    if (totalVotes < 0) {
-      totalStr = "-" + Long.toString(Math.abs(totalVotes));
-    } else {
-      totalStr = Long.toString(totalVotes);
+
+    long upVotes = (long) feedbackEntity.getProperty(UP);
+    long downVotes = (long) feedbackEntity.getProperty(DOWN);
+
+    if (request.getParameter(UP) != null) {
+      totalVotes = upVotes - downVotes + 1;
+      feedbackEntity.setProperty(UP, upVotes + 1);
+    } else if (request.getParameter(DOWN) != null) {
+      totalVotes = upVotes - downVotes - 1;
+      feedbackEntity.setProperty(DOWN, downVotes + 1);
     }
+
     datastore.put(feedbackEntity);
     response.setContentType("text/plain");
-    response.getWriter().println(totalStr);
+    response.getWriter().println(Long.toString(totalVotes));
   }
 }
