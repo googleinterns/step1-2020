@@ -23,7 +23,7 @@ public final class W3SchoolsClientTest {
             "https://www.w3schools.com/tags/tag_img.asp",
             "How to insert an image:",
             "W3Schools",
-            "https://image.winudf.com/v2/image1/Y29tLlczc2Nob29sLkFuYnVfaWNvbl8xNTYyMDU5NzE3XzAwMw/icon.png?w=170&fakeurl=1");
+            "https://w3schools.com/favicon.ico");
     assertEquals(expected, actual);
   }
 
@@ -38,7 +38,7 @@ public final class W3SchoolsClientTest {
             "https://www.w3schools.com/js/js_json_intro.asp",
             "JSON: JavaScript Object Notation.",
             "W3Schools",
-            "https://image.winudf.com/v2/image1/Y29tLlczc2Nob29sLkFuYnVfaWNvbl8xNTYyMDU5NzE3XzAwMw/icon.png?w=170&fakeurl=1");
+            "https://w3schools.com/favicon.ico");
     assertEquals(expected, actual);
   }
 
