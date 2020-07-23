@@ -22,24 +22,36 @@
   transition: box-shadow .25s;
   border-radius: 2px;
   width: 400px;
+  display: flex;
 }
 
-.card .card-title {
+.card .content .card-title {
   font: 300 20px Roboto, Arial, sans-serif;
 }
 
-.card .card-description {
+.card .content .card-description {
   font: bold 16px Roboto, Arial, sans-serif;
   margin-top: 20px;
 }
 
-.card code {
+.card .content code {
   margin-top: 10px;
   margin-bottom: 10px;
   display: block;
 }
 
-.card p {
+.card .content p {
   margin-top: 0;
   display: block;
+}
+
+.vote {
+  margin-right: 10px;
+  text-align: center;
+}
+
+.vote button {
+  background: none;
+  border: none;
+  outline: none;
 }
