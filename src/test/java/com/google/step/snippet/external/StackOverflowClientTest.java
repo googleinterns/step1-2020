@@ -59,7 +59,7 @@ public final class StackOverflowClientTest {
     String answer_id = client.getAnswerId(question_id);
     assertNull(answer_id);
   }
-  
+
   @Test
   public void validTitleTest() {
     // Valid question id.
@@ -91,7 +91,7 @@ public final class StackOverflowClientTest {
             + "<p>In this example, the variable <code>x</code> is an <",
         answer_body.substring(0, 300));
   }
-  
+
   @Test
   public void invalidAnswerBodyTest() {
     // Invalid answer id.
