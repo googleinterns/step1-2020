@@ -63,7 +63,7 @@ public final class StackOverflowClientTest {
     // Valid answer id.
     String answer_id1 = "218510";
     // Invalid answer id.
-    String answer_id2 = "Answer id";
+    String answer_id2 = "12912048";
 
     String answer_body1 = client.getAnswerBody(answer_id1);
     String answer_body2 = client.getAnswerBody(answer_id2);

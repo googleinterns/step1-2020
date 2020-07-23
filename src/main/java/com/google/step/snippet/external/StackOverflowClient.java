@@ -112,7 +112,7 @@ public final class StackOverflowClient implements Client {
   String getAnswerBody(String answerId) {
     String answerUrl = String.format(ANSWER_URL_TEMPLATE, answerId);
     String answerBody = getResponse(answerUrl, BODY_PARAMETER);
-    if (answerBody.length() > 300) {
+    if (answerBody != null && answerBody.length() > 300) {
       answerBody = answerBody.substring(0, MAX_ANSWER_LENGTH);
     }
     answerBody += "...";
