@@ -1,14 +1,38 @@
+.heading {
+  display: flex;
+  align-items: center;
+  margin: 30px 0px 10px 0px;
+}
+
+.logo {
+  margin: 0px 20px 5px;
+  text-decoration: none;
+}
+
+h1 {
+  font: 400 30px Roboto, Arial, sans-serif;
+  margin: 0;
+}
+
+.searchbox {
+  flex-shrink: 1;
+}
+
+.gsc-search-box.gsc-search-box-tools {
+  margin-bottom: 0; 
+}
+
+.spacing {
+  min-width: 10px;
+  flex-grow: 1;
+}
+
 .srp-container {
   display: flex;
 }
 
 .srp {
   flex-grow: 1;
-}
-
-.heading {
-  display: flex;
-  align-items: center;
 }
 
 .card-container {
