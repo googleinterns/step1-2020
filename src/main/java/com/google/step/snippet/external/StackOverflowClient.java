@@ -12,6 +12,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -37,6 +38,8 @@ public final class StackOverflowClient implements Client {
   private static final String BODY_PARAMETER = "body";
   private static final String CODE_PARAMETER = "code";
   private static final String ANSWER_ID_PARAMETER = "answer_id";
+  private static final String SOURCE_NAME = "StackOverflow";
+  private static final String ICON_LINK = "https://stackoverflow.com/favicon.ico";
   // Set 200 to be the maximum length of description for MVP.
   private static final int MAX_DESCRIPTION_LENGTH = 200;
 
@@ -75,7 +78,7 @@ public final class StackOverflowClient implements Client {
     // No description or code is allowed for StackOverflow.
     String description = getDescription(answerBody);
     String code = getCode(answerBody);
-    return new Card(title, code, url, description);
+    return new Card(title, code, url, description, SOURCE_NAME, ICON_LINK);
   }
 
   /* Get the question id of passed in URL. */
@@ -173,10 +176,13 @@ public final class StackOverflowClient implements Client {
       return null;
     }
     JSONObject json = new JSONObject(responseBody.toString());
-    String res = json.getJSONArray(ITEM_PARAMETER).getJSONObject(0).get(fieldParam).toString();
-    if (response.getStatusLine().getStatusCode() != 200) {
-      return null;
+    if (json.has(ITEM_PARAMETER) && json.getJSONArray(ITEM_PARAMETER).length() > 0) {
+      JSONArray items = json.getJSONArray(ITEM_PARAMETER);
+      JSONObject obj = items.getJSONObject(0);
+      if (obj.has(fieldParam)) {
+        return obj.get(fieldParam).toString();
+      }
     }
-    return res;
+    return null;
   }
 }
