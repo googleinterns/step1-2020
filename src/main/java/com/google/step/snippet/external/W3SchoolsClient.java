@@ -55,15 +55,15 @@ public final class W3SchoolsClient implements Client {
       return null;
     }
     String title =
-        StringEscapeUtils.escapeHtml4(
-            Jsoup.clean(titles.first().text(), Whitelist.relaxed()));
+        StringEscapeUtils.escapeHtml4(Jsoup.clean(titles.first().text(), Whitelist.relaxed()));
     String description =
         StringEscapeUtils.escapeHtml4(
             Jsoup.clean(descriptions.first().text(), Whitelist.relaxed()));
     String code =
-        Jsoup.clean(
-            snippets.first().getElementsByClass(CODE_CLASS).text(), Whitelist.relaxed());
-    if (containsEscape(query.toLowerCase()) || containsEscape(w3Link) || containsEscape(title.toLowerCase())) {
+        Jsoup.clean(snippets.first().getElementsByClass(CODE_CLASS).text(), Whitelist.relaxed());
+    if (containsEscape(query.toLowerCase())
+        || containsEscape(w3Link)
+        || containsEscape(title.toLowerCase())) {
       code = StringEscapeUtils.escapeHtml4(code);
     }
     return new Card(title, code, w3Link, description);
