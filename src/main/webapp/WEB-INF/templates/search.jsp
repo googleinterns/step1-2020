@@ -7,7 +7,6 @@
   <head>
     <t:head/>
     <link href="css/srp_style.css" rel="stylesheet">
-    <script defer src="js/srp_script.js"></script>
     <title>Snippet</title>
   </head>
   <body>
@@ -18,17 +17,16 @@
       </div>
       <div class="card-container">
         <c:forEach items='${requestScope["cardList"]}' var="knowledgeCard">
-          <div class="card" id="card">
-            <header id="card-header">
+          <div class="card">
+            <header>
               <img class="icon" src="${knowledgeCard.getIcon()}" alt="${knowledgeCard.getSource()} site icon" width="25px" height="25px">
               <a href="${knowledgeCard.getLink()}" title="card-source"class="card-title">
                 ${knowledgeCard.getTitle()}
               </a>
             </header>
-            <div class="content">
-              <pre><code>${knowledgeCard.getCode()}</code></pre>
-              <p>${knowledgeCard.getDescription()}</p>
-            </div>
+            <code>${knowledgeCard.getCode()}</code>
+            <span class="card-description">Description:</span>
+            <p>${knowledgeCard.getDescription()}</p>
           </div>
         </c:forEach>
       </div>
