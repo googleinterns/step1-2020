@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <title>User Dashboard</title>
-    <script src="../../js/user.js"></script>
     <script src="../../data/languages.js"></script>
+    <script src="../../js/user.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/user_style.css">
 </head>
@@ -29,7 +29,7 @@
             <label for="input-languages">Choose your primary coding language:</label>
             <input id="input-languages" type="text" name="input-languages"
                    placeholder="Input your primary coding language">
-            <div><script>autocomplete(document.getElementById("input-languages"), languages);</script></div>
+            <script>autocomplete(document.getElementById('input-languages'), languages);</script>
         </div>
         <input id="setting-submit" type="submit" value="Submit">
     </form>
