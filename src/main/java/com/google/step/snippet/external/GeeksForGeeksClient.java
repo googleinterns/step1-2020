@@ -54,16 +54,16 @@ public final class GeeksForGeeksClient implements Client {
     if (snippets.isEmpty() || snippets.first().getElementsByClass(CODE_CLASS).text().isEmpty()) {
       return null;
     }
-    String title =
-        StringEscapeUtils.escapeHtml4(Jsoup.clean(titles.first().text(), Whitelist.relaxed()));
-    String description =
-        StringEscapeUtils.escapeHtml4(
-            Jsoup.clean(descriptions.first().text(), Whitelist.relaxed()));
+    String title = Jsoup.clean(titles.first().text(), Whitelist.relaxed());
+    String description = Jsoup.clean(descriptions.first().text(), Whitelist.relaxed());
     String code =
         Jsoup.clean(snippets.first().getElementsByClass(CODE_CLASS).text(), Whitelist.relaxed());
     if (containsEscape(query.toLowerCase())
         || containsEscape(geeksLink)
-        || containsEscape(title.toLowerCase())) {
+        || containsEscape(title.toLowerCase())
+        || containsEscape(description.toLowerCase())) {
+      title = StringEscapeUtils.escapeHtml4(title);
+      description = StringEscapeUtils.escapeHtml4(description);
       code = StringEscapeUtils.escapeHtml4(code);
     }
     return new Card(title, code, geeksLink, description);
