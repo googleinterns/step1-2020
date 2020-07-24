@@ -2,11 +2,6 @@ body, html {
   font-family: Roboto, Arial, sans-serif;
 }
 
-h1 {
-  text-align: center;
-  font: 400 60px Roboto, Arial, sans-serif;
-}
-
 .blue {
   color: #4285F4;
 }
@@ -21,6 +16,12 @@ h1 {
 
 .green {
   color: #0F9D58;
+}
+
+.searchbox {
+  width: 100%;
+  min-width: 400px;
+  max-width: 580px;
 }
 
 .auth-button {
