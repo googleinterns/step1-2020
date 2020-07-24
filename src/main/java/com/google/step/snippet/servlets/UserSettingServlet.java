@@ -25,10 +25,10 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/user")
 public class UserSettingServlet extends HttpServlet {
 
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
-        // Forward the request to the template (which is a servlet itself).
-        request.getRequestDispatcher("WEB-INF/templates/user_dashboard.jsp").forward(request, response);
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws IOException, ServletException {
+      // Forward the request to the template (which is a servlet itself).
+      request.getRequestDispatcher("WEB-INF/templates/user_dashboard.jsp").forward(request, response);
     }
 }
