@@ -63,3 +63,8 @@ h1 {
   margin-top: 0;
   display: block;
 }
+
+.icon {
+  margin-right: 5px;
+  vertical-align: bottom;
+}

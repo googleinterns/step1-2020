@@ -18,9 +18,12 @@
       <div class="card-container">
         <c:forEach items='${requestScope["cardList"]}' var="knowledgeCard">
           <div class="card">
-            <a href="${knowledgeCard.getLink()}" title="card-source"class="card-title">
-              ${knowledgeCard.getTitle()}
-            </a>
+            <header>
+              <img class="icon" src="${knowledgeCard.getIcon()}" alt="${knowledgeCard.getSource()} site icon" width="25px" height="25px">
+              <a href="${knowledgeCard.getLink()}" title="card-source"class="card-title">
+                ${knowledgeCard.getTitle()}
+              </a>
+            </header>
             <c:if test="${knowledgeCard.getCode() != null}">
               <code>${knowledgeCard.getCode()}</code>
             </c:if>
