@@ -1,5 +1,4 @@
 <%@tag description="Common page content" pageEncoding="UTF-8"%>
-<a class="auth-button" href="${authUrl}">${authLabel}</a>
 <div class="heading">
   <a class="logo" href="/">
     <h1>
@@ -9,4 +8,6 @@
   <div class="searchbox">
     <div class="gcse-searchbox-only" data-resultsUrl="/search"></div>
   </div>
+  <div class="spacing"></div>
+  <a class="auth-button" href="${authUrl}">${authLabel}</a>
 </div>
