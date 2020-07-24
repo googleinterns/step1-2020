@@ -16,6 +16,14 @@ public final class W3SchoolsClientTest {
         public long getVotes(String url) {
           return 0;
         }
+
+        public String getUpvote(String url) {
+          return "black";
+        }
+
+        public String getDownvote(String url) {
+          return "black";
+        }
       };
 
   @Test
@@ -29,7 +37,9 @@ public final class W3SchoolsClientTest {
             "How to insert an image:",
             0,
             "W3Schools",
-            "https://w3schools.com/favicon.ico");
+            "https://w3schools.com/favicon.ico",
+            "black",
+            "black");
     assertEquals(expected, actual);
   }
 
@@ -45,7 +55,9 @@ public final class W3SchoolsClientTest {
             "JSON: JavaScript Object Notation.",
             0,
             "W3Schools",
-            "https://w3schools.com/favicon.ico");
+            "https://w3schools.com/favicon.ico",
+            "black",
+            "black");
     assertEquals(expected, actual);
   }
 

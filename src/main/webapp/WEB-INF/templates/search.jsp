@@ -21,11 +21,11 @@
         <c:forEach items='${requestScope["cardList"]}' var="knowledgeCard">
           <div class="card" value="${knowledgeCard.getLink()}">
             <div class="vote">
-              <button class="upvote" value="${knowledgeCard.getLink()}">
+            <button class="upvote" style="color:${knowledgeCard.getUpvote()};" value="${knowledgeCard.getLink()}">
                 <i class="fas fa-chevron-up"></i>
               </button>
               <span class="total-votes">${knowledgeCard.getVotes()}</span>
-              <button class="downvote" value="${knowledgeCard.getLink()}">
+              <button class="downvote" style="color:${knowledgeCard.getDownvote()};" value="${knowledgeCard.getLink()}">
                 <i class="fas fa-chevron-down"></i>
               </button>
             </div>

@@ -79,7 +79,10 @@ public final class StackOverflowClient extends Client {
     String description = getDescription(answerBody);
     String code = getCode(answerBody);
     long votes = getVotes(stackLink);
-    return new Card(title, code, stackLink, description, votes, SOURCE_NAME, ICON_LINK);
+    String upvote = getUpvote(stackLink);
+    String downvote = getDownvote(stackLink);
+    return new Card(
+        title, code, stackLink, description, votes, SOURCE_NAME, ICON_LINK, upvote, downvote);
   }
 
   /* Get the question id of passed in URL. */

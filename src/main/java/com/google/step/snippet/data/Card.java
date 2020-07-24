@@ -8,6 +8,8 @@ public final class Card {
   private final long votes;
   private final String source;
   private final String icon;
+  private final String upvote;
+  private final String downvote;
 
   public Card(
       String title,
@@ -16,7 +18,9 @@ public final class Card {
       String description,
       long votes,
       String source,
-      String icon) {
+      String icon,
+      String upvote,
+      String downvote) {
     this.title = title;
     this.code = code;
     this.link = link;
@@ -24,6 +28,8 @@ public final class Card {
     this.votes = votes;
     this.source = source;
     this.icon = icon;
+    this.upvote = upvote;
+    this.downvote = downvote;
   }
 
   public String getTitle() {
@@ -52,6 +58,14 @@ public final class Card {
 
   public String getIcon() {
     return icon;
+  }
+
+  public String getUpvote() {
+    return upvote;
+  }
+
+  public String getDownvote() {
+    return downvote;
   }
 
   @Override

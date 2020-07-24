@@ -55,6 +55,9 @@ public class W3SchoolsClient extends Client {
     String description = descriptions.first().text();
     String code = snippets.first().getElementsByClass(CODE_CLASS).text();
     long votes = getVotes(w3Link);
-    return new Card(title, code, w3Link, description, votes, SOURCE_NAME, ICON_LINK);
+    String upvote = getUpvote(w3Link);
+    String downvote = getDownvote(w3Link);
+    return new Card(
+        title, code, w3Link, description, votes, SOURCE_NAME, ICON_LINK, upvote, downvote);
   }
 }

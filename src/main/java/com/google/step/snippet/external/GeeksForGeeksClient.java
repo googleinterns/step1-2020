@@ -55,6 +55,9 @@ public final class GeeksForGeeksClient extends Client {
     String description = descriptions.first().text();
     String code = snippets.first().getElementsByClass(CODE_CLASS).text();
     long votes = getVotes(geeksLink);
-    return new Card(title, code, geeksLink, description, votes, SOURCE_NAME, ICON_LINK);
+    String upvote = getUpvote(geeksLink);
+    String downvote = getDownvote(geeksLink);
+    return new Card(
+        title, code, geeksLink, description, votes, SOURCE_NAME, ICON_LINK, upvote, downvote);
   }
 }
