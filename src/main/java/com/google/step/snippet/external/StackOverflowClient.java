@@ -37,7 +37,7 @@ public final class StackOverflowClient implements Client {
   private static final int QUESTION_INDEX = 1;
   private static final String SOURCE_NAME = "StackOverflow";
   private static final String ICON_LINK = "https://stackoverflow.com/favicon.ico";
-  
+
   private final String cseId;
 
   public StackOverflowClient(String cseId) {
