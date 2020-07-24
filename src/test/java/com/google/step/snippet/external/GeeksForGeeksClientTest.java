@@ -38,22 +38,6 @@ public final class GeeksForGeeksClientTest {
     Card actual =
         client.search(
             "https://www.geeksforgeeks.org/array-rotation/", "Program for array rotation");
-    assertEquals("Program for array rotation", actual.title);
-    assertEquals(
-        "// C++ program to rotate an array by // d elements #include  using namespace std;"
-            + " /*Function to left Rotate arr[] of size n by 1*/ void leftRotatebyOne(int arr[],"
-            + " int n) { int temp = arr[0], i; for (i = 0; i &lt; n - 1; i++) arr[i] = arr[i + 1];"
-            + " arr[i] = temp; } /*Function to left rotate arr[] of size n by d*/ void"
-            + " leftRotate(int arr[], int d, int n) { for (int i = 0; i &lt; d; i++)"
-            + " leftRotatebyOne(arr, n); } /* utility function to print an array */ void"
-            + " printArray(int arr[], int n) { for (int i = 0; i &lt; n; i++) cout &lt;&lt; arr[i]"
-            + " &lt;&lt; \" \"; } /* Driver program to test above functions */ int main() { int"
-            + " arr[] = { 1, 2, 3, 4, 5, 6, 7 }; int n = sizeof(arr) / sizeof(arr[0]); // Function"
-            + " calling leftRotate(arr, 2, n); printArray(arr, n); return 0; }",
-        actual.code);
-    assertEquals(
-        "Write a function rotate(ar[], d, n) that rotates arr[] of size n by d elements.",
-        actual.description);
     Card expected =
         new Card(
             "Program for array rotation",
