@@ -66,9 +66,6 @@ public final class GeeksForGeeksClient implements Client {
     if (doEscape(query.toLowerCase()) || doEscape(geeksLink) || doEscape(title.toLowerCase())) {
       code = StringEscapeUtils.escapeHtml4(code);
     }
-    System.out.println(title);
-    System.out.println(code);
-    System.out.println(description);
     return new Card(title, code, geeksLink, description);
   }
 
