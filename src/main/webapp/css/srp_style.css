@@ -14,10 +14,6 @@ h1 {
   margin: 0;
 }
 
-.searchbox {
-  flex-shrink: 1;
-}
-
 .gsc-search-box.gsc-search-box-tools {
   margin-bottom: 0; 
 }
