@@ -18,13 +18,13 @@ h1 {
   flex-shrink: 1;
 }
 
+.gsc-search-box.gsc-search-box-tools {
+  margin-bottom: 0; 
+}
+
 .spacing {
   min-width: 10px;
   flex-grow: 1;
-}
-
-.gsc-search-box.gsc-search-box-tools {
-  margin-bottom: 0; 
 }
 
 .srp-container {
