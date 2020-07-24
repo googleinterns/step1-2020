@@ -71,8 +71,7 @@ public final class StackOverflowClient implements Client {
       return null;
     }
     // Code is intentionally set to null for better display.
-    String code = null;
-    return new Card(title, code, url, description, SOURCE_NAME, ICON_LINK);
+    return new Card(title, /* code = */ null, url, description, SOURCE_NAME, ICON_LINK);
   }
 
   /* Get the question id of passed in URL. */
