@@ -76,7 +76,7 @@ public final class StackOverflowClient implements Client {
   }
 
   /* Get the question id of passed in URL. */
-  String getQuestionId(String url) {
+  private String getQuestionId(String url) {
     URI uri;
     try {
       uri = new URI(url);
@@ -96,25 +96,25 @@ public final class StackOverflowClient implements Client {
   }
 
   /* Return the most voted answer's id. */
-  String getAnswerId(String questionId) {
+  private String getAnswerId(String questionId) {
     String questionUrl = String.format(QUESTION_URL_TEMPLATE, questionId);
     return getResponse(questionUrl, ANSWER_ID_PARAMETER);
   }
 
   /* Return the question title using question id */
-  String getTitle(String questionId) {
+  private String getTitle(String questionId) {
     String searchUrl = String.format(SEARCH_URL_TEMPLATE, questionId);
     return getResponse(searchUrl, TITLE_PARAMETER);
   }
 
   /* Get the content of the answer and store it in the card. */
-  String getAnswerBody(String answerId) {
+  private String getAnswerBody(String answerId) {
     String answerUrl = String.format(ANSWER_URL_TEMPLATE, answerId);
     String answerBody = getResponse(answerUrl, BODY_PARAMETER);
     return answerBody;
   }
 
-  String getResponse(String url, String fieldParam) {
+  private String getResponse(String url, String fieldParam) {
     CloseableHttpClient httpClient = HttpClients.createDefault();
     CloseableHttpResponse response;
     try {
