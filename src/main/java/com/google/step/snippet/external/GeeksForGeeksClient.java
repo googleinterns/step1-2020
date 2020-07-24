@@ -59,7 +59,8 @@ public final class GeeksForGeeksClient implements Client {
     String title = Jsoup.clean(titles.first().text(), Whitelist.relaxed());
     String description = Jsoup.clean(descriptions.first().text(), Whitelist.relaxed());
     String code =
-        Jsoup.clean(snippets.first().getElementsByClass(CODE_CLASS).text(), Whitelist.relaxed());
+        Jsoup.clean(snippets.first().getElementsByClass(CODE_CLASS).text(),
+        Whitelist.relaxed().preserveRelativeLinks(true));
     if (containsEscape(query.toLowerCase())
         || containsEscape(geeksLink)
         || containsEscape(title.toLowerCase())
@@ -68,7 +69,7 @@ public final class GeeksForGeeksClient implements Client {
       description = StringEscapeUtils.escapeHtml4(description);
       code = StringEscapeUtils.escapeHtml4(code);
     }
-    return new Card(title, code, geeksLink, description);
+    return new Card(title, code, geeksLink, description, SOURCE_NAME, ICON_LINK);
   }
 
   private boolean containsEscape(String possibleHtml) {
