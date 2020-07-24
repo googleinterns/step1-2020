@@ -22,7 +22,9 @@ public final class W3SchoolsClientTest {
             "&lt;img alt=&quot;Girl in a jacket&quot; width=&quot;500&quot;"
                 + " height=&quot;600&quot;&gt;",
             "https://www.w3schools.com/tags/tag_img.asp",
-            "How to insert an image:");
+            "How to insert an image:",
+            "W3Schools",
+            "https://w3schools.com/favicon.ico");
     assertEquals(expected, actual);
   }
 
@@ -35,7 +37,9 @@ public final class W3SchoolsClientTest {
             "var myObj = {name: \"John\", age: 31, city: \"New York\"}; var myJSON ="
                 + " JSON.stringify(myObj); window.location = \"demo_json.php?x=\" + myJSON;",
             "https://www.w3schools.com/js/js_json_intro.asp",
-            "JSON: JavaScript Object Notation.");
+            "JSON: JavaScript Object Notation.",
+            "W3Schools",
+            "https://w3schools.com/favicon.ico");
     assertEquals(expected, actual);
   }
 

@@ -5,6 +5,7 @@
 <html>
   <head>
     <t:head/>
+    <link href="css/home_style.css" rel="stylesheet">
     <title>Snippet</title>
   </head>
   <body>

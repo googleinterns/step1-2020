@@ -15,6 +15,8 @@ public final class GeeksForGeeksClient implements Client {
   private static final String DESC_TAG = "p";
   private static final String SNIPPET_CLASS = "code-block";
   private static final String CODE_CLASS = "code-container";
+  private static final String SOURCE_NAME = "GeeksForGeeks";
+  private static final String ICON_LINK = "https://geeksforgeeks.org/favicon.ico";
 
   private final String cseId;
   private final List<String> escapeFilters = Arrays.asList("html", "svg", "icons", "css");
