@@ -104,3 +104,17 @@ pre::-webkit-scrollbar-thumb:hover {
   margin-right: 5px;
   vertical-align: bottom;
 }
+
+header {
+  padding: 5px 5px;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.sticky + .content {
+  padding-top: 50px;
+}
