@@ -22,7 +22,6 @@
               ${knowledgeCard.getTitle()}
             </a>
             <pre><code>${knowledgeCard.getCode()}</code></pre>
-            <span class="card-description">Description:</span>
             <p>${knowledgeCard.getDescription()}</p>
           </div>
         </c:forEach>

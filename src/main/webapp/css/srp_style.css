@@ -22,34 +22,35 @@
   transition: box-shadow .25s;
   border-radius: 2px;
   width: 400px;
-  height: 260px;
+  max-height: 260px;
   overflow: scroll;
+  font: 16px Roboto, Arial, sans-serif;
+  margin-top: 20px;
 }
 
 .card::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-  background-color: WHITE;
+  width: 8px;
+  height: 8px;
+  background-color: #FAFAFA;
 }
 
-pre::-webkit-scrollbar-thumb {
-  color: grey;
+.card::-webkit-scrollbar-thumb {
+  background: lightgrey;
   border-radius: 10px;
+}
+
+.card::-webkit-scrollbar-thumb:hover {
+  background: grey;
 }
 
 .card .card-title {
   font: 300 20px Roboto, Arial, sans-serif;
 }
 
-.card .card-description {
-  font: bold 16px Roboto, Arial, sans-serif;
-  margin-top: 20px;
-}
-
 .card code {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin: 10px 5px 5px 10px;
   display: block;
+  font: 12px "Lucida Console", Courier, monospace;
 }
 
 .card p {
@@ -61,17 +62,20 @@ pre {
   background: #EFF0F1;
   border-radius: 2px;
   overflow: scroll;
-  word-wrap: break-word;
 }
 
 pre::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-  background-color: WHITE;
+  width: 5px;
+  height: 5px;
+  background: #FAFAFA;  
 }
 
 pre::-webkit-scrollbar-thumb {
-    background: grey;
+    background: lightgrey;
     border-radius: 10px;
     
+}
+
+pre::-webkit-scrollbar-thumb:hover {
+  background: grey;
 }
