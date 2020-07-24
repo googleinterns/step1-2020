@@ -5,12 +5,17 @@ public final class Card {
   private final String code;
   private final String link;
   private final String description;
+  private final String source;
+  private final String icon;
 
-  public Card(String title, String code, String link, String description) {
+  public Card(
+      String title, String code, String link, String description, String source, String icon) {
     this.title = title;
     this.code = code;
     this.link = link;
     this.description = description;
+    this.source = source;
+    this.icon = icon;
   }
 
   public String getTitle() {
@@ -29,6 +34,14 @@ public final class Card {
     return description;
   }
 
+  public String getSource() {
+    return source;
+  }
+
+  public String getIcon() {
+    return icon;
+  }
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -45,6 +58,8 @@ public final class Card {
     return this.title.equals(other.title)
         && this.code.equals(other.code)
         && this.link.equals(other.link)
-        && this.description.equals(other.description);
+        && this.description.equals(other.description)
+        && this.source.equals(other.source)
+        && this.icon.equals(other.icon);
   }
 }
