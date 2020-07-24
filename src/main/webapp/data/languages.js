@@ -1,4 +1,4 @@
-const languages = [
+var languages = [
   'A# .NET',
   'A# (Axiom)',
   'A-0 System',
