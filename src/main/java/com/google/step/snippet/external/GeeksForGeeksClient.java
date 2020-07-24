@@ -11,6 +11,8 @@ public final class GeeksForGeeksClient extends Client {
   private static final String DESC_TAG = "p";
   private static final String SNIPPET_CLASS = "code-block";
   private static final String CODE_CLASS = "code-container";
+  private static final String SOURCE_NAME = "GeeksForGeeks";
+  private static final String ICON_LINK = "https://geeksforgeeks.org/favicon.ico";
 
   private final String cseId;
 
@@ -53,6 +55,6 @@ public final class GeeksForGeeksClient extends Client {
     String description = descriptions.first().text();
     String code = snippets.first().getElementsByClass(CODE_CLASS).text();
     long votes = getVotes(geeksLink);
-    return new Card(title, code, geeksLink, description, votes);
+    return new Card(title, code, geeksLink, description, votes, SOURCE_NAME, ICON_LINK);
   }
 }

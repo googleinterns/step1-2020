@@ -11,6 +11,8 @@ public class W3SchoolsClient extends Client {
   private static final String DESC_TAG = "p";
   private static final String SNIPPET_CLASS = "w3-example";
   private static final String CODE_CLASS = "w3-code";
+  private static final String SOURCE_NAME = "W3Schools";
+  private static final String ICON_LINK = "https://w3schools.com/favicon.ico";
 
   private String cseId;
 
@@ -53,6 +55,6 @@ public class W3SchoolsClient extends Client {
     String description = descriptions.first().text();
     String code = snippets.first().getElementsByClass(CODE_CLASS).text();
     long votes = getVotes(w3Link);
-    return new Card(title, code, w3Link, description, votes);
+    return new Card(title, code, w3Link, description, votes, SOURCE_NAME, ICON_LINK);
   }
 }

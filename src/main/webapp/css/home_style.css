@@ -1,0 +1,23 @@
+.heading {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  height: 50vh;
+}
+
+.logo {
+  text-decoration: none;
+  margin: 30px 0px;
+}
+
+h1 {
+  font: 400 60px Roboto, Arial, sans-serif;
+  margin: 0;
+}
+
+.auth-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}

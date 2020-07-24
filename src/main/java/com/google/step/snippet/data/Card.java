@@ -6,13 +6,24 @@ public final class Card {
   private final String link;
   private final String description;
   private final long votes;
+  private final String source;
+  private final String icon;
 
-  public Card(String title, String code, String link, String description, long votes) {
+  public Card(
+      String title,
+      String code,
+      String link,
+      String description,
+      long votes,
+      String source,
+      String icon) {
     this.title = title;
     this.code = code;
     this.link = link;
     this.description = description;
     this.votes = votes;
+    this.source = source;
+    this.icon = icon;
   }
 
   public String getTitle() {
@@ -35,6 +46,14 @@ public final class Card {
     return votes;
   }
 
+  public String getSource() {
+    return source;
+  }
+
+  public String getIcon() {
+    return icon;
+  }
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -52,6 +71,8 @@ public final class Card {
         && this.code.equals(other.code)
         && this.link.equals(other.link)
         && this.description.equals(other.description)
-        && this.votes == other.votes;
+        && this.votes == other.votes
+        && this.source.equals(other.source)
+        && this.icon.equals(other.icon);
   }
 }
