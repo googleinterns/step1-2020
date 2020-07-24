@@ -56,20 +56,20 @@ public final class W3SchoolsClient implements Client {
     }
     String title =
         StringEscapeUtils.escapeHtml4(
-            Jsoup.clean(titles.first().text(), Whitelist.basicWithImages()));
+            Jsoup.clean(titles.first().text(), Whitelist.relaxed()));
     String description =
         StringEscapeUtils.escapeHtml4(
-            Jsoup.clean(descriptions.first().text(), Whitelist.basicWithImages()));
+            Jsoup.clean(descriptions.first().text(), Whitelist.relaxed()));
     String code =
         Jsoup.clean(
-            snippets.first().getElementsByClass(CODE_CLASS).text(), Whitelist.basicWithImages());
-    if (doEscape(query.toLowerCase()) || doEscape(w3Link) || doEscape(title.toLowerCase())) {
+            snippets.first().getElementsByClass(CODE_CLASS).text(), Whitelist.relaxed());
+    if (containsEscape(query.toLowerCase()) || containsEscape(w3Link) || containsEscape(title.toLowerCase())) {
       code = StringEscapeUtils.escapeHtml4(code);
     }
     return new Card(title, code, w3Link, description);
   }
 
-  private boolean doEscape(String possibleHtml) {
+  private boolean containsEscape(String possibleHtml) {
     for (String filterWord : escapeFilters) {
       if (possibleHtml.contains(filterWord)) {
         return true;
