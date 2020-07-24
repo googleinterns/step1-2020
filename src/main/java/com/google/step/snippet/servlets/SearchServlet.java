@@ -73,6 +73,8 @@ public class SearchServlet extends HttpServlet {
           new StackOverflowClient(STACK_CSE_ID),
           new GeeksForGeeksClient(GEEKS_CSE_ID));
 
+  private final ExecutorService executor = Executors.newCachedThreadPool();
+
   private static String encodeValue(String value) {
     try {
       return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
@@ -105,8 +107,6 @@ public class SearchServlet extends HttpServlet {
       return;
     }
     String query = encodeValue(param);
-    List<Card> allCards;
-    ExecutorService executor = Executors.newFixedThreadPool(THREAD_COUNT);
     List<Callable<Card>> cardCallbacks =
         clients.stream()
             .map(
@@ -120,9 +120,7 @@ public class SearchServlet extends HttpServlet {
                           return null;
                         }))
             .collect(Collectors.toList());
-    /* thread process completion takes roughly 1.5 to 2.5 seconds, thus a timeout of
-     * 3 seconds was chosen.
-     */
+    List<Card> allCards;
     try {
       allCards =
           executor.invokeAll(cardCallbacks, 3L, TimeUnit.SECONDS).stream()
