@@ -59,8 +59,9 @@ public final class GeeksForGeeksClient implements Client {
     String title = Jsoup.clean(titles.first().text(), Whitelist.relaxed());
     String description = Jsoup.clean(descriptions.first().text(), Whitelist.relaxed());
     String code =
-        Jsoup.clean(snippets.first().getElementsByClass(CODE_CLASS).text(),
-        Whitelist.relaxed().preserveRelativeLinks(true));
+        Jsoup.clean(
+            snippets.first().getElementsByClass(CODE_CLASS).text(),
+            Whitelist.relaxed().preserveRelativeLinks(true));
     if (containsEscape(query.toLowerCase())
         || containsEscape(geeksLink)
         || containsEscape(title.toLowerCase())
