@@ -8,7 +8,6 @@
   <div class="searchbox">
     <div class="gcse-searchbox-only" enableAutoComplete="true" data-resultsUrl="/search"></div>
   </div>
-	<a class="auth-button" href="${authUrl}">${authLabel}</a>
   <div class="spacing"></div>
   <a class="auth-button" href="${authUrl}">${authLabel}</a>
 </div>
