@@ -22,6 +22,19 @@
   transition: box-shadow .25s;
   border-radius: 2px;
   width: 400px;
+  height: 260px;
+  overflow: scroll;
+}
+
+.card::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  background-color: WHITE;
+}
+
+pre::-webkit-scrollbar-thumb {
+  color: grey;
+  border-radius: 10px;
 }
 
 .card .card-title {
@@ -42,4 +55,23 @@
 .card p {
   margin-top: 0;
   display: block;
+}
+
+pre {
+  background: #EFF0F1;
+  border-radius: 2px;
+  overflow: scroll;
+  word-wrap: break-word;
+}
+
+pre::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: WHITE;
+}
+
+pre::-webkit-scrollbar-thumb {
+    background: grey;
+    border-radius: 10px;
+    
 }
