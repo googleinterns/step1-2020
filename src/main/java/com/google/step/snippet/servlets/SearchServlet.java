@@ -65,7 +65,6 @@ public class SearchServlet extends HttpServlet {
   private static final String AUTH_LABEL = "authLabel";
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
   private static final String CARD_LIST_LABEL = "cardList";
-  private static final int THREAD_COUNT = 3;
 
   private final List<Client> clients =
       Arrays.asList(
