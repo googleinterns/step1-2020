@@ -24,7 +24,7 @@
                 ${knowledgeCard.getTitle()}
               </a>
             </header>
-            <code>${knowledgeCard.getCode()}</code>
+            <pre><code>${knowledgeCard.getCode()}</code></pre>
             <span class="card-description">Description:</span>
             <p>${knowledgeCard.getDescription()}</p>
           </div>
