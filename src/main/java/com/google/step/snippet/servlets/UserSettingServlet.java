@@ -17,8 +17,6 @@ package com.google.step.snippet.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
@@ -34,7 +32,7 @@ public class UserSettingServlet extends HttpServlet {
   private static final String WEBSITE_PARAMETER = "website";
   private static final String LANGUAGE_PARAMETER = "language";
   private static final String ID_PARAMETER = "id";
-  
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
