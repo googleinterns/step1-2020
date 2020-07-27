@@ -91,9 +91,8 @@ pre::-webkit-scrollbar {
 }
 
 pre::-webkit-scrollbar-thumb {
-    background: lightgrey;
-    border-radius: 10px;
-    
+  background: lightgrey;
+  border-radius: 10px;    
 }
 
 pre::-webkit-scrollbar-thumb:hover {
