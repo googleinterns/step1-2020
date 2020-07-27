@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that renders a basic homepage. */
+/** Servelet that renders user setting page */
 @WebServlet("/user")
 public class UserSettingServlet extends HttpServlet {
   private static final String WEBSITE_PARAMETER = "website";
