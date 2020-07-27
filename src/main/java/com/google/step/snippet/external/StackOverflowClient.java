@@ -84,10 +84,11 @@ public final class StackOverflowClient implements Client {
     }
     // Parse the URL to get the question id.
     String[] segments = uri.getPath().split("/");
-    if (segments.length <= QUESTION_ID_INDEX || !segments[QUESTION_PATH_INDEX].equals(QUESTION_PARAMETER)) {
+    if (segments.length <= QUESTION_ID_INDEX
+        || !segments[QUESTION_PATH_INDEX].equals(QUESTION_PARAMETER)) {
       return null;
     }
-    String questionId = segments[ID_INDEX];
+    String questionId = segments[QUESTION_ID_INDEX];
     if (!Pattern.matches("[0-9]+", questionId)) {
       return null;
     }
