@@ -56,8 +56,8 @@ public final class GeeksForGeeksClient implements Client {
     if (snippets.isEmpty() || snippets.first().getElementsByClass(CODE_CLASS).text().isEmpty()) {
       return null;
     }
-    String title = titles.first().text();
-    String description = descriptions.first().text();
+    String title = Jsoup.clean(titles.first().text(), Whitelist.relaxed());
+    String description = Jsoup.clean(descriptions.first().text(), Whitelist.relaxed());
     String code = snippets.first().getElementsByClass(CODE_CLASS).text();
     if (containsEscape(query.toLowerCase())
         || containsEscape(geeksLink)
@@ -67,8 +67,6 @@ public final class GeeksForGeeksClient implements Client {
       description = StringEscapeUtils.escapeHtml4(description);
       code = StringEscapeUtils.escapeHtml4(code);
     } else {
-      title = Jsoup.clean(title, Whitelist.relaxed());
-      description = Jsoup.clean(description, Whitelist.relaxed());
       code = Jsoup.clean(code, Whitelist.relaxed().preserveRelativeLinks(true));
     }
     return new Card(title, code, geeksLink, description, SOURCE_NAME, ICON_LINK);
