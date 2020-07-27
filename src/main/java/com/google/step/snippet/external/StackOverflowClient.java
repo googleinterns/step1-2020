@@ -33,8 +33,8 @@ public final class StackOverflowClient implements Client {
   private static final String TITLE_PARAMETER = "title";
   private static final String BODY_PARAMETER = "body";
   private static final String ANSWER_ID_PARAMETER = "answer_id";
-  private static final String QUESTION_PARAMETER = "questions";
-  private static final int QUESTION_INDEX = 1;
+  private static final String QUESTION_ID_INDEX = "questions";
+  private static final int QUESTION_PATH_INDEX = 1;
   private static final String SOURCE_NAME = "StackOverflow";
   private static final String ICON_LINK = "https://stackoverflow.com/favicon.ico";
 
@@ -84,7 +84,7 @@ public final class StackOverflowClient implements Client {
     }
     // Parse the URL to get the question id.
     String[] segments = uri.getPath().split("/");
-    if (segments.length <= ID_INDEX || !segments[QUESTION_INDEX].equals(QUESTION_PARAMETER)) {
+    if (segments.length <= ID_INDEX || !segments[QUESTION_PATH_INDEX].equals(QUESTION_ID_INDEX)) {
       return null;
     }
     String questionId = segments[ID_INDEX];
