@@ -25,6 +25,9 @@
               </a>
             </header>
             <pre><code>${knowledgeCard.getCode()}</code></pre>
+            <c:if test="${knowledgeCard.getCode() != null}">
+              <code>${knowledgeCard.getCode()}</code>
+            </c:if>
             <p>${knowledgeCard.getDescription()}</p>
           </div>
         </c:forEach>
