@@ -18,7 +18,7 @@ public final class W3SchoolsClientTest {
     Card actual = client.search("https://www.w3schools.com/tags/tag_img.asp", "html img");
     Card expected =
         new Card(
-            "HTML &lt;img&gt; Tag",
+            "HTML \n&lt;img&gt; Tag",
             "&lt;img src=&quot;img_girl.jpg&quot; alt=&quot;Girl in a jacket&quot;"
                 + " width=&quot;500&quot; height=&quot;600&quot;&gt;",
             "https://www.w3schools.com/tags/tag_img.asp",
