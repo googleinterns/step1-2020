@@ -106,15 +106,6 @@ public class SearchServlet extends HttpServlet {
       return;
     }
     String query = encodeValue(param);
-    List<Card> allCards = new ArrayList<>();
-    for (Client client : clients) {
-      String link = getLink(client.getCseId(), query);
-      if (link != null) {
-        Card card = client.search(link, query);
-        if (card != null) {
-          allCards.add(card);
-        }
-      }
     List<Callable<Card>> cardCallbacks =
         clients.stream()
             .map(
