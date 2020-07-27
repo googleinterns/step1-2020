@@ -58,6 +58,9 @@ public final class W3SchoolsClient implements Client {
     }
     String title = titles.first().text();
     String description = descriptions.first().text();
+    if (!snippets.first().getElementsByTag(DESC_TAG).text().isEmpty()) {
+      description = snippets.first().getElementsByTag(DESC_TAG).first().text();
+    }
     String code = snippets.first().getElementsByClass(CODE_CLASS).text();
     if (containsEscape(query.toLowerCase())
         || containsEscape(w3Link)

@@ -49,7 +49,8 @@ public final class W3SchoolsClientTest {
     Card expected =
         new Card(
             "HTML Styles - CSS",
-            "&lt;h1 style=&quot;color:blue;&quot;&gt;A Blue Heading&lt;/h1&gt; &lt;p style=&quot;color:red;&quot;&gt;A red paragraph.&lt;/p&gt;",
+            "&lt;h1 style=&quot;color:blue;&quot;&gt;A Blue Heading&lt;/h1&gt; &lt;p"
+                + " style=&quot;color:red;&quot;&gt;A red paragraph.&lt;/p&gt;",
             "https://www.w3schools.com/html/html_css.asp",
             "CSS stands for Cascading Style Sheets.",
             "W3Schools",
@@ -63,9 +64,10 @@ public final class W3SchoolsClientTest {
     Card expected =
         new Card(
             "CSS Flexbox",
-            "&lt;div class=&quot;flex-container&quot;&gt; &lt;div&gt;1&lt;/div&gt; &lt;div&gt;2&lt;/div&gt; &lt;div&gt;3&lt;/div&gt; &lt;/div&gt;",
+            "&lt;div class=&quot;flex-container&quot;&gt; &lt;div&gt;1&lt;/div&gt;"
+                + " &lt;div&gt;2&lt;/div&gt; &lt;div&gt;3&lt;/div&gt; &lt;/div&gt;",
             "https://www.w3schools.com/css/css3_flexbox.asp",
-            "Try it Yourself &raquo;",
+            "A flex container with three flex items:",
             "W3Schools",
             "https://w3schools.com/favicon.ico");
     assertEquals(expected, actual);
