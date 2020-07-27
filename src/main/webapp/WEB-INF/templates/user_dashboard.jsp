@@ -13,7 +13,7 @@
     <form class="setting" action="/user" method="POST">
         <div class="column websites">
             <label for="input-websites">Choose your preferred website:</label>
-            <select class="input-websites" id="input-websites" name="input-websites">
+            <select class="input-websites" id="input-websites" name="website">
                 <option value="geeksforgeeks">GeeksForGeeks</option>
                 <option value="stackoverflow">StackOverflow</option>
                 <option value="w3schools">W3Schools</option>
@@ -21,7 +21,7 @@
         </div>
         <div id="languages" class="column">
             <label for="input-languages">Choose your primary coding language:</label>
-            <input class="input-languages" id="input-languages" type="text" name="input-languages"
+            <input class="input-languages" id="input-languages" type="text" name="language"
                    placeholder="Input your primary coding language">
             <script>autocomplete(document.getElementById('input-languages'), languages);</script>
         </div>
