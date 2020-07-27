@@ -22,14 +22,13 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that renders a basic homepage. */
+/** Servelet that renders user setting page */
 @WebServlet("/user")
 public class UserSettingServlet extends HttpServlet {
   private static final String WEBSITE_PARAMETER = "website";
