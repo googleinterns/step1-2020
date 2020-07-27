@@ -1,8 +1,8 @@
 .main {
     text-align: center;
     padding: 0px 10px;
+    font-family: sans-serif;
 }
-
 
 .column {
     display: inline-block;
