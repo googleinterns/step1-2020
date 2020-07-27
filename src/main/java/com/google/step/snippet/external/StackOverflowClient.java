@@ -70,7 +70,8 @@ public final class StackOverflowClient implements Client {
     if (title == null || description == null) {
       return null;
     }
-    // Code is intentionally set to null for better display.
+    // Code is intentionally set to null for StackOverflow 
+    // to avoid displaying code snippet without context.
     return new Card(title, /* code = */ null, url, description, SOURCE_NAME, ICON_LINK);
   }
 
