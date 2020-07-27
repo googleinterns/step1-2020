@@ -56,10 +56,12 @@ public final class W3SchoolsClient implements Client {
     if (snippets.isEmpty() || snippets.first().getElementsByClass(CODE_CLASS).text().isEmpty()) {
       return null;
     }
-    String title = titles.first().text();
-    String description = descriptions.first().text();
+    String title = Jsoup.clean(titles.first().text(), Whitelist.relaxed());
+    String description = Jsoup.clean(descriptions.first().text(), Whitelist.relaxed());
     if (!snippets.first().getElementsByTag(DESC_TAG).text().isEmpty()) {
-      description = snippets.first().getElementsByTag(DESC_TAG).first().text();
+      description =
+          Jsoup.clean(
+              snippets.first().getElementsByTag(DESC_TAG).first().text(), Whitelist.relaxed());
     }
     String code = snippets.first().getElementsByClass(CODE_CLASS).text();
     if (containsEscape(query.toLowerCase())
@@ -70,8 +72,6 @@ public final class W3SchoolsClient implements Client {
       description = StringEscapeUtils.escapeHtml4(description);
       code = StringEscapeUtils.escapeHtml4(code);
     } else {
-      title = Jsoup.clean(title, Whitelist.relaxed());
-      description = Jsoup.clean(description, Whitelist.relaxed());
       code = Jsoup.clean(code, Whitelist.relaxed().preserveRelativeLinks(true));
     }
     return new Card(title, code, w3Link, description, SOURCE_NAME, ICON_LINK);
