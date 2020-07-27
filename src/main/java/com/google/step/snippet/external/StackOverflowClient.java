@@ -28,12 +28,12 @@ public final class StackOverflowClient implements Client {
           + "=desc&sort=activity&site=stackoverflow&filter=!9_bDE(fI5";
   // The URL is in the pattern of stackoverlow.com/questions/question_id/title.
   // The ID_INDEX help retrieve the question_id from parsed URL.
-  private static final int ID_INDEX = 2;
+  private static final int QUESTION_ID_INDEX = 2;
   private static final String ITEM_PARAMETER = "items";
   private static final String TITLE_PARAMETER = "title";
   private static final String BODY_PARAMETER = "body";
   private static final String ANSWER_ID_PARAMETER = "answer_id";
-  private static final String QUESTION_ID_INDEX = "questions";
+  private static final String QUESTION_PARAMETER = "questions";
   private static final int QUESTION_PATH_INDEX = 1;
   private static final String SOURCE_NAME = "StackOverflow";
   private static final String ICON_LINK = "https://stackoverflow.com/favicon.ico";
@@ -84,7 +84,7 @@ public final class StackOverflowClient implements Client {
     }
     // Parse the URL to get the question id.
     String[] segments = uri.getPath().split("/");
-    if (segments.length <= ID_INDEX || !segments[QUESTION_PATH_INDEX].equals(QUESTION_ID_INDEX)) {
+    if (segments.length <= QUESTION_ID_INDEX || !segments[QUESTION_PATH_INDEX].equals(QUESTION_PARAMETER)) {
       return null;
     }
     String questionId = segments[ID_INDEX];
