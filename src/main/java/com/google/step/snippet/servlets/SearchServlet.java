@@ -14,8 +14,16 @@
 
 package com.google.step.snippet.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.appengine.repackaged.com.google.common.collect.Iterables;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
@@ -47,7 +55,7 @@ import org.apache.http.impl.client.HttpClients;
 @WebServlet("/search")
 public class SearchServlet extends HttpServlet {
 
-  private static final String W3_CSE_ID = "INSERT_W3SCHOOLS_CSE_ID";
+  private static final String W3_CSE_ID = "INSERT_W3SCHOOL_CSE_ID";
   private static final String STACK_CSE_ID = "INSERT_STACKOVERFLOW_CSE_ID";
   private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CSE_ID";
   private static final String API_KEY = "INSERT_API_KEY";
@@ -95,14 +103,61 @@ public class SearchServlet extends HttpServlet {
       response.getWriter().println("Invalid Query");
       return;
     }
+
     String query = encodeValue(param);
     List<Card> allCards = new ArrayList<>();
     for (Client client : clients) {
       String link = getLink(client.getCseId(), query);
+
       if (link != null) {
-        Card card = client.search(link);
-        if (card != null) {
-          allCards.add(card);
+        // Check if card exists in the cache
+        Query cardQuery = new Query("Card").addSort("timestamp", SortDirection.ASCENDING);
+        Query.FilterPredicate filter = new Query.FilterPredicate("url", FilterOperator.EQUAL, link);
+        Query filteredQuery = cardQuery.setFilter(filter);
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Entity cardEntity = datastore.prepare(filteredQuery).asSingleEntity();
+
+        // Card *is* in the cache
+        if (cardEntity != null) {
+          // System.out.println("Card is in cache");
+          String title = (String) cardEntity.getProperty("title");
+          String code = ((Text) cardEntity.getProperty("code")).toString();
+          String url = (String) cardEntity.getProperty("url");
+          String description = (String) cardEntity.getProperty("description");
+          String source = (String) cardEntity.getProperty("source");
+          String icon = (String) cardEntity.getProperty("icon");
+          // Update timestamp of card
+          cardEntity.setProperty("timestamp", System.currentTimeMillis());
+          // Construct a card to return back to SRP
+          allCards.add(new Card(title, code, url, description, source, icon));
+        }
+
+        //  Card is *not* in the cache
+        else {
+          Card card = client.search(link);
+          if (card != null) {
+            // System.out.println("Card is not in cache");
+            // Add a new card into the cache
+            cardEntity = new Entity("Card");
+            cardEntity.setProperty("title", card.getTitle());
+            cardEntity.setProperty("code", new Text(card.getCode()));
+            cardEntity.setProperty("url", card.getLink());
+            cardEntity.setProperty("description", card.getDescription());
+            cardEntity.setProperty("source", card.getSource());
+            cardEntity.setProperty("icon", card.getIcon());
+            cardEntity.setProperty("timestamp", System.currentTimeMillis());
+            //  Add new card into the cache if there is capacity
+            Query cacheQuery = new Query("Card").addSort("timestamp", SortDirection.ASCENDING);
+            Iterable<Entity> iteratorCache = datastore.prepare(cacheQuery).asIterable();
+            // System.out.println(Iterables.size(iteratorCache));
+            if (Iterables.size(iteratorCache) >= 10) {
+              // System.out.println("Delete LRU Query");
+              Entity first = Iterables.get(iteratorCache, 0);
+              datastore.delete(first.getKey());
+            }
+            datastore.put(cardEntity);
+            allCards.add(card);
+          }
         }
       }
     }
