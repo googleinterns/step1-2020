@@ -71,10 +71,7 @@ public class W3SchoolsClient extends Client {
       code = Jsoup.clean(code, Whitelist.relaxed());
     }
     long votes = getVotes(w3Link);
-    String upvote = getUpvote(w3Link);
-    String downvote = getDownvote(w3Link);
-    return new Card(
-        title, code, w3Link, description, votes, SOURCE_NAME, ICON_LINK, upvote, downvote);
+    return new Card(title, code, w3Link, description, votes, SOURCE_NAME, ICON_LINK);
   }
 
   private boolean containsEscape(String possibleHtml) {

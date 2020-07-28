@@ -38,9 +38,7 @@ public final class W3SchoolsClientTest {
             "How to insert an image:",
             0,
             "W3Schools",
-            "https://w3schools.com/favicon.ico",
-            "black",
-            "black");
+            "https://w3schools.com/favicon.ico");
     assertEquals(expected, actual);
   }
 
@@ -56,9 +54,7 @@ public final class W3SchoolsClientTest {
             "JSON: JavaScript Object Notation.",
             0,
             "W3Schools",
-            "https://w3schools.com/favicon.ico",
-            "black",
-            "black");
+            "https://w3schools.com/favicon.ico");
     assertEquals(expected, actual);
   }
 

@@ -71,10 +71,7 @@ public final class GeeksForGeeksClient extends Client {
       code = Jsoup.clean(code, Whitelist.relaxed());
     }
     long votes = getVotes(geeksLink);
-    String upvote = getUpvote(geeksLink);
-    String downvote = getDownvote(geeksLink);
-    return new Card(
-        title, code, geeksLink, description, votes, SOURCE_NAME, ICON_LINK, upvote, downvote);
+    return new Card(title, code, geeksLink, description, votes, SOURCE_NAME, ICON_LINK);
   }
 
   private boolean containsEscape(String possibleHtml) {

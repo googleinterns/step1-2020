@@ -140,9 +140,7 @@ public final class StackOverflowClientTest {
                 + "<pre><code>pageSizeOptions= {[10, 15, 20]}\n</code></pre>\n",
             0,
             "StackOverflow",
-            "https://stackoverflow.com/favicon.ico",
-            "black",
-            "black");
+            "https://stackoverflow.com/favicon.ico");
     assertEquals(expected, actual);
   }
 }

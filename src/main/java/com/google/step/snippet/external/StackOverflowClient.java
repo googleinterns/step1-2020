@@ -73,8 +73,6 @@ public class StackOverflowClient extends Client {
     // Code is intentionally set to null for StackOverflow
     // to avoid displaying code snippet without context.
     long votes = getVotes(stackLink);
-    String upvote = getUpvote(stackLink);
-    String downvote = getDownvote(stackLink);
     return new Card(
         title,
         /* code = */ null,
@@ -82,9 +80,7 @@ public class StackOverflowClient extends Client {
         description,
         votes,
         SOURCE_NAME,
-        ICON_LINK,
-        upvote,
-        downvote);
+        ICON_LINK);
   }
 
   /* Get the question id of passed in URL. */

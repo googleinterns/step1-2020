@@ -15,9 +15,9 @@
 package com.google.step.snippet.servlets;
 
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.ThreadManager;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.google.appengine.api.ThreadManager;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
@@ -60,17 +60,21 @@ public class SearchServlet extends HttpServlet {
   private static final String STACK_CSE_ID = "INSERT_STACKOVERFLOW_CSE_ID";
   private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CSE_ID";
   private static final String API_KEY = "INSERT_API_KEY";
-  private static final String CSE_ITEMS = "items";
+private static final String CSE_ITEMS = "items";
   private static final String CSE_LINK = "link";
   private static final String AUTH_URL = "authUrl";
   private static final String AUTH_LABEL = "authLabel";
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
   private static final String CARD_LIST_LABEL = "cardList";
 
-  private final List<Client> clients = Arrays.asList(new W3SchoolsClient(W3_CSE_ID),
-      new StackOverflowClient(STACK_CSE_ID), new GeeksForGeeksClient(GEEKS_CSE_ID));
+  private final List<Client> clients =
+      Arrays.asList(
+          new W3SchoolsClient(W3_CSE_ID),
+          new StackOverflowClient(STACK_CSE_ID),
+          new GeeksForGeeksClient(GEEKS_CSE_ID));
 
-  private final ExecutorService executor = Executors.newCachedThreadPool(ThreadManager.backgroundThreadFactory());
+  private final ExecutorService executor =
+      Executors.newCachedThreadPool(ThreadManager.backgroundThreadFactory());
 
   private static String encodeValue(String value) {
     try {
@@ -81,7 +85,8 @@ public class SearchServlet extends HttpServlet {
   }
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
     String redirectPath = request.getRequestURI();
     if (request.getQueryString() != null) {
       redirectPath += "?" + request.getQueryString();
@@ -103,17 +108,24 @@ public class SearchServlet extends HttpServlet {
       return;
     }
     String query = encodeValue(param);
-    List<Callable<Card>> cardCallbacks = clients.stream().map(client -> ((Callable<Card>) () -> {
-      NamespaceManager.set(NamespaceManager.getGoogleAppsNamespace());
-      String link = getLink(client.getCseId(), query);
-      if (link != null) {
-        return client.search(link, query);
-      }
-      return null;
-    })).collect(Collectors.toList());
+    List<Callable<Card>> cardCallbacks =
+        clients.stream()
+            .map(
+                client ->
+                    ((Callable<Card>)
+                        () -> {
+                          NamespaceManager.set(NamespaceManager.getGoogleAppsNamespace());
+                          String link = getLink(client.getCseId(), query);
+                          if (link != null) {
+                            return client.search(link, query);
+                          }
+                          return null;
+                        }))
+            .collect(Collectors.toList());
     List<Card> allCards;
     try {
-      allCards = executor.invokeAll(cardCallbacks, 30L, TimeUnit.SECONDS).stream()
+      allCards =
+          executor.invokeAll(cardCallbacks, 30L, TimeUnit.SECONDS).stream()
               .map(
                   future -> {
                     try {
