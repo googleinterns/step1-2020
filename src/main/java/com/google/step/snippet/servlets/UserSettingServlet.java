@@ -32,6 +32,7 @@ public class UserSettingServlet extends HttpServlet {
   private static final String WEBSITE_PARAMETER = "website";
   private static final String LANGUAGE_PARAMETER = "language";
   private static final String ID_PARAMETER = "id";
+  private static final String USER_PARAMETER = "UserInfo";
   private String referer = "";
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -54,7 +55,7 @@ public class UserSettingServlet extends HttpServlet {
     String id = userService.getCurrentUser().getUserId();
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Entity entity = new Entity("UserInfo", id);
+    Entity entity = new Entity(USER_PARAMETER, id);
     entity.setProperty(ID_PARAMETER, id);
     entity.setProperty(WEBSITE_PARAMETER, website);
     entity.setProperty(LANGUAGE_PARAMETER, language);
