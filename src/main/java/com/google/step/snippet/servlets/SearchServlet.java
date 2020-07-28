@@ -209,7 +209,6 @@ public class SearchServlet extends HttpServlet {
     String site = "";
     if (userPreferenceEntity != null) {
       site = (String) userPreferenceEntity.getProperty(WEBSITE_PARAMETER);
-      System.out.println(site);
     }
     return site;
   }
