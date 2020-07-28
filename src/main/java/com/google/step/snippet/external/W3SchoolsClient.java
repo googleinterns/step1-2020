@@ -77,7 +77,7 @@ public final class W3SchoolsClient implements Client {
       description = StringEscapeUtils.escapeHtml4(description);
       code = StringEscapeUtils.escapeHtml4(code);
     } else {
-      code = Jsoup.clean(code, Whitelist.relaxed().preserveRelativeLinks(true));
+      code = Jsoup.clean(code, Whitelist.relaxed());
     }
     return new Card(title, code, w3Link, description, SOURCE_NAME, ICON_LINK);
   }
