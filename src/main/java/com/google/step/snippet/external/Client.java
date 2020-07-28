@@ -14,7 +14,7 @@ public abstract class Client {
   public static final String UP = "upvote";
   public static final String DOWN = "downvote";
 
-  public abstract Card search(String url);
+  public abstract Card search(String url, String query);
 
   public abstract String getCseId();
 
