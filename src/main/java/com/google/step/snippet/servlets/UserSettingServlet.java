@@ -34,6 +34,7 @@ public class UserSettingServlet extends HttpServlet {
   private static final String ID_PARAMETER = "id";
   private static final String USER_PARAMETER = "UserInfo";
   private String referer = "";
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
