@@ -24,8 +24,10 @@
                 ${knowledgeCard.getTitle()}
               </a>
             </header>
-            <code>${knowledgeCard.getCode()}</code>
-            <span class="card-description">Description:</span>
+            <c:if test="${knowledgeCard.getCode() != null}">
+              <code>${knowledgeCard.getCode()}</code>
+            </c:if>
+            <div class="card-description">Description:</div>
             <p>${knowledgeCard.getDescription()}</p>
           </div>
         </c:forEach>
