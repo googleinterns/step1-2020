@@ -67,7 +67,7 @@ public final class GeeksForGeeksClient implements Client {
       description = StringEscapeUtils.escapeHtml4(description);
       code = StringEscapeUtils.escapeHtml4(code);
     } else {
-      code = Jsoup.clean(code, Whitelist.relaxed().preserveRelativeLinks(true));
+      code = Jsoup.clean(code, Whitelist.relaxed());
     }
     return new Card(title, code, geeksLink, description, SOURCE_NAME, ICON_LINK);
   }

@@ -81,7 +81,7 @@ public final class W3SchoolsClientTest {
 
   @Test
   public void nonexistentLink() {
-    Card actual = client.search("https://www.w3schools.com/css/html.asp", null);
+    Card actual = client.search("https://www.w3schools.com/css/html.asp", "");
     assertNull(actual);
   }
 
