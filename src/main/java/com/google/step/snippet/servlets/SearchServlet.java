@@ -14,6 +14,11 @@
 
 package com.google.step.snippet.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.JsonObject;
@@ -31,6 +36,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
@@ -66,6 +72,10 @@ public class SearchServlet extends HttpServlet {
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
   private static final String CARD_LIST_LABEL = "cardList";
 
+  private static final String ID_PARAMETER = "id";
+  private static final String USER_PARAMETER = "UserInfo";
+  private static final String WEBSITE_PARAMETER = "website";
+
   private final List<Client> clients =
       Arrays.asList(
           new W3SchoolsClient(W3_CSE_ID),
@@ -89,11 +99,12 @@ public class SearchServlet extends HttpServlet {
     if (request.getQueryString() != null) {
       redirectPath += "?" + request.getQueryString();
     }
-
+    String pSite = "";
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
       request.setAttribute(AUTH_URL, userService.createLogoutURL(redirectPath));
       request.setAttribute(AUTH_LABEL, "Logout");
+      pSite = getPreferredSite(userService.getCurrentUser().getUserId());
     } else {
       request.setAttribute(AUTH_URL, userService.createLoginURL(redirectPath));
       request.setAttribute(AUTH_LABEL, "Login");
@@ -136,7 +147,19 @@ public class SearchServlet extends HttpServlet {
     } catch (InterruptedException | RejectedExecutionException e) {
       allCards = Collections.emptyList();
     }
-
+    List<Card> sortedCards;
+    if (!pSite.isEmpty()) {
+      sortedCards = new ArrayList<Card>(allCards);
+      for (Card card : sortedCards) {
+        if (card.getSource().toLowerCase().equals(pSite)) {
+          int index = allCards.indexOf(card);
+          sortedCards.remove(index);
+          sortedCards.add(0, card);
+          allCards = sortedCards;
+          break;
+        }
+      }
+    }
     request.setAttribute(CARD_LIST_LABEL, allCards);
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
@@ -175,5 +198,19 @@ public class SearchServlet extends HttpServlet {
       return null;
     }
     return null;
+  }
+
+  private String getPreferredSite(String userId) {
+    Query.FilterPredicate filterId =
+        new Query.FilterPredicate(ID_PARAMETER, FilterOperator.EQUAL, userId);
+    Query userQuery = new Query(USER_PARAMETER).setFilter(filterId);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Entity userPreferenceEntity = datastore.prepare(userQuery).asSingleEntity();
+    String site = "";
+    if (userPreferenceEntity != null) {
+      site = (String) userPreferenceEntity.getProperty(WEBSITE_PARAMETER);
+      System.out.println(site);
+    }
+    return site;
   }
 }
