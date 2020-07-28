@@ -147,9 +147,8 @@ public class SearchServlet extends HttpServlet {
     } catch (InterruptedException | RejectedExecutionException e) {
       allCards = Collections.emptyList();
     }
-    List<Card> sortedCards;
     if (!pSite.isEmpty()) {
-      sortedCards = new ArrayList<Card>(allCards);
+      List<Card> sortedCards = allCards;
       for (Card card : sortedCards) {
         if (card.getSource().toLowerCase().equals(pSite)) {
           int index = allCards.indexOf(card);
