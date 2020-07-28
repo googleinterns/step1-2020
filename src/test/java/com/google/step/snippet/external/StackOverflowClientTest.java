@@ -99,8 +99,7 @@ public final class StackOverflowClientTest {
   public void noAnswerSearchTest() {
     Card actual =
         client.search(
-            "https://stackoverflow.com/questions/44686609/implementing-a-neural-network-in-haskell",
-            "implement neural net in haskell");
+            "https://stackoverflow.com/questions/44686609/implementing-a-neural-network-in-haskell");
     assertNull(actual);
   }
 
@@ -108,7 +107,7 @@ public final class StackOverflowClientTest {
   public void fakeLinkSearchTest() {
     Card actual =
         client.search(
-            "https://softwareengineering.stackexchange.com/questions/100/what-website-are-yo", "");
+            "https://softwareengineering.stackexchange.com/questions/100/what-website-are-yo");
     assertNull(actual);
   }
 
@@ -116,8 +115,7 @@ public final class StackOverflowClientTest {
   public void validSearchTest() {
     Card actual =
         client.search(
-            "https://stackoverflow.com/questions/63057965/custom-dropdown-to-page-size-on-reacttable",
-            "custom dropdown to page size on reacttable");
+            "https://stackoverflow.com/questions/63057965/custom-dropdown-to-page-size-on-reacttable");
     Card expected =
         new Card(
             "Custom dropdown to page size on ReactTable",
