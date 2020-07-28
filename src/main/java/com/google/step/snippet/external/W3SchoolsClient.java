@@ -2,12 +2,8 @@ package com.google.step.snippet.external;
 
 import com.google.step.snippet.data.Card;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
 public final class W3SchoolsClient implements Client {
@@ -18,8 +14,7 @@ public final class W3SchoolsClient implements Client {
   private static final String SOURCE_NAME = "W3Schools";
   private static final String ICON_LINK = "https://w3schools.com/favicon.ico";
 
-  private final String cseId;
-  private final List<String> escapeFilters = Arrays.asList("html", "svg", "icons", "css");
+  private String cseId;
 
   public W3SchoolsClient(String cseId) {
     this.cseId = cseId;
@@ -37,7 +32,7 @@ public final class W3SchoolsClient implements Client {
    * @return the created card, or {@code null} if a card could not be created
    */
   @Override
-  public Card search(String w3Link, String query) {
+  public Card search(String w3Link) {
     Document doc = null;
     try {
       doc = Jsoup.connect(w3Link).get();
@@ -56,28 +51,9 @@ public final class W3SchoolsClient implements Client {
     if (snippets.isEmpty() || snippets.first().getElementsByClass(CODE_CLASS).text().isEmpty()) {
       return null;
     }
-    String title = Jsoup.clean(titles.first().text(), Whitelist.relaxed());
-    String description = Jsoup.clean(descriptions.first().text(), Whitelist.relaxed());
+    String title = titles.first().text();
+    String description = descriptions.first().text();
     String code = snippets.first().getElementsByClass(CODE_CLASS).text();
-    if (containsEscape(query.toLowerCase())
-        || containsEscape(w3Link)
-        || containsEscape(title.toLowerCase())
-        || containsEscape(description.toLowerCase())) {
-      title = StringEscapeUtils.escapeHtml4(title);
-      description = StringEscapeUtils.escapeHtml4(description);
-      code = StringEscapeUtils.escapeHtml4(code);
-    } else {
-      code = Jsoup.clean(code, Whitelist.relaxed());
-    }
     return new Card(title, code, w3Link, description, SOURCE_NAME, ICON_LINK);
-  }
-
-  private boolean containsEscape(String possibleHtml) {
-    for (String filterWord : escapeFilters) {
-      if (possibleHtml.contains(filterWord)) {
-        return true;
-      }
-    }
-    return false;
   }
 }
