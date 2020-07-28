@@ -98,12 +98,12 @@ public class SearchServlet extends HttpServlet {
     if (request.getQueryString() != null) {
       redirectPath += "?" + request.getQueryString();
     }
-    String pSite = "";
+    String preferredSite = "";
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
       request.setAttribute(AUTH_URL, userService.createLogoutURL(redirectPath));
       request.setAttribute(AUTH_LABEL, "Logout");
-      pSite = getPreferredSite(userService.getCurrentUser().getUserId());
+      preferredSite = getPreferredSite(userService.getCurrentUser().getUserId());
     } else {
       request.setAttribute(AUTH_URL, userService.createLoginURL(redirectPath));
       request.setAttribute(AUTH_LABEL, "Login");
@@ -146,10 +146,10 @@ public class SearchServlet extends HttpServlet {
     } catch (InterruptedException | RejectedExecutionException e) {
       allCards = Collections.emptyList();
     }
-    if (!pSite.isEmpty()) {
+    if (!preferredSite.isEmpty()) {
       List<Card> sortedCards = allCards;
       for (Card card : sortedCards) {
-        if (card.getSource().toLowerCase().equals(pSite)) {
+        if (card.getSource().toLowerCase().equals(preferredSite)) {
           int index = allCards.indexOf(card);
           sortedCards.remove(index);
           sortedCards.add(0, card);
