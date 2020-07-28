@@ -32,6 +32,7 @@ body, html {
   padding: 5px 10px;
   border-radius: 4px;
   text-decoration: none;
+  display: inline-block;
 }
 
 .auth-button:hover, .setting-button:hover {
@@ -45,13 +46,5 @@ body, html {
 }
 
 .auth-button {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-}
-
-.setting-button {
-  position: absolute;
-  top: 20px;
-  right: 100px;
+  margin-left: 10px;
 }

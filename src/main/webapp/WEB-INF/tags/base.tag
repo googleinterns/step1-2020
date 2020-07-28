@@ -9,6 +9,6 @@
     <div class="gcse-searchbox-only" data-resultsUrl="/search"></div>
   </div>
   <div class="spacing"></div>
-  <a class="auth-button" href="${authUrl}">${authLabel}</a>
   <a class="setting-button" href="/user">Setting</a>
+  <a class="auth-button" href="${authUrl}">${authLabel}</a>
 </div>
