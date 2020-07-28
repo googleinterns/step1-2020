@@ -15,6 +15,14 @@ public final class StackOverflowClientTest {
         public long getVotes(String url) {
           return 0;
         }
+
+        public String getUpvote(String url) {
+          return "black";
+        }
+
+        public String getDownvote(String url) {
+          return "black";
+        }
       };
 
   @Test
@@ -132,7 +140,9 @@ public final class StackOverflowClientTest {
                 + "<pre><code>pageSizeOptions= {[10, 15, 20]}\n</code></pre>\n",
             0,
             "StackOverflow",
-            "https://stackoverflow.com/favicon.ico");
+            "https://stackoverflow.com/favicon.ico",
+            "black",
+            "black");
     assertEquals(expected, actual);
   }
 }
