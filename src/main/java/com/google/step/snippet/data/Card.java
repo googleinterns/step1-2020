@@ -82,7 +82,7 @@ public final class Card {
 
     final Card other = (Card) obj;
     return this.title.equals(other.title)
-        && this.code.equals(other.code)
+        && ((this.code == null && other.code == null) || this.code.equals(other.code))
         && this.link.equals(other.link)
         && this.description.equals(other.description)
         && this.votes == other.votes

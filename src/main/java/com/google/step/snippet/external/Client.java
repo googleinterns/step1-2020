@@ -19,7 +19,7 @@ public abstract class Client {
   private static final String UPVOTERS = "upvoters";
   private static final String DOWNVOTERS = "downvoters";
 
-  public abstract Card search(String url);
+  public abstract Card search(String url, String query);
 
   public abstract String getCseId();
 
