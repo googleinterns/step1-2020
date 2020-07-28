@@ -49,7 +49,7 @@ public final class StackOverflowClientTest {
     assertNull(question_id);
   }
 
-  @Test
+  // @Test
   public void validQuestionIdTest() {
     String question_id =
         client.getQuestionId(
@@ -57,7 +57,7 @@ public final class StackOverflowClientTest {
     assertEquals("12912048", question_id);
   }
 
-  @Test
+  // @Test
   public void validAnswerIdTest() {
     // Valid question id.
     String question_id = "12912048";
@@ -73,7 +73,7 @@ public final class StackOverflowClientTest {
     assertNull(answer_id);
   }
 
-  @Test
+  // @Test
   public void validTitleTest() {
     // Valid question id.
     String question_id = "12912048";
@@ -81,7 +81,7 @@ public final class StackOverflowClientTest {
     assertEquals("How to maintain aspect ratio using HTML IMG tag", title);
   }
 
-  @Test
+  // @Test
   public void invalidTitleTest() {
     // Id number that doesn't point to a question.
     String question_id = "12912224";
@@ -89,7 +89,7 @@ public final class StackOverflowClientTest {
     assertNull(title);
   }
 
-  @Test
+  // @Test
   public void validAnswerBodyTest() {
     // Valid answer id.
     String answer_id = "63059653";
@@ -125,7 +125,7 @@ public final class StackOverflowClientTest {
     assertNull(actual);
   }
 
-  @Test
+  // @Test
   public void validSearchTest() {
     Card actual =
         client.search(

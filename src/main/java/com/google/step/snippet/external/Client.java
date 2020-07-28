@@ -24,6 +24,7 @@ public abstract class Client {
   public abstract String getCseId();
 
   protected long getVotes(String url) {
+    System.out.println(url);
     Query.FilterPredicate filter = new Query.FilterPredicate(URL, FilterOperator.EQUAL, url);
     Query query = new Query(FEEDBACK).setFilter(filter);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
