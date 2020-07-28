@@ -21,15 +21,22 @@ public final class GeeksForGeeksClientTest {
     Card expected =
         new Card(
             "How to change the height of br tag?",
-            "Customized break example     \n"
-                + "&lt;h3&gt;This page shows different break height between lines&lt;/h3&gt; \n"
-                + "&lt;p&gt; Hi User &lt;span&gt;&lt;/span&gt; Welcome to &lt;span&gt;&lt;/span&gt;"
-                + " Geeks for geeks. &lt;span&gt;&lt;/span&gt; Hope you have enjoyed your stay."
-                + " &lt;/p&gt;",
+            "&lt;!DOCTYPE html &gt; &lt;html&gt; &lt;head&gt; &lt;title&gt; Customized break"
+                + " example &lt;/title&gt; &lt;style type=&quot;text/css&quot;&gt; .br { display:"
+                + " block; margin-bottom: 0em; } .brmedium { display: block; margin-bottom: 1em; }"
+                + " .brlarge { display: block; margin-bottom: 2em; } &lt;/style&gt; &lt;/head&gt;"
+                + " &lt;body&gt; &lt;h3&gt;This page shows different break height between"
+                + " lines&lt;/h3&gt; &lt;p&gt; Hi User &lt;span"
+                + " class=&quot;brlarge&quot;&gt;&lt;/span&gt; Welcome to &lt;span"
+                + " class=&quot;brmedium&quot;&gt;&lt;/span&gt; Geeks for geeks. &lt;span"
+                + " class=&quot;br&quot;&gt;&lt;/span&gt; Hope you have enjoyed your stay."
+                + " &lt;/p&gt; &lt;/body&gt; &lt;/html&gt;",
             "https://www.geeksforgeeks.org/how-to-change-the-height-of-br-tag/",
             "You can&rsquo;t change the height of \n"
                 + "&lt;br&gt; tag as its not an HTML element, it is just an instruction which"
-                + " enforces a line break. br does not take up any space in the page.", "GeeksForGeeks", "https://geeksforgeeks.org/favicon.ico");
+                + " enforces a line break. br does not take up any space in the page.",
+            "GeeksForGeeks",
+            "https://geeksforgeeks.org/favicon.ico");
     assertEquals(expected, actual);
   }
 
@@ -53,7 +60,9 @@ public final class GeeksForGeeksClientTest {
                 + " sizeof(arr[0]); // Function calling leftRotate(arr, 2, n); printArray(arr, n);"
                 + " return 0; }",
             "https://www.geeksforgeeks.org/array-rotation/",
-            "Write a function rotate(ar[], d, n) that rotates arr[] of size n by d elements.", "GeeksForGeeks", "https://geeksforgeeks.org/favicon.ico");
+            "Write a function rotate(ar[], d, n) that rotates arr[] of size n by d elements.",
+            "GeeksForGeeks",
+            "https://geeksforgeeks.org/favicon.ico");
     assertEquals(expected, actual);
   }
 
