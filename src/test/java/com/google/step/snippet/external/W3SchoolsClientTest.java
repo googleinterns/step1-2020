@@ -20,11 +20,12 @@ public final class W3SchoolsClientTest {
 
   @Test
   public void htmlCodeCard() {
-    Card actual = client.search("https://www.w3schools.com/tags/tag_img.asp");
+    Card actual = client.search("https://www.w3schools.com/tags/tag_img.asp", "html img");
     Card expected =
         new Card(
-            "HTML <img> Tag",
-            "<img src=\"img_girl.jpg\" alt=\"Girl in a jacket\" width=\"500\" height=\"600\">",
+            "HTML \n&lt;img&gt; Tag",
+            "&lt;img src=&quot;img_girl.jpg&quot; alt=&quot;Girl in a jacket&quot;"
+                + " width=&quot;500&quot; height=&quot;600&quot;&gt;",
             "https://www.w3schools.com/tags/tag_img.asp",
             "How to insert an image:",
             0,
@@ -35,7 +36,7 @@ public final class W3SchoolsClientTest {
 
   @Test
   public void jsonCodeCard() {
-    Card actual = client.search("https://www.w3schools.com/js/js_json_intro.asp");
+    Card actual = client.search("https://www.w3schools.com/js/js_json_intro.asp", "json");
     Card expected =
         new Card(
             "JSON - Introduction",
@@ -51,19 +52,19 @@ public final class W3SchoolsClientTest {
 
   @Test
   public void partiallyFilledCard() {
-    Card actual = client.search("https://www.w3schools.com/html/html_quiz.asp");
+    Card actual = client.search("https://www.w3schools.com/html/html_quiz.asp", "html quiz");
     assertNull(actual);
   }
 
   @Test
   public void nonexistentLink() {
-    Card actual = client.search("https://www.w3schools.com/css/html.asp");
+    Card actual = client.search("https://www.w3schools.com/css/html.asp", "");
     assertNull(actual);
   }
 
   @Test
   public void blankPageLink() {
-    Card actual = client.search("https://www.w3schools.com/");
+    Card actual = client.search("https://www.w3schools.com/", "w3schools");
     assertNull(actual);
   }
 }

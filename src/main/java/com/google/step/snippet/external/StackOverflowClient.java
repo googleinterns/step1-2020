@@ -14,12 +14,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
-public final class StackOverflowClient extends Client {
+public class StackOverflowClient extends Client {
   private static final String SEARCH_URL_TEMPLATE =
       "https://api.stackexchange.com/2.2/questions/%s?"
           + "order=desc&sort=activity&site=stackoverflow";
@@ -32,16 +28,15 @@ public final class StackOverflowClient extends Client {
           + "=desc&sort=activity&site=stackoverflow&filter=!9_bDE(fI5";
   // The URL is in the pattern of stackoverlow.com/questions/question_id/title.
   // The ID_INDEX help retrieve the question_id from parsed URL.
-  private static final int ID_INDEX = 2;
+  private static final int QUESTION_ID_INDEX = 2;
   private static final String ITEM_PARAMETER = "items";
   private static final String TITLE_PARAMETER = "title";
   private static final String BODY_PARAMETER = "body";
-  private static final String CODE_PARAMETER = "code";
   private static final String ANSWER_ID_PARAMETER = "answer_id";
+  private static final String QUESTION_PARAMETER = "questions";
+  private static final int QUESTION_PATH_INDEX = 1;
   private static final String SOURCE_NAME = "StackOverflow";
   private static final String ICON_LINK = "https://stackoverflow.com/favicon.ico";
-  // Set 200 to be the maximum length of description for MVP.
-  private static final int MAX_DESCRIPTION_LENGTH = 200;
 
   private final String cseId;
 
@@ -61,7 +56,7 @@ public final class StackOverflowClient extends Client {
    * @return the created card, or {@code null} if a card could not be created
    */
   @Override
-  public Card search(String stackLink) {
+  public Card search(String stackLink, String query) {
     String questionId = getQuestionId(stackLink);
     if (questionId == null) {
       return null;
@@ -71,19 +66,19 @@ public final class StackOverflowClient extends Client {
       return null;
     }
     String title = getTitle(questionId);
-    String answerBody = getAnswerBody(answerId);
-    if (title == null || answerBody == null) {
+    String description = getAnswerBody(answerId);
+    if (title == null || description == null) {
       return null;
     }
-    // No description or code is allowed for StackOverflow.
-    String description = getDescription(answerBody);
-    String code = getCode(answerBody);
+    // Code is intentionally set to null for StackOverflow
+    // to avoid displaying code snippet without context.
     long votes = getVotes(stackLink);
-    return new Card(title, code, stackLink, description, votes, SOURCE_NAME, ICON_LINK);
+    return new Card(
+        title, /* code = */ null, stackLink, description, votes, SOURCE_NAME, ICON_LINK);
   }
 
   /* Get the question id of passed in URL. */
-  private String getQuestionId(String url) {
+  String getQuestionId(String url) {
     URI uri;
     try {
       uri = new URI(url);
@@ -92,7 +87,11 @@ public final class StackOverflowClient extends Client {
     }
     // Parse the URL to get the question id.
     String[] segments = uri.getPath().split("/");
-    String questionId = segments[ID_INDEX];
+    if (segments.length <= QUESTION_ID_INDEX
+        || !segments[QUESTION_PATH_INDEX].equals(QUESTION_PARAMETER)) {
+      return null;
+    }
+    String questionId = segments[QUESTION_ID_INDEX];
     if (!Pattern.matches("[0-9]+", questionId)) {
       return null;
     }
@@ -100,52 +99,25 @@ public final class StackOverflowClient extends Client {
   }
 
   /* Return the most voted answer's id. */
-  private String getAnswerId(String questionId) {
+  String getAnswerId(String questionId) {
     String questionUrl = String.format(QUESTION_URL_TEMPLATE, questionId);
     return getResponse(questionUrl, ANSWER_ID_PARAMETER);
   }
 
   /* Return the question title using question id */
-  private String getTitle(String questionId) {
+  String getTitle(String questionId) {
     String searchUrl = String.format(SEARCH_URL_TEMPLATE, questionId);
     return getResponse(searchUrl, TITLE_PARAMETER);
   }
 
   /* Get the content of the answer and store it in the card. */
-  private String getAnswerBody(String answerId) {
+  String getAnswerBody(String answerId) {
     String answerUrl = String.format(ANSWER_URL_TEMPLATE, answerId);
-    return getResponse(answerUrl, BODY_PARAMETER);
+    String answerBody = getResponse(answerUrl, BODY_PARAMETER);
+    return answerBody;
   }
 
-  /* Return the description parsed from answer body. */
-  private String getDescription(String body) {
-    Document doc = Jsoup.parse(body);
-    // Combine all description in the answer body.
-    Elements descriptionHtml = doc.select("p");
-    String description = "";
-    for (Element e : descriptionHtml) {
-      description += e.outerHtml();
-      if (description.length() >= MAX_DESCRIPTION_LENGTH) {
-        description = description.substring(0, MAX_DESCRIPTION_LENGTH);
-        break;
-      }
-    }
-    return description;
-  }
-
-  /* Return the code parsed from answer body. */
-  private String getCode(String body) {
-    Document doc = Jsoup.parse(body);
-    // Combine all code in the answer body.
-    Elements codeHtml = doc.select(CODE_PARAMETER);
-    String code = "";
-    for (Element e : codeHtml) {
-      code += e.outerHtml();
-    }
-    return code;
-  }
-
-  private String getResponse(String url, String fieldParam) {
+  String getResponse(String url, String fieldParam) {
     CloseableHttpClient httpClient = HttpClients.createDefault();
     CloseableHttpResponse response;
     try {
