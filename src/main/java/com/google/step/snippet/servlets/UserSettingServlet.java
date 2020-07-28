@@ -32,12 +32,13 @@ public class UserSettingServlet extends HttpServlet {
   private static final String WEBSITE_PARAMETER = "website";
   private static final String LANGUAGE_PARAMETER = "language";
   private static final String ID_PARAMETER = "id";
-
+  private String referer = "";
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     // Forward the request to the template (which is a servlet itself).
     request.getRequestDispatcher("WEB-INF/templates/user_dashboard.jsp").forward(request, response);
+    referer = request.getHeader("referer");
   }
 
   @Override
@@ -58,7 +59,6 @@ public class UserSettingServlet extends HttpServlet {
     entity.setProperty(WEBSITE_PARAMETER, website);
     entity.setProperty(LANGUAGE_PARAMETER, language);
     datastore.put(entity);
-
-    response.sendRedirect("/home");
+    response.sendRedirect(referer);
   }
 }
