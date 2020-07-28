@@ -56,7 +56,7 @@ public final class StackOverflowClient implements Client {
    * @return the created card, or {@code null} if a card could not be created
    */
   @Override
-  public Card search(String url) {
+  public Card search(String url, String query) {
     String questionId = getQuestionId(url);
     if (questionId == null) {
       return null;
@@ -76,7 +76,7 @@ public final class StackOverflowClient implements Client {
   }
 
   /* Get the question id of passed in URL. */
-  private String getQuestionId(String url) {
+  String getQuestionId(String url) {
     URI uri;
     try {
       uri = new URI(url);
@@ -97,25 +97,25 @@ public final class StackOverflowClient implements Client {
   }
 
   /* Return the most voted answer's id. */
-  private String getAnswerId(String questionId) {
+  String getAnswerId(String questionId) {
     String questionUrl = String.format(QUESTION_URL_TEMPLATE, questionId);
     return getResponse(questionUrl, ANSWER_ID_PARAMETER);
   }
 
   /* Return the question title using question id */
-  private String getTitle(String questionId) {
+  String getTitle(String questionId) {
     String searchUrl = String.format(SEARCH_URL_TEMPLATE, questionId);
     return getResponse(searchUrl, TITLE_PARAMETER);
   }
 
   /* Get the content of the answer and store it in the card. */
-  private String getAnswerBody(String answerId) {
+  String getAnswerBody(String answerId) {
     String answerUrl = String.format(ANSWER_URL_TEMPLATE, answerId);
     String answerBody = getResponse(answerUrl, BODY_PARAMETER);
     return answerBody;
   }
 
-  private String getResponse(String url, String fieldParam) {
+  String getResponse(String url, String fieldParam) {
     CloseableHttpClient httpClient = HttpClients.createDefault();
     CloseableHttpResponse response;
     try {
