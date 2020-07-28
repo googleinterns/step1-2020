@@ -25,6 +25,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.step.snippet.data.Card;
+import com.google.step.snippet.data.Languages;
 import com.google.step.snippet.external.Client;
 import com.google.step.snippet.external.GeeksForGeeksClient;
 import com.google.step.snippet.external.StackOverflowClient;
@@ -74,6 +75,7 @@ public class SearchServlet extends HttpServlet {
   private static final String ID_PARAMETER = "id";
   private static final String USER_PARAMETER = "UserInfo";
   private static final String WEBSITE_PARAMETER = "website";
+  private static final String LANGUAGE_PARAMETER = "language";
 
   private final List<Client> clients =
       Arrays.asList(
@@ -99,11 +101,13 @@ public class SearchServlet extends HttpServlet {
       redirectPath += "?" + request.getQueryString();
     }
     String preferredSite = "";
+    String preferredLang = "";
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
       request.setAttribute(AUTH_URL, userService.createLogoutURL(redirectPath));
       request.setAttribute(AUTH_LABEL, "Logout");
-      preferredSite = getPreferredSite(userService.getCurrentUser().getUserId());
+      preferredSite = getPreference(userService.getCurrentUser().getUserId())[0];
+      preferredLang = getPreference(userService.getCurrentUser().getUserId())[1];
     } else {
       request.setAttribute(AUTH_URL, userService.createLoginURL(redirectPath));
       request.setAttribute(AUTH_LABEL, "Login");
@@ -114,6 +118,9 @@ public class SearchServlet extends HttpServlet {
       response.setContentType("text/html;");
       response.getWriter().println("Invalid Query");
       return;
+    }
+    if (!queryContainsLanguage(param, Languages.languages)) {
+      param = param + " " + preferredLang;
     }
     String query = encodeValue(param);
     List<Callable<Card>> cardCallbacks =
@@ -198,16 +205,21 @@ public class SearchServlet extends HttpServlet {
     return null;
   }
 
-  private String getPreferredSite(String userId) {
+  private String[] getPreference(String userId) {
+    String[] result = new String[2];
     Query.FilterPredicate filterId =
         new Query.FilterPredicate(ID_PARAMETER, FilterOperator.EQUAL, userId);
     Query userQuery = new Query(USER_PARAMETER).setFilter(filterId);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Entity userPreferenceEntity = datastore.prepare(userQuery).asSingleEntity();
-    String site = "";
     if (userPreferenceEntity != null) {
-      site = (String) userPreferenceEntity.getProperty(WEBSITE_PARAMETER);
+      result[0] = (String) userPreferenceEntity.getProperty(WEBSITE_PARAMETER);
+      result[1] = (String) userPreferenceEntity.getProperty(LANGUAGE_PARAMETER);
     }
-    return site;
+    return result;
+  }
+
+  private boolean queryContainsLanguage(String query, String[] languages) {
+    return Arrays.stream(languages).parallel().anyMatch(query.toLowerCase()::contains);
   }
 }
