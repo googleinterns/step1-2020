@@ -12,8 +12,8 @@ import org.junit.runners.JUnit4;
 public final class StackOverflowClientTest {
   private final StackOverflowClient client =
       new StackOverflowClient("CSE_ID") {
-        public long getVotes(String url) {
-          return 0;
+        public String getVotes(String url) {
+          return "0";
         }
       };
 
@@ -41,7 +41,7 @@ public final class StackOverflowClientTest {
     assertNull(question_id);
   }
 
-  // @Test
+  @Test
   public void validQuestionIdTest() {
     String question_id =
         client.getQuestionId(
@@ -49,7 +49,7 @@ public final class StackOverflowClientTest {
     assertEquals("12912048", question_id);
   }
 
-  // @Test
+  @Test
   public void validAnswerIdTest() {
     // Valid question id.
     String question_id = "12912048";
@@ -65,7 +65,7 @@ public final class StackOverflowClientTest {
     assertNull(answer_id);
   }
 
-  // @Test
+  @Test
   public void validTitleTest() {
     // Valid question id.
     String question_id = "12912048";
@@ -73,7 +73,7 @@ public final class StackOverflowClientTest {
     assertEquals("How to maintain aspect ratio using HTML IMG tag", title);
   }
 
-  // @Test
+  @Test
   public void invalidTitleTest() {
     // Id number that doesn't point to a question.
     String question_id = "12912224";
@@ -81,7 +81,7 @@ public final class StackOverflowClientTest {
     assertNull(title);
   }
 
-  // @Test
+  @Test
   public void validAnswerBodyTest() {
     // Valid answer id.
     String answer_id = "63059653";
@@ -117,7 +117,7 @@ public final class StackOverflowClientTest {
     assertNull(actual);
   }
 
-  // @Test
+  @Test
   public void validSearchTest() {
     Card actual =
         client.search(
@@ -130,7 +130,7 @@ public final class StackOverflowClientTest {
             "https://stackoverflow.com/questions/63057965/custom-dropdown-to-page-size-on-reacttable",
             "<p>I found the solution and was add in the properties this line</p>\n"
                 + "<pre><code>pageSizeOptions= {[10, 15, 20]}\n</code></pre>\n",
-            0,
+            "0",
             "StackOverflow",
             "https://stackoverflow.com/favicon.ico");
     assertEquals(expected, actual);

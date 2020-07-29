@@ -15,9 +15,9 @@
 package com.google.step.snippet.servlets;
 
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.ThreadManager;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.google.appengine.api.ThreadManager;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
@@ -56,10 +56,10 @@ import org.apache.http.impl.client.HttpClients;
 /** Servlet that handles searches. */
 @WebServlet("/search")
 public class SearchServlet extends HttpServlet {
-  private static final String W3_CSE_ID = "005097877490363447003:jdql8egojso";
-  private static final String STACK_CSE_ID = "005097877490363447003:fcadxuehmy0";
-  private static final String GEEKS_CSE_ID = "005097877490363447003:5-hfrrccix4";
-  private static final String API_KEY = "AIzaSyCMg08fxt9IX8LOAdwJGR0DyphMFpXPe5k";
+  private static final String W3_CSE_ID = "INSERT_W3SCHOOLS_CSE_ID";
+  private static final String STACK_CSE_ID = "INSERT_STACKOVERFLOW_CSE_ID";
+  private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CSE_ID";
+  private static final String API_KEY = "INSERT_API_KEY";
   private static final String CSE_ITEMS = "items";
   private static final String CSE_LINK = "link";
   private static final String AUTH_URL = "authUrl";
@@ -73,7 +73,8 @@ public class SearchServlet extends HttpServlet {
           new StackOverflowClient(STACK_CSE_ID),
           new GeeksForGeeksClient(GEEKS_CSE_ID));
 
-  private final ExecutorService executor = Executors.newCachedThreadPool(ThreadManager.backgroundThreadFactory());
+  private final ExecutorService executor =
+      Executors.newCachedThreadPool(ThreadManager.backgroundThreadFactory());
 
   private static String encodeValue(String value) {
     try {
