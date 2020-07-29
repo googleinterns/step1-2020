@@ -32,7 +32,7 @@
             <div class="content">
               <header>
                 <img class="icon" src="${knowledgeCard.getIcon()}" alt="${knowledgeCard.getSource()} site icon" width="25px" height="25px">
-                <a id="link" href="${knowledgeCard.getLink()}" class="card-title">
+                <a href="${knowledgeCard.getLink()}" class="card-title">
                   ${knowledgeCard.getTitle()}
                 </a>
               </header>

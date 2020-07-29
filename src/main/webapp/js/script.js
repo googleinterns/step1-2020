@@ -31,7 +31,6 @@ async function renderVote(card, action) {
 function toggleButtons(card, json) {
   const total = card.getElementsByClassName('total-votes')[0];
   if (Object.keys(json).length !== 0) {
-    console.log(json);
     if (json.totalvotes != null) {
       total.innerHTML = json.totalvotes;
     }
