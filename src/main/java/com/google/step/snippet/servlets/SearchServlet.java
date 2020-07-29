@@ -56,6 +56,7 @@ import org.apache.http.impl.client.HttpClients;
 /** Servlet that handles searches. */
 @WebServlet("/search")
 public class SearchServlet extends HttpServlet {
+
   private static final String W3_CSE_ID = "INSERT_W3SCHOOLS_CSE_ID";
   private static final String STACK_CSE_ID = "INSERT_STACKOVERFLOW_CSE_ID";
   private static final String GEEKS_CSE_ID = "INSERT_GEEKSFORGEEKS_CSE_ID";
@@ -131,7 +132,6 @@ public class SearchServlet extends HttpServlet {
                     try {
                       return future.get();
                     } catch (CancellationException | ExecutionException | InterruptedException e) {
-                      e.printStackTrace();
                       return null;
                     }
                   })

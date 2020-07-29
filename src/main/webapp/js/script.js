@@ -3,54 +3,49 @@ window.addEventListener('DOMContentLoaded', (event) => {
   initVote(cards);
   for (const card of cards) {
     const up = card.getElementsByClassName('upvote')[0];
-    up.addEventListener('click', function() {
-      renderVote(card, up.value, 'upvote');
-    });
     const down = card.getElementsByClassName('downvote')[0];
+    up.addEventListener('click', function() {
+      renderVote(card, 'upvote');
+    });
     down.addEventListener('click', function() {
-      renderVote(card, down.value, 'downvote');
+      renderVote(card, 'downvote');
     });
   }
 });
 
 function initVote(cards) {
   for (const card of cards) {
-    const link = card.querySelector('#link');
-    fetch('/vote?url=' + link.href).then((res) => res.json()).then((json) => {
-      if (Object.keys(json).length !== 0) {
-        const upButton = card.getElementsByClassName('upvote')[0];
-        const downButton = card.getElementsByClassName('downvote')[0];
-        if (json.toggleUpvote === 'active') {
-          upButton.style.color = 'green';
-        } else {
-          upButton.style.color = 'black';
-        }
-        if (json.toggleDownvote === 'active') {
-          downButton.style.color = 'red';
-        } else {
-          downButton.style.color = 'black';
-        }
-      }
+    const url = card.getAttribute('url');
+    fetch('/vote?url=' + url).then((res) => res.json()).then((json) => {
+      toggleButtons(card, json);
     });
   }
 }
 
-async function renderVote(card, url, action) {
-  const total = card.getElementsByClassName('total-votes')[0];
+async function renderVote(card, action) {
+  const url = card.getAttribute('url');
   const json = await updateVote(url, action);
+  toggleButtons(card, json);
+}
+
+function toggleButtons(card, json) {
+  const total = card.getElementsByClassName('total-votes')[0];
   if (Object.keys(json).length !== 0) {
-    total.innerHTML = json.totalvotes;
-    const upButton = card.getElementsByClassName('upvote')[0];
-    const downButton = card.getElementsByClassName('downvote')[0];
+    console.log(json);
+    if (json.totalvotes != null) {
+      total.innerHTML = json.totalvotes;
+    }
+    const up = card.getElementsByClassName('upvote')[0];
+    const down = card.getElementsByClassName('downvote')[0];
     if (json.toggleUpvote === 'active') {
-      upButton.style.color = 'green';
+      up.style.color = 'green';
     } else {
-      upButton.style.color = 'black';
+      up.style.color = 'black';
     }
     if (json.toggleDownvote === 'active') {
-      downButton.style.color = 'red';
+      down.style.color = 'red';
     } else {
-      downButton.style.color = 'black';
+      down.style.color = 'black';
     }
   }
 }
