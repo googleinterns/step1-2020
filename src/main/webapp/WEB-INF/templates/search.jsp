@@ -19,7 +19,7 @@
       </div>
       <div class="card-container">
         <c:forEach items='${requestScope["cardList"]}' var="knowledgeCard">
-          <div class="card" value="${knowledgeCard.getLink()}">
+          <div class="card" url="${knowledgeCard.getLink()}">
             <div class="vote">
               <button class="upvote">
                 <i class="fas fa-chevron-up"></i>

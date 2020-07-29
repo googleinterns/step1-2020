@@ -15,21 +15,25 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 function initVote(cards) {
   for (const card of cards) {
-    fetch('/vote?url=' + card.value).then((res) => res.json()).then((json) => {
+    const url = card.getAttribute('url');
+    fetch('/vote?url=' + url).then((res) => res.json()).then((json) => {
       toggleButtons(card, json);
     });
   }
 }
 
 async function renderVote(card, action) {
-  const json = await updateVote(card.value, action);
+  const url = card.getAttribute('url');
+  const json = await updateVote(url, action);
   toggleButtons(card, json);
 }
 
 function toggleButtons(card, json) {
   const total = card.getElementsByClassName('total-votes')[0];
   if (Object.keys(json).length !== 0) {
-    total.innerHTML = json.totalvotes;
+    if (json.totalvotes != null) {
+      total.innerHTML = json.totalvotes;
+    }
     const up = card.getElementsByClassName('upvote')[0];
     const down = card.getElementsByClassName('downvote')[0];
     if (json.toggleUpvote === 'active') {
