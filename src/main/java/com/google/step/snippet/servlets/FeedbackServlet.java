@@ -29,32 +29,42 @@ public class FeedbackServlet extends HttpServlet {
   private static final String USER = "user";
   private static final String UID = "uid";
   private static final String EMAIL = "email";
+  private static final String ACTIVE = "active";
+  private static final String DISABLED = "disabled";
   private static final String TOG_UP = "toggleUpvote";
   private static final String TOG_DOWN = "toggleDownvote";
+
+  private Entity getUserEntity(DatastoreService datastore, UserService userService) {
+    String uid = userService.getCurrentUser().getUserId();
+    Query.FilterPredicate filterUser = new Query.FilterPredicate(UID, FilterOperator.EQUAL, uid);
+    Query queryUser = new Query(USER).setFilter(filterUser);
+    Entity userEntity = datastore.prepare(queryUser).asSingleEntity();
+    if (userEntity == null) {
+      userEntity = new Entity(USER);
+      userEntity.setProperty(UID, uid);
+      userEntity.setProperty(EMAIL, userService.getCurrentUser().getEmail());
+    }
+    return userEntity;
+  }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     JSONObject json = new JSONObject();
-    json.put(TOG_UP, "disabled");
-    json.put(TOG_DOWN, "disabled");
-
     UserService userService = UserServiceFactory.getUserService();
-    if (userService.isUserLoggedIn()) {
-      String uid = userService.getCurrentUser().getUserId();
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      Query.FilterPredicate filterUser = new Query.FilterPredicate(UID, FilterOperator.EQUAL, uid);
-      Query queryUser = new Query(USER).setFilter(filterUser);
-      Entity userEntity = datastore.prepare(queryUser).asSingleEntity();
-      String url = request.getParameter(URL);
 
-      // If a user has voted previously, retrieve their past voting status
-      if (userEntity != null && url != null) {
+    if (userService.isUserLoggedIn()) {
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      String url = request.getParameter(URL);
+      Entity userEntity = getUserEntity(datastore, userService);
+
+      // If a user has previously voted on this card, retrieve their past voting status
+      if (url != null) {
         ArrayList<String> userUpCards = (ArrayList<String>) userEntity.getProperty(UPVOTED);
         ArrayList<String> userDownCards = (ArrayList<String>) userEntity.getProperty(DOWNVOTED);
         if (userUpCards != null && userUpCards.contains(url)) {
-          json.put(TOG_UP, "active");
+          json.put(TOG_UP, ACTIVE);
         } else if (userDownCards != null && userDownCards.contains(url)) {
-          json.put(TOG_DOWN, "active");
+          json.put(TOG_DOWN, ACTIVE);
         }
       }
     }
@@ -65,48 +75,20 @@ public class FeedbackServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    // Invalid url in POST request
+    // Invalid POST request if URL is invalid or user is not logged
     String url = request.getParameter(URL);
-    if (url == null) {
-      return;
-    }
-
-    // Query for feedback card entity
-    Query.FilterPredicate filter = new Query.FilterPredicate(URL, FilterOperator.EQUAL, url);
-    Query query = new Query(FEEDBACK).setFilter(filter);
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Entity feedbackEntity = datastore.prepare(query).asSingleEntity();
-
-    // Initialize feedback entity if none exists in datastore
-    if (feedbackEntity == null) {
-      feedbackEntity = new Entity(FEEDBACK);
-      feedbackEntity.setProperty(URL, url);
-      feedbackEntity.setProperty(TOTAL, (long) 0);
-    }
-
-    // Return unchanged total voate count
     UserService userService = UserServiceFactory.getUserService();
-    if (!userService.isUserLoggedIn()) {
+    if (url == null || !userService.isUserLoggedIn()) {
       JSONObject json = new JSONObject();
       response.setContentType("application/json");
       response.getWriter().println(json);
       return;
     }
 
-    // Query for user info by user id
-    String uid = userService.getCurrentUser().getUserId();
-    Query.FilterPredicate filterUser = new Query.FilterPredicate(UID, FilterOperator.EQUAL, uid);
-    Query queryUser = new Query(USER).setFilter(filterUser);
-    Entity userEntity = datastore.prepare(queryUser).asSingleEntity();
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Entity userEntity = getUserEntity(datastore, userService);
 
-    // If the user does not exist, greate a new user entity
-    if (userEntity == null) {
-      userEntity = new Entity(USER);
-      userEntity.setProperty(UID, uid);
-      userEntity.setProperty(EMAIL, userService.getCurrentUser().getEmail());
-    }
-
-    // Get list of user's upvoted and downvoted cards
+    // Get lists of user's upvoted and downvoted cards
     ArrayList<String> upCards;
     if (userEntity.getProperty(UPVOTED) == null) {
       upCards = new ArrayList<String>();
@@ -120,7 +102,7 @@ public class FeedbackServlet extends HttpServlet {
       downCards = (ArrayList<String>) userEntity.getProperty(DOWNVOTED);
     }
 
-    // Add and remove card in user's list of upvoted and downvoted cards accordingly
+    // Add or remove card from user's list of upvoted and downvoted cards
     if (request.getParameter(UP) != null) {
       if (!upCards.contains(url)) {
         upCards.add(url);
@@ -144,20 +126,17 @@ public class FeedbackServlet extends HttpServlet {
     userEntity.setProperty(DOWNVOTED, downCards);
     datastore.put(userEntity);
 
-    // Get the toggle status of upvote and downvote buttons
-    String upVoteStatus = "disabled";
-    String downVoteStatus = "disabled";
+    // Retrieve toggle status of upvote and downvote buttons for user
+    String upVoteStatus = DISABLED;
+    String downVoteStatus = DISABLED;
     if (userEntity.getProperty(UPVOTED) != null
         && ((ArrayList<String>) userEntity.getProperty(UPVOTED)).contains(url)) {
-      upVoteStatus = "active";
+      upVoteStatus = ACTIVE;
     }
     if (userEntity.getProperty(DOWNVOTED) != null
         && ((ArrayList<String>) userEntity.getProperty(DOWNVOTED)).contains(url)) {
-      downVoteStatus = "active";
+      downVoteStatus = ACTIVE;
     }
-    JSONObject json = new JSONObject();
-    json.put(TOG_UP, upVoteStatus);
-    json.put(TOG_DOWN, downVoteStatus);
 
     // Calculate the total votes per card
     long totalUpvotes = 0;
@@ -174,10 +153,24 @@ public class FeedbackServlet extends HttpServlet {
         totalDownvotes++;
       }
     }
-    json.put(TOTAL, Long.toString(totalUpvotes - totalDownvotes));
+
+    // Update card's feedback entity with new vote total
+    Query.FilterPredicate filter = new Query.FilterPredicate(URL, FilterOperator.EQUAL, url);
+    Query query = new Query(FEEDBACK).setFilter(filter);
+    Entity feedbackEntity = datastore.prepare(query).asSingleEntity();
+    if (feedbackEntity == null) {
+      feedbackEntity = new Entity(FEEDBACK);
+      feedbackEntity.setProperty(URL, url);
+      feedbackEntity.setProperty(TOTAL, (long) 0);
+    }
     feedbackEntity.setProperty(TOTAL, Long.toString(totalUpvotes - totalDownvotes));
     datastore.put(feedbackEntity);
 
+    // Construct json response with toggle status and total vote count
+    JSONObject json = new JSONObject();
+    json.put(TOG_UP, upVoteStatus);
+    json.put(TOG_DOWN, downVoteStatus);
+    json.put(TOTAL, Long.toString(totalUpvotes - totalDownvotes));
     response.setContentType("application/json");
     response.getWriter().println(json);
   }
