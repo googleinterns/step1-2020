@@ -3,18 +3,18 @@ window.addEventListener('DOMContentLoaded', (event) => {
   for (const card of cards) {
     const up = card.getElementsByClassName('upvote')[0];
     up.addEventListener('click', function() {
-      renderVote(card, up.value, 'upvote');
+      renderVote(card, 'upvote');
     });
     const down = card.getElementsByClassName('downvote')[0];
     down.addEventListener('click', function() {
-      renderVote(card, down.value, 'downvote');
+      renderVote(card, 'downvote');
     });
   }
 });
 
-async function renderVote(card, url, action) {
+async function renderVote(card, action) {
   const total = card.getElementsByClassName('total-votes')[0];
-  total.innerHTML = await updateVote(url, action);
+  total.innerHTML = await updateVote(card.value, action);
 }
 
 async function updateVote(url, action) {
