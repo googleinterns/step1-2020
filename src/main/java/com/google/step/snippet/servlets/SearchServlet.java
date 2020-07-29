@@ -128,7 +128,6 @@ public class SearchServlet extends HttpServlet {
                     try {
                       return future.get();
                     } catch (CancellationException | ExecutionException | InterruptedException e) {
-                      e.printStackTrace();
                       return null;
                     }
                   })
