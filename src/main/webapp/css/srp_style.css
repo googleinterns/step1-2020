@@ -82,6 +82,7 @@ pre {
   background: #EFF0F1;
   border-radius: 2px;
   overflow: scroll;
+  scrollbar-color: grey #FAFAFA;
   scrollbar-width: thin;
 }
 
