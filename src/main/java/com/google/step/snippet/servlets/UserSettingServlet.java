@@ -17,6 +17,8 @@ package com.google.step.snippet.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
@@ -32,6 +34,7 @@ public class UserSettingServlet extends HttpServlet {
   private static final String WEBSITE_PARAMETER = "website";
   private static final String LANGUAGE_PARAMETER = "language";
   private static final String ID_PARAMETER = "id";
+  private static final String EMAIL_PARAMETER = "email";
   private static final String USER_PARAMETER = "UserInfo";
   private String referer = "";
 
@@ -50,17 +53,24 @@ public class UserSettingServlet extends HttpServlet {
       response.sendRedirect("/home");
       return;
     }
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     String website = request.getParameter(WEBSITE_PARAMETER);
     String language = request.getParameter(LANGUAGE_PARAMETER);
     String id = userService.getCurrentUser().getUserId();
+    Query.FilterPredicate filterUser =
+        new Query.FilterPredicate(ID_PARAMETER, FilterOperator.EQUAL, id);
+    Query queryUser = new Query(USER_PARAMETER).setFilter(filterUser);
+    Entity userEntity = datastore.prepare(queryUser).asSingleEntity();
 
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Entity entity = new Entity(USER_PARAMETER, id);
-    entity.setProperty(ID_PARAMETER, id);
-    entity.setProperty(WEBSITE_PARAMETER, website);
-    entity.setProperty(LANGUAGE_PARAMETER, language);
-    datastore.put(entity);
+    if (userEntity == null) {
+      userEntity = new Entity(USER_PARAMETER);
+      userEntity.setProperty(ID_PARAMETER, id);
+      userEntity.setProperty(EMAIL_PARAMETER, userService.getCurrentUser().getEmail());
+    }
+    userEntity.setProperty(WEBSITE_PARAMETER, website);
+    userEntity.setProperty(LANGUAGE_PARAMETER, language);
+    datastore.put(userEntity);
     response.sendRedirect(referer);
   }
 }
