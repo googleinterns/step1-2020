@@ -21,6 +21,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.step.snippet.data.User;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,13 +36,34 @@ public class UserSettingServlet extends HttpServlet {
   private static final String LANGUAGE_PARAMETER = "language";
   private static final String ID_PARAMETER = "id";
   private static final String EMAIL_PARAMETER = "email";
-  private static final String USER_PARAMETER = "UserInfo";
+  private static final String USER_CLASS_PARAMETER = "UserInfo";
+  private static final String USER_PARAMETER = "user";
   private String referer = "";
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+    UserService userService = UserServiceFactory.getUserService();
     // Forward the request to the template (which is a servlet itself).
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    String id = userService.getCurrentUser().getUserId();
+    String email = userService.getCurrentUser().getEmail();
+    Query.FilterPredicate filterUser =
+        new Query.FilterPredicate(ID_PARAMETER, FilterOperator.EQUAL, id);
+    Query queryUser = new Query(USER_CLASS_PARAMETER).setFilter(filterUser);
+    Entity userEntity = datastore.prepare(queryUser).asSingleEntity();
+    String website;
+    String language;
+    if (userEntity == null) {
+      website = null;
+      language = null;
+    } else {
+      website = (String) userEntity.getProperty(WEBSITE_PARAMETER);
+      language = (String) userEntity.getProperty(LANGUAGE_PARAMETER);
+    }
+
+    User u = new User(id, email, website, language);
+    request.setAttribute(USER_PARAMETER, u);
     request.getRequestDispatcher("WEB-INF/templates/user_dashboard.jsp").forward(request, response);
     referer = request.getHeader("referer");
   }
@@ -60,11 +82,11 @@ public class UserSettingServlet extends HttpServlet {
     String id = userService.getCurrentUser().getUserId();
     Query.FilterPredicate filterUser =
         new Query.FilterPredicate(ID_PARAMETER, FilterOperator.EQUAL, id);
-    Query queryUser = new Query(USER_PARAMETER).setFilter(filterUser);
+    Query queryUser = new Query(USER_CLASS_PARAMETER).setFilter(filterUser);
     Entity userEntity = datastore.prepare(queryUser).asSingleEntity();
 
     if (userEntity == null) {
-      userEntity = new Entity(USER_PARAMETER);
+      userEntity = new Entity(USER_CLASS_PARAMETER);
       userEntity.setProperty(ID_PARAMETER, id);
       userEntity.setProperty(EMAIL_PARAMETER, userService.getCurrentUser().getEmail());
     }
