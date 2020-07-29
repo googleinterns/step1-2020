@@ -24,9 +24,8 @@
                 ${knowledgeCard.getTitle()}
               </a>
             </header>
-            <pre><code>${knowledgeCard.getCode()}</code></pre>
             <c:if test="${knowledgeCard.getCode() != null}">
-              <code>${knowledgeCard.getCode()}</code>
+              <pre><code>${knowledgeCard.getCode()}</code></pre>
             </c:if>
             <p>${knowledgeCard.getDescription()}</p>
           </div>
