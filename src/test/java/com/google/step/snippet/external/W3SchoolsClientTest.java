@@ -59,8 +59,8 @@ public final class W3SchoolsClientTest {
   }
 
   @Test
-  public void divEscaping() {
-    Card actual = client.search("https://www.w3schools.com/css/css3_flexbox.asp", "css flexbox");
+  public void htmlInWebpageNotQuery() {
+    Card actual = client.search("https://www.w3schools.com/css/css3_flexbox.asp", "flexbox");
     Card expected =
         new Card(
             "CSS Flexbox",
@@ -68,6 +68,37 @@ public final class W3SchoolsClientTest {
                 + " &lt;div&gt;2&lt;/div&gt; &lt;div&gt;3&lt;/div&gt; &lt;/div&gt;",
             "https://www.w3schools.com/css/css3_flexbox.asp",
             "A flex container with three flex items:",
+            "W3Schools",
+            "https://w3schools.com/favicon.ico");
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void htmlInQueryNotWebpage() {
+    Card actual = client.search("https://www.w3schools.com/js/js_errors.asp", "html js error");
+    Card expected =
+        new Card(
+            "JavaScript Errors - Throw and Try to Catch",
+            "&lt;p id=&quot;demo&quot;&gt;&lt;/p&gt; &lt;script&gt; try { adddlert(&quot;Welcome"
+                + " guest!&quot;); } catch(err) {"
+                + " document.getElementById(&quot;demo&quot;).innerHTML = err.message; }"
+                + " &lt;/script&gt;",
+            "https://www.w3schools.com/js/js_errors.asp",
+            "In this example we have written alert as adddlert to deliberately produce an error:",
+            "W3Schools",
+            "https://w3schools.com/favicon.ico");
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void noHtmlInQueryOrWebpage() {
+    Card actual = client.search("https://www.w3schools.com/js/js_errors.asp", "js error");
+    Card expected =
+        new Card(
+            "JavaScript Errors - Throw and Try to Catch",
+            "<p></p>",
+            "https://www.w3schools.com/js/js_errors.asp",
+            "In this example we have written alert as adddlert to deliberately produce an error:",
             "W3Schools",
             "https://w3schools.com/favicon.ico");
     assertEquals(expected, actual);
