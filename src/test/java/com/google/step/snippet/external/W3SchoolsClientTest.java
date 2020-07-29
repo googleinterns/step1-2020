@@ -67,7 +67,7 @@ public final class W3SchoolsClientTest {
             "&lt;div class=&quot;flex-container&quot;&gt; &lt;div&gt;1&lt;/div&gt;"
                 + " &lt;div&gt;2&lt;/div&gt; &lt;div&gt;3&lt;/div&gt; &lt;/div&gt;",
             "https://www.w3schools.com/css/css3_flexbox.asp",
-            "Try it Yourself &raquo;",
+            "A flex container with three flex items:",
             "W3Schools",
             "https://w3schools.com/favicon.ico");
     assertEquals(expected, actual);
