@@ -100,7 +100,7 @@ public final class StackOverflowClientTest {
     Card actual =
         client.search(
             "https://stackoverflow.com/questions/44686609/implementing-a-neural-network-in-haskell",
-            "implement neural network in haskell");
+            "implement neural net in haskell");
     assertNull(actual);
   }
 
