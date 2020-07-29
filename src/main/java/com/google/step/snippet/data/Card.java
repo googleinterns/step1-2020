@@ -5,8 +5,8 @@ public final class Card {
   private final String code;
   private final String link;
   private final String description;
-  private final String votes;
   private final String source;
+  private final String votes;
   private final String icon;
 
   public Card(
