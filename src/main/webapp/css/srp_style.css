@@ -45,6 +45,7 @@ h1 {
   max-height: 260px;
   overflow: scroll;
   font-size: 16px;
+  scrollbar-color: grey #FAFAFA;
 }
 
 .card::-webkit-scrollbar {
@@ -81,6 +82,7 @@ pre {
   background: #EFF0F1;
   border-radius: 2px;
   overflow: scroll;
+  scrollbar-width: thin;
 }
 
 pre::-webkit-scrollbar {
