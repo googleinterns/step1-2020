@@ -70,7 +70,7 @@ public final class GeeksForGeeksClient extends Client {
     } else {
       code = Jsoup.clean(code, Whitelist.relaxed());
     }
-    long votes = getVotes(geeksLink);
+    String votes = getVotes(geeksLink);
     return new Card(title, code, geeksLink, description, votes, SOURCE_NAME, ICON_LINK);
   }
 

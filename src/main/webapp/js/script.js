@@ -1,5 +1,6 @@
 window.addEventListener('DOMContentLoaded', (event) => {
   const cards = document.getElementsByClassName('card');
+  initVote(cards);
   for (const card of cards) {
     const up = card.getElementsByClassName('upvote')[0];
     up.addEventListener('click', function() {
@@ -12,25 +13,45 @@ window.addEventListener('DOMContentLoaded', (event) => {
   }
 });
 
+function initVote(cards) {
+  for (const card of cards) {
+    const link = card.querySelector('#link');
+    fetch('/vote?url=' + link.href).then((res) => res.json()).then((json) => {
+      if (Object.keys(json).length !== 0) {
+        const upButton = card.getElementsByClassName('upvote')[0];
+        const downButton = card.getElementsByClassName('downvote')[0];
+        if (json.toggleUpvote === 'active') {
+          upButton.style.color = 'green';
+        } else {
+          upButton.style.color = 'black';
+        }
+        if (json.toggleDownvote === 'active') {
+          downButton.style.color = 'red';
+        } else {
+          downButton.style.color = 'black';
+        }
+      }
+    });
+  }
+}
+
 async function renderVote(card, url, action) {
   const total = card.getElementsByClassName('total-votes')[0];
-  const jsonElem = await updateVote(url, action);
-  if (Object.keys(jsonElem).length !== 0) {
-    total.innerHTML = jsonElem.totalVotes;
+  const json = await updateVote(url, action);
+  if (Object.keys(json).length !== 0) {
+    total.innerHTML = json.totalvotes;
     const upButton = card.getElementsByClassName('upvote')[0];
     const downButton = card.getElementsByClassName('downvote')[0];
-    if (jsonElem.toggleUpvote === 'true') {
+    if (json.toggleUpvote === 'active') {
       upButton.style.color = 'green';
     } else {
       upButton.style.color = 'black';
     }
-    if (jsonElem.toggleDownvote === 'true') {
+    if (json.toggleDownvote === 'active') {
       downButton.style.color = 'red';
     } else {
       downButton.style.color = 'black';
     }
-  } else {
-    alert('You are not currently signed in. Please sign in to add feedback.');
   }
 }
 

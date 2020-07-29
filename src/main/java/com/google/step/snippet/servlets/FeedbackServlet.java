@@ -3,6 +3,7 @@ package com.google.step.snippet.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.users.UserService;
@@ -21,112 +22,162 @@ public class FeedbackServlet extends HttpServlet {
   private static final String UP = "upvote";
   private static final String DOWN = "downvote";
   private static final String TOTAL = "totalvotes";
-  private static final String UPVOTERS = "upvoters";
-  private static final String DOWNVOTERS = "downvoters";
+  private static final String UPVOTED = "upvoted";
+  private static final String DOWNVOTED = "downvoted";
   private static final String URL = "url";
   private static final String FEEDBACK = "feedback";
+  private static final String USER = "user";
+  private static final String UID = "uid";
+  private static final String EMAIL = "email";
+  private static final String TOG_UP = "toggleUpvote";
+  private static final String TOG_DOWN = "toggleDownvote";
+
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    JSONObject json = new JSONObject();
+    json.put(TOG_UP, "disabled");
+    json.put(TOG_DOWN, "disabled");
+
+    UserService userService = UserServiceFactory.getUserService();
+    if (userService.isUserLoggedIn()) {
+      String uid = userService.getCurrentUser().getUserId();
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      Query.FilterPredicate filterUser = new Query.FilterPredicate(UID, FilterOperator.EQUAL, uid);
+      Query queryUser = new Query(USER).setFilter(filterUser);
+      Entity userEntity = datastore.prepare(queryUser).asSingleEntity();
+      String url = request.getParameter(URL);
+
+      // If a user has voted previously, retrieve their past voting status
+      if (userEntity != null && url != null) {
+        ArrayList<String> userUpCards = (ArrayList<String>) userEntity.getProperty(UPVOTED);
+        ArrayList<String> userDownCards = (ArrayList<String>) userEntity.getProperty(DOWNVOTED);
+        if (userUpCards != null && userUpCards.contains(url)) {
+          json.put(TOG_UP, "active");
+        } else if (userDownCards != null && userDownCards.contains(url)) {
+          json.put(TOG_DOWN, "active");
+        }
+      }
+    }
+    response.setContentType("application/json");
+    response.getWriter().println(json);
+  }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    UserService userService = UserServiceFactory.getUserService();
-    if (!userService.isUserLoggedIn()) {
-      response.setContentType("application/json");
-      response.getWriter().println(new JSONObject());
-      return;
-    }
 
-    Entity feedbackEntity = null;
+    // Invalid url in POST request
     String url = request.getParameter(URL);
-
     if (url == null) {
       return;
     }
 
-    /* Query for card feedback by card URL */
+    // Query for feedback card entity
     Query.FilterPredicate filter = new Query.FilterPredicate(URL, FilterOperator.EQUAL, url);
     Query query = new Query(FEEDBACK).setFilter(filter);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    feedbackEntity = datastore.prepare(query).asSingleEntity();
+    Entity feedbackEntity = datastore.prepare(query).asSingleEntity();
 
+    // Initialize feedback entity if none exists in datastore
     if (feedbackEntity == null) {
       feedbackEntity = new Entity(FEEDBACK);
       feedbackEntity.setProperty(URL, url);
-      feedbackEntity.setProperty(UP, (long) 0);
-      feedbackEntity.setProperty(DOWN, (long) 0);
       feedbackEntity.setProperty(TOTAL, (long) 0);
-      feedbackEntity.setProperty(UPVOTERS, new ArrayList<String>());
-      feedbackEntity.setProperty(DOWNVOTERS, new ArrayList<String>());
     }
 
-    long upVotes = (long) feedbackEntity.getProperty(UP);
-    long downVotes = (long) feedbackEntity.getProperty(DOWN);
-    long totalVotes = (long) feedbackEntity.getProperty(TOTAL);
+    // Return unchanged total voate count
+    UserService userService = UserServiceFactory.getUserService();
+    if (!userService.isUserLoggedIn()) {
+      JSONObject json = new JSONObject();
+      response.setContentType("application/json");
+      response.getWriter().println(json);
+      return;
+    }
 
-    ArrayList<String> upvoters;
-    if (feedbackEntity.getProperty(UPVOTERS) == null) {
-      upvoters = new ArrayList<String>();
+    // Query for user info by user id
+    String uid = userService.getCurrentUser().getUserId();
+    Query.FilterPredicate filterUser = new Query.FilterPredicate(UID, FilterOperator.EQUAL, uid);
+    Query queryUser = new Query(USER).setFilter(filterUser);
+    Entity userEntity = datastore.prepare(queryUser).asSingleEntity();
+
+    // If the user does not exist, greate a new user entity
+    if (userEntity == null) {
+      userEntity = new Entity(USER);
+      userEntity.setProperty(UID, uid);
+      userEntity.setProperty(EMAIL, userService.getCurrentUser().getEmail());
+    }
+
+    // Get list of user's upvoted and downvoted cards
+    ArrayList<String> upCards;
+    if (userEntity.getProperty(UPVOTED) == null) {
+      upCards = new ArrayList<String>();
     } else {
-      upvoters = (ArrayList<String>) feedbackEntity.getProperty(UPVOTERS);
+      upCards = (ArrayList<String>) userEntity.getProperty(UPVOTED);
     }
-    ArrayList<String> downvoters;
-    if (feedbackEntity.getProperty(DOWNVOTERS) == null) {
-      downvoters = new ArrayList<String>();
+    ArrayList<String> downCards;
+    if (userEntity.getProperty(DOWNVOTED) == null) {
+      downCards = new ArrayList<String>();
     } else {
-      downvoters = (ArrayList<String>) feedbackEntity.getProperty(DOWNVOTERS);
+      downCards = (ArrayList<String>) userEntity.getProperty(DOWNVOTED);
     }
 
-    String USER_ID = userService.getCurrentUser().getUserId();
-    JSONObject json = new JSONObject();
-
+    // Add and remove card in user's list of upvoted and downvoted cards accordingly
     if (request.getParameter(UP) != null) {
-      if (!upvoters.contains(USER_ID)) {
-        upvoters.add(USER_ID);
-        feedbackEntity.setProperty(UPVOTERS, upvoters);
-        if (!downvoters.contains(USER_ID)) {
-          totalVotes += 1;
-        } else {
-          totalVotes += 2;
-          downvoters.remove(USER_ID);
-          feedbackEntity.setProperty(DOWN, downVotes - 1);
-          feedbackEntity.setProperty(DOWNVOTERS, downvoters);
+      if (!upCards.contains(url)) {
+        upCards.add(url);
+        if (downCards.contains(url)) {
+          downCards.remove(url);
         }
-        feedbackEntity.setProperty(UP, upVotes + 1);
-        json.put("toggleUpvote", "true");
       } else {
-        totalVotes -= 1;
-        upvoters.remove(USER_ID);
-        feedbackEntity.setProperty(UPVOTERS, upvoters);
-        feedbackEntity.setProperty(UP, upVotes - 1);
-        json.put("toggleUpvote", "false");
+        upCards.remove(url);
       }
-      feedbackEntity.setProperty(TOTAL, totalVotes);
-      json.put("toggleDownvote", "false");
     } else if (request.getParameter(DOWN) != null) {
-      if (!downvoters.contains(USER_ID)) {
-        downvoters.add(USER_ID);
-        feedbackEntity.setProperty(DOWNVOTERS, downvoters);
-        if (!upvoters.contains(USER_ID)) {
-          totalVotes -= 1;
-        } else {
-          totalVotes -= 2;
-          upvoters.remove(USER_ID);
-          feedbackEntity.setProperty(UP, upVotes - 1);
-          feedbackEntity.setProperty(UPVOTERS, upvoters);
+      if (!downCards.contains(url)) {
+        downCards.add(url);
+        if (upCards.contains(url)) {
+          upCards.remove(url);
         }
-        feedbackEntity.setProperty(DOWN, downVotes + 1);
-        json.put("toggleDownvote", "true");
       } else {
-        totalVotes += 1;
-        downvoters.remove(USER_ID);
-        feedbackEntity.setProperty(DOWNVOTERS, downvoters);
-        feedbackEntity.setProperty(DOWN, downVotes - 1);
-        json.put("toggleDownvote", "false");
+        downCards.remove(url);
       }
-      feedbackEntity.setProperty(TOTAL, totalVotes);
-      json.put("toggleUpvote", "false");
     }
+    userEntity.setProperty(UPVOTED, upCards);
+    userEntity.setProperty(DOWNVOTED, downCards);
+    datastore.put(userEntity);
+
+    // Get the toggle status of upvote and downvote buttons
+    String upVoteStatus = "disabled";
+    String downVoteStatus = "disabled";
+    if (userEntity.getProperty(UPVOTED) != null
+        && ((ArrayList<String>) userEntity.getProperty(UPVOTED)).contains(url)) {
+      upVoteStatus = "active";
+    }
+    if (userEntity.getProperty(DOWNVOTED) != null
+        && ((ArrayList<String>) userEntity.getProperty(DOWNVOTED)).contains(url)) {
+      downVoteStatus = "active";
+    }
+    JSONObject json = new JSONObject();
+    json.put(TOG_UP, upVoteStatus);
+    json.put(TOG_DOWN, downVoteStatus);
+
+    // Calculate the total votes per card
+    long totalUpvotes = 0;
+    long totalDownvotes = 0;
+    Query allUsers = new Query(USER);
+    PreparedQuery results = datastore.prepare(allUsers);
+    for (Entity entity : results.asIterable()) {
+      ArrayList<String> userUpCards = (ArrayList<String>) entity.getProperty(UPVOTED);
+      ArrayList<String> userDownCards = (ArrayList<String>) entity.getProperty(DOWNVOTED);
+      if (userUpCards != null && userUpCards.contains(url)) {
+        totalUpvotes++;
+      }
+      if (userDownCards != null && userDownCards.contains(url)) {
+        totalDownvotes++;
+      }
+    }
+    json.put(TOTAL, Long.toString(totalUpvotes - totalDownvotes));
+    feedbackEntity.setProperty(TOTAL, Long.toString(totalUpvotes - totalDownvotes));
     datastore.put(feedbackEntity);
-    json.put("totalVotes", Long.toString(totalVotes));
+
     response.setContentType("application/json");
     response.getWriter().println(json);
   }
