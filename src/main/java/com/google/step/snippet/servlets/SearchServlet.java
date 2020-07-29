@@ -35,6 +35,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -146,20 +147,22 @@ public class SearchServlet extends HttpServlet {
     } catch (InterruptedException | RejectedExecutionException e) {
       allCards = Collections.emptyList();
     }
+
     if (!preferredSite.isEmpty()) {
-      List<Card> sortedCards = allCards;
-      for (Card card : sortedCards) {
+      List<Card> sortedCards = new ArrayList<>(allCards);
+      for (int i = 0; i < sortedCards.size(); i++) {
+        Card card = sortedCards.get(i);
         if (card.getSource().toLowerCase().equals(preferredSite)) {
-          int index = allCards.indexOf(card);
-          if (index != 0) {
-            sortedCards.remove(index);
+          if (i != 0) {
+            sortedCards.remove(i);
             sortedCards.add(0, card);
             allCards = sortedCards;
-            break;
           }
+          break;
         }
       }
     }
+         
     request.setAttribute(CARD_LIST_LABEL, allCards);
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
