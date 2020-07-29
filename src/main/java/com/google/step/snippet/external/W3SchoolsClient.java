@@ -69,7 +69,6 @@ public class W3SchoolsClient extends Client {
     }
 
     String code = snippets.first().getElementsByClass(CODE_CLASS).text();
-
     if (containsEscape(query.toLowerCase())
         || containsEscape(w3Link)
         || containsEscape(title.toLowerCase())
