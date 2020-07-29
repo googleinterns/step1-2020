@@ -57,7 +57,17 @@ public class W3SchoolsClient extends Client {
       return null;
     }
     String title = Jsoup.clean(titles.first().text(), Whitelist.relaxed());
-    String description = Jsoup.clean(descriptions.first().text(), Whitelist.relaxed());
+    String description;
+    // If description for specific code example exists, use example description, otherwise use first
+    // page description.
+    if (!snippets.first().getElementsByTag(DESC_TAG).text().isEmpty()) {
+      description =
+          Jsoup.clean(
+              snippets.first().getElementsByTag(DESC_TAG).first().text(), Whitelist.relaxed());
+    } else {
+      description = Jsoup.clean(descriptions.first().text(), Whitelist.relaxed());
+    }
+
     String code = snippets.first().getElementsByClass(CODE_CLASS).text();
 
     if (containsEscape(query.toLowerCase())
