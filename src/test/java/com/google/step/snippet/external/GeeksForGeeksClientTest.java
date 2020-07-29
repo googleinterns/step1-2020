@@ -136,8 +136,8 @@ public final class GeeksForGeeksClientTest {
             "Errors in JavaScript can be displayed without the use of alert boxes but using the"
                 + " alert box is the traditional way to do that. We can show errors with two"
                 + " methods without using the alert box.",
-            "GeeksForGeeks",
             "0",
+            "GeeksForGeeks",
             "https://geeksforgeeks.org/favicon.ico");
     assertEquals(expected, actual);
   }
