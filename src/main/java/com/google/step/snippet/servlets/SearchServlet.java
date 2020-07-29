@@ -207,7 +207,8 @@ public class SearchServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Entity userPreferenceEntity = datastore.prepare(userQuery).asSingleEntity();
     String site = "";
-    if (userPreferenceEntity != null) {
+    if (userPreferenceEntity != null
+        && userPreferenceEntity.getProperty(WEBSITE_PARAMETER) != null) {
       site = (String) userPreferenceEntity.getProperty(WEBSITE_PARAMETER);
     }
     return site;
