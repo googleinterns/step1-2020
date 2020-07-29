@@ -11,7 +11,12 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class GeeksForGeeksClientTest {
 
-  private final GeeksForGeeksClient client = new GeeksForGeeksClient("CSE_ID");
+  private final GeeksForGeeksClient client =
+      new GeeksForGeeksClient("CSE_ID") {
+        public String getVotes(String url) {
+          return "0";
+        }
+      };
 
   @Test
   public void htmlCodeCard() {
@@ -35,6 +40,7 @@ public final class GeeksForGeeksClientTest {
             "You can&rsquo;t change the height of \n"
                 + "&lt;br&gt; tag as its not an HTML element, it is just an instruction which"
                 + " enforces a line break. br does not take up any space in the page.",
+            "0",
             "GeeksForGeeks",
             "https://geeksforgeeks.org/favicon.ico");
     assertEquals(expected, actual);
@@ -62,6 +68,7 @@ public final class GeeksForGeeksClientTest {
             "You can&rsquo;t change the height of \n"
                 + "&lt;br&gt; tag as its not an HTML element, it is just an instruction which"
                 + " enforces a line break. br does not take up any space in the page.",
+            "0",
             "GeeksForGeeks",
             "https://geeksforgeeks.org/favicon.ico");
     assertEquals(expected, actual);
@@ -101,6 +108,7 @@ public final class GeeksForGeeksClientTest {
             "Errors in JavaScript can be displayed without the use of alert boxes but using the"
                 + " alert box is the traditional way to do that. We can show errors with two"
                 + " methods without using the alert box.",
+            "0",
             "GeeksForGeeks",
             "https://geeksforgeeks.org/favicon.ico");
     assertEquals(expected, actual);
@@ -129,6 +137,7 @@ public final class GeeksForGeeksClientTest {
                 + " alert box is the traditional way to do that. We can show errors with two"
                 + " methods without using the alert box.",
             "GeeksForGeeks",
+            "0",
             "https://geeksforgeeks.org/favicon.ico");
     assertEquals(expected, actual);
   }
@@ -154,6 +163,7 @@ public final class GeeksForGeeksClientTest {
                 + " return 0; }",
             "https://www.geeksforgeeks.org/array-rotation/",
             "Write a function rotate(ar[], d, n) that rotates arr[] of size n by d elements.",
+            "0",
             "GeeksForGeeks",
             "https://geeksforgeeks.org/favicon.ico");
     assertEquals(expected, actual);
