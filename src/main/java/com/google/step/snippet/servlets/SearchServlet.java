@@ -151,10 +151,12 @@ public class SearchServlet extends HttpServlet {
       for (Card card : sortedCards) {
         if (card.getSource().toLowerCase().equals(preferredSite)) {
           int index = allCards.indexOf(card);
-          sortedCards.remove(index);
-          sortedCards.add(0, card);
-          allCards = sortedCards;
-          break;
+          if (index != 0) {
+            sortedCards.remove(index);
+            sortedCards.add(0, card);
+            allCards = sortedCards;
+            break;
+          }
         }
       }
     }
