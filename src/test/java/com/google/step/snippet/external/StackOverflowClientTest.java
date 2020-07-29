@@ -45,7 +45,6 @@ public final class StackOverflowClientTest {
     assertEquals("12912048", question_id);
   }
 
-  @Ignore
   @Test
   public void validAnswerIdTest() {
     // Valid question id.
@@ -62,7 +61,6 @@ public final class StackOverflowClientTest {
     assertNull(answer_id);
   }
 
-  @Ignore
   @Test
   public void validTitleTest() {
     // Valid question id.
@@ -79,7 +77,6 @@ public final class StackOverflowClientTest {
     assertNull(title);
   }
 
-  @Ignore
   @Test
   public void validAnswerBodyTest() {
     // Valid answer id.
@@ -116,7 +113,6 @@ public final class StackOverflowClientTest {
     assertNull(actual);
   }
 
-  @Ignore
   @Test
   public void validSearchTest() {
     Card actual =
