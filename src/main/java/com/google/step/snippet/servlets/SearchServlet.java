@@ -158,10 +158,12 @@ public class SearchServlet extends HttpServlet {
       for (Card card : sortedCards) {
         if (card.getSource().toLowerCase().equals(preferredSite)) {
           int index = allCards.indexOf(card);
-          sortedCards.remove(index);
-          sortedCards.add(0, card);
-          allCards = sortedCards;
-          break;
+          if (index != 0) {
+            sortedCards.remove(index);
+            sortedCards.add(0, card);
+            allCards = sortedCards;
+            break;
+          }
         }
       }
     }
@@ -212,7 +214,8 @@ public class SearchServlet extends HttpServlet {
     Query userQuery = new Query(USER_PARAMETER).setFilter(filterId);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Entity userPreferenceEntity = datastore.prepare(userQuery).asSingleEntity();
-    if (userPreferenceEntity != null) {
+    if (userPreferenceEntity != null
+        && userPreferenceEntity.getProperty(WEBSITE_PARAMETER) != null) {
       result[0] = (String) userPreferenceEntity.getProperty(WEBSITE_PARAMETER);
       result[1] = (String) userPreferenceEntity.getProperty(LANGUAGE_PARAMETER);
     }
