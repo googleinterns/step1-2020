@@ -14,6 +14,6 @@ public abstract class Client {
   public abstract String getCseId();
 
   protected String getVotes(String url) {
-   return "0";
+    return "0";
   }
 }
