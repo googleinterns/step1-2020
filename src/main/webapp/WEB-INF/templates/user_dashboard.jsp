@@ -19,12 +19,14 @@
             <div class="column websites">
                 <label for="input-websites">Choose your preferred website:</label>
                 <select class="input-websites" id="input-websites" name="website">
-                    <c:if test="${user.getWebsite() == null}">
-                        <option value="" selected disabled hidden>Select</option>
-                    </c:if>
-                    <c:if test="${user.getWebsite() != null}">
-                        <option value="${user.getWebsite()}" selected hidden>${user.getWebsite()}</option>
-                    </c:if>
+                    <c:choose>
+                        <c:when test="${user.getWebsite() != null}">
+                            <option value="${user.getWebsite()}" selected hidden>${user.getWebsite()}</option>
+                        </c:when>
+                        <c:otherwise>
+                            <option value="" selected disabled hidden>Select</option>
+                        </c:otherwise>
+                    </c:choose>
                     <option value="GeeksForGeeks">GeeksForGeeks</option>
                     <option value="StackOverflow">StackOverflow</option>
                     <option value="W3Schools">W3Schools</option>
@@ -32,14 +34,15 @@
             </div>
             <div id="languages" class="column">
                 <label for="input-languages">Choose your primary coding language:</label>
-
                 <input class="input-languages" id="input-languages" type="text" name="language"
-                <c:if test="${user.getLanguage() != null}">
-                       value="${user.getLanguage()}"
-                </c:if>
-                <c:if test="${user.getLanguage() == null || user.getLanguage().length() == 0}">
-                       placeholder="Input a coding language"
-                </c:if>
+                    <c:choose>
+                        <c:when test="${user.getLanguage() != null}">
+                            value="${user.getLanguage()}"
+                        </c:when>
+                        <c:otherwise>
+                            placeholder="Input a coding language"
+                        </c:otherwise>
+                    </c:choose>
                 >
                 <script>autocomplete(document.getElementById('input-languages'), languages);</script>
             </div>
