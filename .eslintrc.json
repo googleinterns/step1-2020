@@ -9,7 +9,6 @@
   },
   "rules": {
     "require-jsdoc": "off",
-    "valid-jsdoc": "off",
-    "no-unused-vars": "off"
+    "valid-jsdoc": "off"
   }
 }

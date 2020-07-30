@@ -4,13 +4,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>User Dashboard</title>
-    <script src="data/languages.js"></script>
-    <script src="js/user.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/user_style.css">
+  <div class="heading">
+    <a class="logo" href="/">
+      <h1>
+        <span class="blue">S</span><span class="red">n</span><span class="yellow">i</span><span
+          class="blue">p</span><span class="green">p</span><span class="red">e</span><span
+          class="yellow">t</span>
+      </h1>
+    </a>
+  </div>
+  <meta charset="utf-8">
+  <title>User Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/user_style.css">
 </head>
 <body>
     <a class="home-button" href="/">Home</a>
@@ -44,7 +50,6 @@
                         </c:otherwise>
                     </c:choose>
                 >
-                <script>autocomplete(document.getElementById('input-languages'), languages);</script>
             </div>
             <input class="setting-submit" type="submit" value="Submit">
         </form>
