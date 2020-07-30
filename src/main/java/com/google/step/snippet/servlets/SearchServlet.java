@@ -149,14 +149,12 @@ public class SearchServlet extends HttpServlet {
     }
 
     if (!preferredSite.isEmpty()) {
-      List<Card> sortedCards = new ArrayList<>(allCards);
-      for (int i = 0; i < sortedCards.size(); i++) {
-        Card card = sortedCards.get(i);
+      for (int i = 0; i < allCards.size(); i++) {
+        Card card = allCards.get(i);
         if (card.getSource().toLowerCase().equals(preferredSite)) {
           if (i != 0) {
-            sortedCards.remove(i);
-            sortedCards.add(0, card);
-            allCards = sortedCards;
+            allCards.remove(i);
+            allCards.add(0, card);
           }
           break;
         }
