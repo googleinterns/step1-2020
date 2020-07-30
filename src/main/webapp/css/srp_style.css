@@ -45,7 +45,26 @@ h1 {
   display: flex;
 }
 
-.content {
+.vote {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 20px;
+  margin: 24px 14px;
+}
+
+.vote button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.icon {
+  margin-right: 5px;
+  vertical-align: bottom;
+}
+
+.card .content {
   overflow: scroll;
   overflow: overlay;
   padding: 24px 24px 24px 0px;
@@ -96,23 +115,4 @@ pre::-webkit-scrollbar {
   width: 5px;
   height: 5px;
   background: #FAFAFA;  
-}
-
-.icon {
-  margin-right: 5px;
-  vertical-align: bottom;
-}
-
-.vote {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 20px;
-  margin: 24px 14px;
-}
-
-.vote button {
-  cursor: pointer;
-  background: none;
-  border: none;
 }
