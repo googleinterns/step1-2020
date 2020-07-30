@@ -15,7 +15,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 function initVote(cards) {
   for (const card of cards) {
-    const url = card.getAttribute('url');
+    const url = card.dataset.url;
     fetch('/vote?url=' + url).then((res) => res.json()).then((json) => {
       toggleButtons(card, json);
     });
@@ -23,7 +23,7 @@ function initVote(cards) {
 }
 
 async function renderVote(card, action) {
-  const url = card.getAttribute('url');
+  const url = card.dataset.url;
   const json = await updateVote(url, action);
   toggleButtons(card, json);
 }
