@@ -48,7 +48,7 @@ h1 {
 .content {
   overflow: scroll;
   overflow: overlay;
-  padding: 20px 20px 20px 0px;
+  padding: 24px 24px 24px 0px;
   font-size: 16px;
   scrollbar-color: grey #FAFAFA;
 }
@@ -108,7 +108,7 @@ pre::-webkit-scrollbar {
   flex-direction: column;
   align-items: center;
   width: 20px;
-  margin: 20px 12px;
+  margin: 24px 14px;
 }
 
 .vote button {
