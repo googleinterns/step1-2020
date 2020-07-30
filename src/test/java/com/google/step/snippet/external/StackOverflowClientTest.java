@@ -123,7 +123,6 @@ public final class StackOverflowClientTest {
             "Custom dropdown to page size on ReactTable",
             null,
             "https://stackoverflow.com/questions/63057965/custom-dropdown-to-page-size-on-reacttable",
-
             "<p>I found the solution and was add in the properties this line</p> \n"
                 + "<pre><code>pageSizeOptions= {[10, 15, 20]}\n</code></pre>",
             0,
