@@ -36,33 +36,71 @@ h1 {
 }
 
 .card {
-  margin-bottom: 20px;
-  padding: 24px 24px 24px 14px;
+  margin: 20px 0px;
+  padding: 20px 20px 20px 14px;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
   transition: box-shadow .25s;
   border-radius: 2px;
   width: 400px;
+  max-height: 260px;
   display: flex;
 }
 
-.card .content .card-title {
-  font: 300 20px Roboto, Arial, sans-serif;
+.content {
+  overflow: scroll;
+  overflow: overlay;
+  font-size: 16px;
+  scrollbar-color: grey #FAFAFA;
 }
 
-.card .content .card-description {
-  font: bold 16px Roboto, Arial, sans-serif;
-  margin-top: 20px;
+.card .content::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #FAFAFA;
+}
+
+.card .content::-webkit-scrollbar-thumb, pre::-webkit-scrollbar-thumb {
+  background: lightgrey;
+  border-radius: 10px;
+}
+
+.card .content::-webkit-scrollbar-thumb:hover, pre::-webkit-scrollbar-thumb:hover {
+  background: grey;
+}
+
+.card .content .card-title {
+  font-size: 20px;
+  font-weight: 300;
 }
 
 .card .content code {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin: 10px 5px;
   display: block;
+  font: 12px "Lucida Console", Courier, monospace;
 }
 
 .card .content p {
-  margin-top: 0;
+  font-size: 14px;
   display: block;
+}
+
+pre {
+  background: #EFF0F1;
+  border-radius: 2px;
+  overflow: scroll;
+  scrollbar-color: grey #FAFAFA;
+  scrollbar-width: thin;
+}
+
+pre::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  background: #FAFAFA;  
+}
+
+.icon {
+  margin-right: 5px;
+  vertical-align: bottom;
 }
 
 .vote {
@@ -81,9 +119,4 @@ h1 {
 
 .total-votes {
   font-size: 15px;
-}
-
-.icon {
-  margin-right: 5px;
-  vertical-align: bottom;
 }
