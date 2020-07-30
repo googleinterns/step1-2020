@@ -154,8 +154,7 @@ public final class StackOverflowClient implements Client {
       JSONObject obj = items.getJSONObject(0);
       if (obj.has(fieldParam)) {
         String result = obj.get(fieldParam).toString();
-        result = Jsoup.clean(result, Whitelist.relaxed());
-        return result;
+        return Jsoup.clean(result, Whitelist.relaxed());
       }
     }
     return null;
