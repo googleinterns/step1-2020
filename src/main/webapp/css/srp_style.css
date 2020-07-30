@@ -64,7 +64,8 @@ h1 {
 }
 
 .card .card-title {
-  font: 300 20px Roboto, Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 300;
 }
 
 .card code {
