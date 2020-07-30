@@ -1,3 +1,7 @@
+window.addEventListener('DOMContentLoaded', (event) => {
+  autocomplete(document.getElementById('input-languages'), languages);
+});
+
 function autocomplete(input, languages) {
   let currentFocus;
   input.addEventListener('input', function(e) {
