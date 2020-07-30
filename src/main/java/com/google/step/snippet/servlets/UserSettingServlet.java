@@ -38,13 +38,11 @@ public class UserSettingServlet extends HttpServlet {
   private static final String EMAIL_PARAMETER = "email";
   private static final String USER_CLASS_PARAMETER = "UserInfo";
   private static final String USER_PARAMETER = "user";
-  private String referer = "";
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     UserService userService = UserServiceFactory.getUserService();
-    // Forward the request to the template (which is a servlet itself).
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     String id = userService.getCurrentUser().getUserId();
     String email = userService.getCurrentUser().getEmail();
@@ -52,20 +50,15 @@ public class UserSettingServlet extends HttpServlet {
         new Query.FilterPredicate(ID_PARAMETER, FilterOperator.EQUAL, id);
     Query queryUser = new Query(USER_CLASS_PARAMETER).setFilter(filterUser);
     Entity userEntity = datastore.prepare(queryUser).asSingleEntity();
-    String website;
-    String language;
-    if (userEntity == null) {
-      website = null;
-      language = null;
-    } else {
+    String website = null;
+    String language = null;
+    if (userEntity != null) {
       website = (String) userEntity.getProperty(WEBSITE_PARAMETER);
       language = (String) userEntity.getProperty(LANGUAGE_PARAMETER);
     }
-
-    User u = new User(id, email, website, language);
-    request.setAttribute(USER_PARAMETER, u);
+    User user = new User(id, email, website, language);
+    request.setAttribute(USER_PARAMETER, user);
     request.getRequestDispatcher("WEB-INF/templates/user_dashboard.jsp").forward(request, response);
-    referer = request.getHeader("referer");
   }
 
   @Override
@@ -93,6 +86,6 @@ public class UserSettingServlet extends HttpServlet {
     userEntity.setProperty(WEBSITE_PARAMETER, website);
     userEntity.setProperty(LANGUAGE_PARAMETER, language);
     datastore.put(userEntity);
-    response.sendRedirect(referer);
+    response.sendRedirect("/user");
   }
 }

@@ -81,3 +81,9 @@ input[type=submit] {
 .websites {
     vertical-align: top;
 }
+
+.home-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
