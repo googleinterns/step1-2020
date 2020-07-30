@@ -72,7 +72,7 @@ public class StackOverflowClient extends Client {
     }
     // Code is intentionally set to null for StackOverflow
     // to avoid displaying code snippet without context.
-    String votes = getVotes(stackLink);
+    long votes = getVotes(stackLink);
     return new Card(
         title, /* code = */ null, stackLink, description, votes, SOURCE_NAME, ICON_LINK);
   }

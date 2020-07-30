@@ -8,7 +8,7 @@
     <t:head/>
     <link href="css/srp_style.css" rel="stylesheet">
     <title>Snippet</title>
-    <script type="text/javascript" src="${pageContext.request.contextPath}js/script.js"></script>
+    <script src="js/script.js"></script>
     <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
   </head>
   <body>

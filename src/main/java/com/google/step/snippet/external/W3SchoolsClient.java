@@ -79,7 +79,7 @@ public class W3SchoolsClient extends Client {
     } else {
       code = Jsoup.clean(code, Whitelist.relaxed());
     }
-    String votes = getVotes(w3Link);
+    long votes = getVotes(w3Link);
     return new Card(title, code, w3Link, description, votes, SOURCE_NAME, ICON_LINK);
   }
 

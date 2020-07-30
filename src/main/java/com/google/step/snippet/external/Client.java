@@ -8,8 +8,8 @@ public abstract class Client {
 
   public abstract String getCseId();
 
-  protected String getVotes(String url) {
+  protected long getVotes(String url) {
     // TODO: Add vote retrieval from datastore
-    return "0";
+    return 0;
   }
 }

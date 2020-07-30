@@ -10,12 +10,7 @@ import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public final class StackOverflowClientTest {
-  private final StackOverflowClient client =
-      new StackOverflowClient("CSE_ID") {
-        public String getVotes(String url) {
-          return "0";
-        }
-      };
+  private final StackOverflowClient client = new StackOverflowClient("CSE_ID");
 
   @Test
   public void noQuestionIdTest() {
@@ -130,7 +125,7 @@ public final class StackOverflowClientTest {
             "https://stackoverflow.com/questions/63057965/custom-dropdown-to-page-size-on-reacttable",
             "<p>I found the solution and was add in the properties this line</p>\n"
                 + "<pre><code>pageSizeOptions= {[10, 15, 20]}\n</code></pre>\n",
-            "0",
+            0,
             "StackOverflow",
             "https://stackoverflow.com/favicon.ico");
     assertEquals(expected, actual);
