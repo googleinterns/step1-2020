@@ -24,15 +24,13 @@ public class FeedbackServlet extends HttpServlet {
   private static final String TOTAL = "totalvotes";
   private static final String UPVOTED = "upvoted";
   private static final String DOWNVOTED = "downvoted";
+  private static final String NONE = "none";
   private static final String URL = "url";
   private static final String FEEDBACK = "feedback";
   private static final String USER = "UserInfo";
   private static final String ID = "id";
   private static final String EMAIL = "email";
-  private static final String ACTIVE = "active";
-  private static final String DISABLED = "disabled";
-  private static final String TOGGLE_UP = "toggleUpvote";
-  private static final String TOGGLE_DOWN = "toggleDownvote";
+  private static final String STATUS = "status";
 
   private Entity getUserEntity(DatastoreService datastore, UserService userService) {
     String id = userService.getCurrentUser().getUserId();
@@ -62,9 +60,9 @@ public class FeedbackServlet extends HttpServlet {
         ArrayList<String> userUpCards = (ArrayList<String>) userEntity.getProperty(UPVOTED);
         ArrayList<String> userDownCards = (ArrayList<String>) userEntity.getProperty(DOWNVOTED);
         if (userUpCards != null && userUpCards.contains(url)) {
-          json.put(TOGGLE_UP, ACTIVE);
+          json.put(STATUS, UPVOTED);
         } else if (userDownCards != null && userDownCards.contains(url)) {
-          json.put(TOGGLE_DOWN, ACTIVE);
+          json.put(STATUS, UPVOTED);
         }
       }
     }
@@ -80,6 +78,7 @@ public class FeedbackServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     if (url == null || !userService.isUserLoggedIn()) {
       JSONObject json = new JSONObject();
+      json.put(STATUS, NONE);
       response.setContentType("application/json");
       response.getWriter().println(json);
       return;
@@ -127,15 +126,14 @@ public class FeedbackServlet extends HttpServlet {
     datastore.put(userEntity);
 
     // Retrieve toggle status of upvote and downvote buttons for user
-    String upVoteStatus = DISABLED;
-    String downVoteStatus = DISABLED;
+    String status = NONE;
     if (userEntity.getProperty(UPVOTED) != null
         && ((ArrayList<String>) userEntity.getProperty(UPVOTED)).contains(url)) {
-      upVoteStatus = ACTIVE;
+      status = UPVOTED;
     }
     if (userEntity.getProperty(DOWNVOTED) != null
         && ((ArrayList<String>) userEntity.getProperty(DOWNVOTED)).contains(url)) {
-      downVoteStatus = ACTIVE;
+      status = DOWNVOTED;
     }
 
     // Calculate the total votes per card
@@ -168,8 +166,7 @@ public class FeedbackServlet extends HttpServlet {
 
     // Construct json response with toggle status and total vote count
     JSONObject json = new JSONObject();
-    json.put(TOGGLE_UP, upVoteStatus);
-    json.put(TOGGLE_DOWN, downVoteStatus);
+    json.put(STATUS, status);
     json.put(TOTAL, totalUpvotes - totalDownvotes);
     response.setContentType("application/json");
     response.getWriter().println(json);
