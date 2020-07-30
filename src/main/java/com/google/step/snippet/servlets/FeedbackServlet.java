@@ -26,11 +26,11 @@ public class FeedbackServlet extends HttpServlet {
   private static final String DOWNVOTED = "downvoted";
   private static final String NONE = "none";
   private static final String URL = "url";
-  private static final String FEEDBACK = "feedback";
-  private static final String USER = "UserInfo";
   private static final String ID = "id";
   private static final String EMAIL = "email";
   private static final String STATUS = "status";
+  private static final String FEEDBACK = "Feedback";
+  private static final String USER = "UserInfo";
 
   private Entity getUserEntity(DatastoreService datastore, UserService userService) {
     String id = userService.getCurrentUser().getUserId();
