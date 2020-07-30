@@ -9,8 +9,8 @@
     <script src="data/languages.js"></script>
     <script src="js/user.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <link rel="stylesheet" type="text/css" href="/css/user_style.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/user_style.css">
 </head>
 <body>
     <a class="home-button" href="/">Home</a>
