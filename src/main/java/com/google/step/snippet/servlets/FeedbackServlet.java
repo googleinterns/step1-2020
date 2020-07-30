@@ -26,22 +26,22 @@ public class FeedbackServlet extends HttpServlet {
   private static final String DOWNVOTED = "downvoted";
   private static final String URL = "url";
   private static final String FEEDBACK = "feedback";
-  private static final String USER = "user";
-  private static final String UID = "uid";
+  private static final String USER = "UserInfo";
+  private static final String ID = "id";
   private static final String EMAIL = "email";
   private static final String ACTIVE = "active";
   private static final String DISABLED = "disabled";
-  private static final String TOG_UP = "toggleUpvote";
-  private static final String TOG_DOWN = "toggleDownvote";
+  private static final String TOGGLE_UP = "toggleUpvote";
+  private static final String TOGGLE_DOWN = "toggleDownvote";
 
   private Entity getUserEntity(DatastoreService datastore, UserService userService) {
-    String uid = userService.getCurrentUser().getUserId();
-    Query.FilterPredicate filterUser = new Query.FilterPredicate(UID, FilterOperator.EQUAL, uid);
+    String id = userService.getCurrentUser().getUserId();
+    Query.FilterPredicate filterUser = new Query.FilterPredicate(ID, FilterOperator.EQUAL, id);
     Query queryUser = new Query(USER).setFilter(filterUser);
     Entity userEntity = datastore.prepare(queryUser).asSingleEntity();
     if (userEntity == null) {
       userEntity = new Entity(USER);
-      userEntity.setProperty(UID, uid);
+      userEntity.setProperty(ID, id);
       userEntity.setProperty(EMAIL, userService.getCurrentUser().getEmail());
     }
     return userEntity;
@@ -62,9 +62,9 @@ public class FeedbackServlet extends HttpServlet {
         ArrayList<String> userUpCards = (ArrayList<String>) userEntity.getProperty(UPVOTED);
         ArrayList<String> userDownCards = (ArrayList<String>) userEntity.getProperty(DOWNVOTED);
         if (userUpCards != null && userUpCards.contains(url)) {
-          json.put(TOG_UP, ACTIVE);
+          json.put(TOGGLE_UP, ACTIVE);
         } else if (userDownCards != null && userDownCards.contains(url)) {
-          json.put(TOG_DOWN, ACTIVE);
+          json.put(TOGGLE_DOWN, ACTIVE);
         }
       }
     }
@@ -168,8 +168,8 @@ public class FeedbackServlet extends HttpServlet {
 
     // Construct json response with toggle status and total vote count
     JSONObject json = new JSONObject();
-    json.put(TOG_UP, upVoteStatus);
-    json.put(TOG_DOWN, downVoteStatus);
+    json.put(TOGGLE_UP, upVoteStatus);
+    json.put(TOGGLE_DOWN, downVoteStatus);
     json.put(TOTAL, totalUpvotes - totalDownvotes);
     response.setContentType("application/json");
     response.getWriter().println(json);
