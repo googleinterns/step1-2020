@@ -14,6 +14,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
 public class StackOverflowClient extends Client {
   private static final String SEARCH_URL_TEMPLATE =
@@ -153,7 +155,8 @@ public class StackOverflowClient extends Client {
       JSONArray items = json.getJSONArray(ITEM_PARAMETER);
       JSONObject obj = items.getJSONObject(0);
       if (obj.has(fieldParam)) {
-        return obj.get(fieldParam).toString();
+        String result = obj.get(fieldParam).toString();
+        return Jsoup.clean(result, Whitelist.relaxed());
       }
     }
     return null;
