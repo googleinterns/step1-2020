@@ -36,6 +36,7 @@
                placeholder="Input your primary coding language">
       </div>
       <input class="setting-submit" type="submit" value="Submit">
+      <script>autocomplete(document.getElementById('input-languages'), languages);</script>
     </form>
 </body>
 </html>
