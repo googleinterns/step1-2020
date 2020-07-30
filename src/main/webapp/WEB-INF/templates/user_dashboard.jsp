@@ -19,14 +19,12 @@
             <div class="column websites">
                 <label for="input-websites">Choose your preferred website:</label>
                 <select class="input-websites" id="input-websites" name="website">
-                    <option value="none" selected disabled hidden>
-                        <c:if test="${user.getWebsite() != null}">
-                            ${user.getWebsite()}
-                        </c:if>
-                        <c:if test="${user.getWebsite() == null}">
-                            Select
-                        </c:if>
-                    </option>
+                    <c:if test="${user.getWebsite() == null}">
+                        <option value="" selected disabled hidden>Select</option>
+                    </c:if>
+                    <c:if test="${user.getWebsite() != null}">
+                        <option value="${user.getWebsite()}" selected hidden>${user.getWebsite()}</option>
+                    </c:if>
                     <option value="GeeksForGeeks">GeeksForGeeks</option>
                     <option value="StackOverflow">StackOverflow</option>
                     <option value="W3Schools">W3Schools</option>
