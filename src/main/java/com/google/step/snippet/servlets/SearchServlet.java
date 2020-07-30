@@ -125,7 +125,7 @@ public class SearchServlet extends HttpServlet {
                         () -> {
                           String link = getLink(client.getCseId(), query);
                           if (link != null) {
-                            return client.search(link);
+                            return client.search(link, query);
                           }
                           return null;
                         }))
