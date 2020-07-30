@@ -47,15 +47,14 @@ function toggleButtons(card, json) {
     }
     const up = card.getElementsByClassName('upvote')[0];
     const down = card.getElementsByClassName('downvote')[0];
+    up.style.color = 'black';
+    down.style.color = 'black';
     if (json.status === 'upvoted') {
       up.style.color = 'green';
       down.style.color = 'black';
     } else if (json.status === 'downvoted') {
       up.style.color = 'black';
       down.style.color = 'red';
-    } else if (json.status === 'none') {
-      up.style.color = 'black';
-      down.style.color = 'black';
     }
   }
 }
