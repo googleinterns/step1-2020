@@ -43,7 +43,7 @@ function toggleButtons(card, json) {
   const total = card.getElementsByClassName('total-votes')[0];
   if (Object.keys(json).length !== 0) {
     if (json.totalvotes != null) {
-      total.innerHTML = json.totalvotes;
+      total.innerText = json.totalvotes;
     }
     const up = card.getElementsByClassName('upvote')[0];
     const down = card.getElementsByClassName('downvote')[0];
