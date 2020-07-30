@@ -163,14 +163,14 @@ public class FeedbackServlet extends HttpServlet {
       feedbackEntity.setProperty(URL, url);
       feedbackEntity.setProperty(TOTAL, (long) 0);
     }
-    feedbackEntity.setProperty(TOTAL, Long.toString(totalUpvotes - totalDownvotes));
+    feedbackEntity.setProperty(TOTAL, totalUpvotes - totalDownvotes);
     datastore.put(feedbackEntity);
 
     // Construct json response with toggle status and total vote count
     JSONObject json = new JSONObject();
     json.put(TOG_UP, upVoteStatus);
     json.put(TOG_DOWN, downVoteStatus);
-    json.put(TOTAL, Long.toString(totalUpvotes - totalDownvotes));
+    json.put(TOTAL, totalUpvotes - totalDownvotes);
     response.setContentType("application/json");
     response.getWriter().println(json);
   }

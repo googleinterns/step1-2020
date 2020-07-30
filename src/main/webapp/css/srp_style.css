@@ -66,20 +66,21 @@ h1 {
 }
 
 .vote {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 20px;
   margin-right: 10px;
-  text-align: center;
 }
 
 .vote button {
+  cursor: pointer;
   background: none;
   border: none;
-  outline: none;
 }
 
 .total-votes {
-  padding: 1px 6px;
-  font-size: small;
+  font-size: 15px;
 }
 
 .icon {

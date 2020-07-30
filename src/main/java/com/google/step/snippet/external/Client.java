@@ -17,15 +17,15 @@ public abstract class Client {
 
   public abstract String getCseId();
 
-  protected String getVotes(String url) {
+  protected long getVotes(String url) {
     Query.FilterPredicate filter = new Query.FilterPredicate(URL, FilterOperator.EQUAL, url);
     Query query = new Query(FEEDBACK).setFilter(filter);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Entity feedback = datastore.prepare(query).asSingleEntity();
     if (feedback != null) {
-      return (String) feedback.getProperty(TOTAL);
+      return (long) feedback.getProperty(TOTAL);
     } else {
-      return "0";
+      return 0;
     }
   }
 }

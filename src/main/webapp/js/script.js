@@ -28,6 +28,17 @@ async function renderVote(card, action) {
   toggleButtons(card, json);
 }
 
+async function updateVote(url, action) {
+  const response = await fetch('/vote', {
+    method: 'POST',
+    body: 'url=' + url + '&' + action,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  });
+  return response.json();
+}
+
 function toggleButtons(card, json) {
   const total = card.getElementsByClassName('total-votes')[0];
   if (Object.keys(json).length !== 0) {
@@ -49,13 +60,3 @@ function toggleButtons(card, json) {
   }
 }
 
-async function updateVote(url, action) {
-  const response = await fetch('/vote', {
-    method: 'POST',
-    body: 'url=' + url + '&' + action,
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-  });
-  return response.json();
-}

@@ -10,7 +10,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
-public final class GeeksForGeeksClient extends Client {
+public class GeeksForGeeksClient extends Client {
   private static final String TITLE_TAG = "h1";
   private static final String DESC_TAG = "p";
   private static final String SNIPPET_CLASS = "code-block";
@@ -69,7 +69,7 @@ public final class GeeksForGeeksClient extends Client {
     } else {
       code = Jsoup.clean(code, Whitelist.relaxed());
     }
-    String votes = getVotes(geeksLink);
+    long votes = getVotes(geeksLink);
     return new Card(title, code, geeksLink, description, votes, SOURCE_NAME, ICON_LINK);
   }
 

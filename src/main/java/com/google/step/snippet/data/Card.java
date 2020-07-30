@@ -6,7 +6,7 @@ public final class Card {
   private final String link;
   private final String description;
   private final String source;
-  private final String votes;
+  private final long votes;
   private final String icon;
 
   public Card(
@@ -14,7 +14,7 @@ public final class Card {
       String code,
       String link,
       String description,
-      String votes,
+      long votes,
       String source,
       String icon) {
     this.title = title;
@@ -42,7 +42,7 @@ public final class Card {
     return description;
   }
 
-  public String getVotes() {
+  public long getVotes() {
     return votes;
   }
 
@@ -71,7 +71,7 @@ public final class Card {
         && ((this.code == null && other.code == null) || this.code.equals(other.code))
         && this.link.equals(other.link)
         && this.description.equals(other.description)
-        && this.votes.equals(other.votes)
+        && this.votes == other.votes
         && this.source.equals(other.source)
         && this.icon.equals(other.icon);
   }
