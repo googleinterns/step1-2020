@@ -7,7 +7,7 @@
     </h1>
   </a>
   <div class="searchbox">
-    <div class="gcse-searchbox-only" data-resultsUrl="/search"></div>
+    <div class="gcse-searchbox-only" enableAutoComplete="true" data-resultsUrl="/search"></div>
   </div>
   <div class="spacing"></div>
   <c:if test="${authLabel == 'Logout'}">

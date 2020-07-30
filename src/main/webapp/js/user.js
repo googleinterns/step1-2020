@@ -32,46 +32,54 @@ function autocomplete(input, languages) {
   });
   /* Execute a function presses a key on the keyboard */
   input.addEventListener('keydown', function(e) {
-    let x = document.getElementById(this.id + 'autocomplete-list');
-    if (x) {
-      x = x.getElementsByTagName('div');
+    let newItem = document.getElementById(this.id + 'autocomplete-list');
+    if (newItem) {
+      newItem = newItem.getElementsByTagName('div');
     }
     if (e.keyCode == 40) {
       // If DOWN key is pressed.
       currentFocus++;
-      addActive(x);
+      addActive(newItem);
     } else if (e.keyCode == 38) {
       // If UP key is pressed.
       currentFocus--;
-      addActive(x);
+      addActive(newItem);
     } else if (e.keyCode == 13) {
       // If ENTER key is pressed.
       e.preventDefault();
       if (currentFocus > -1) {
-        if (x) x[currentFocus].click();
+        if (newItem) {
+          newItem[currentFocus].click();
+        }
       }
     }
   });
 
-  function addActive(x) {
-    if (!x) return false;
-    removeActive(x);
-    if (currentFocus >= x.length) currentFocus = 0;
-    if (currentFocus < 0) currentFocus = (x.length - 1);
-    x[currentFocus].classList.add('autocomplete-active');
+  function addActive(items) {
+    if (!items) {
+      return false;
+    }
+    removeActive(items);
+    if (currentFocus >= items.length) {
+      currentFocus = 0;
+    }
+    if (currentFocus < 0) {
+      currentFocus = (items.length - 1);
+    }
+    items[currentFocus].classList.add('autocomplete-active');
   }
 
-  function removeActive(x) {
-    for (let i = 0; i < x.length; i++) {
-      x[i].classList.remove('autocomplete-active');
+  function removeActive(items) {
+    for (let i = 0; i < items.length; i++) {
+      items[i].classList.remove('autocomplete-active');
     }
   }
 
   function closeAllLists(elmnt) {
-    const x = document.getElementsByClassName('autocomplete-items');
-    for (let i = 0; i < x.length; i++) {
-      if (elmnt != x[i] && elmnt != input) {
-        x[i].parentNode.removeChild(x[i]);
+    const items = document.getElementsByClassName('autocomplete-items');
+    for (let i = 0; i < items.length; i++) {
+      if (elmnt != items[i] && elmnt != input) {
+        items[i].parentNode.removeChild(items[i]);
       }
     }
   }
