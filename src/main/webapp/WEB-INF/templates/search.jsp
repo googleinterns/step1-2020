@@ -36,10 +36,9 @@
                   ${knowledgeCard.getTitle()}
                 </a>
               </header>
-              <c:if test="${knowledgeCard.getCode() != null}">
-                <code>${knowledgeCard.getCode()}</code>
+              <c:if test="${knowledgeCard.getCode() != null}">	
+                <pre><code>${knowledgeCard.getCode()}</code></pre>
               </c:if>
-              <div class="card-description">Description:</div>
               <p>${knowledgeCard.getDescription()}</p>
             </div>
           </div>
