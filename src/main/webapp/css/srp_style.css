@@ -74,6 +74,7 @@ h1 {
 }
 
 .vote button {
+  cursor: pointer;
   background: none;
   border: none;
 }
