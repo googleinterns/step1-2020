@@ -15,8 +15,6 @@
   </div>
   <meta charset="utf-8">
   <title>User Dashboard</title>
-  <script src="data/languages.js"></script>
-  <script src="js/user.js"></script>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/user_style.css">
 </head>
@@ -36,7 +34,6 @@
                placeholder="Input your primary coding language">
       </div>
       <input class="setting-submit" type="submit" value="Submit">
-      <script>autocomplete(document.getElementById('input-languages'), languages);</script>
     </form>
 </body>
 </html>
