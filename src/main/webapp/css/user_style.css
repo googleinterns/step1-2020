@@ -1,7 +1,7 @@
 .main {
     text-align: center;
     padding: 0px 10px;
-    font-family: sans-serif;
+    font-family: Roboto, Arial, sans-serif;
 }
 
 .column {
@@ -19,6 +19,7 @@ input {
     background-color: #f1f1f1;
     padding: 10px;
     font-size: 16px;
+    font-family: Roboto, Arial, sans-serif;
 }
 
 input[type=text] {
@@ -36,8 +37,6 @@ input[type=submit] {
     border-top: none;
     z-index: 99;
     top: 100%;
-    left: 0;
-    right: 0;
     max-height: 300px;
     overflow: scroll;
     text-align: left;
@@ -70,6 +69,7 @@ input[type=submit] {
     background-color: #f1f1f1;
     padding: 10px;
     font-size: 16px;
+    font-family: Roboto, Arial, sans-serif;
 }
 
 .setting-submit {
