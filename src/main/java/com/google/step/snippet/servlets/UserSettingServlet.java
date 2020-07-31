@@ -23,6 +23,10 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.step.snippet.data.User;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -38,6 +42,9 @@ public class UserSettingServlet extends HttpServlet {
   private static final String EMAIL_PARAMETER = "email";
   private static final String USER_CLASS_PARAMETER = "UserInfo";
   private static final String USER_PARAMETER = "user";
+  private static final Set<String> VALID_WEBSITES =
+      Collections.unmodifiableSet(
+          new HashSet<>(Arrays.asList("GeeksForGeeks", "StackOverflow", "W3Schools")));
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -71,9 +78,7 @@ public class UserSettingServlet extends HttpServlet {
     String website = request.getParameter(WEBSITE_PARAMETER);
     String language = request.getParameter(LANGUAGE_PARAMETER);
     Entity userEntity = getUserEntity(datastore, userService);
-    if (website.equals("GeeksForGeeks")
-        || website.equals("StackOverflow")
-        || website.equals("W3Schools")) {
+    if (VALID_WEBSITES.contains(website)) {
       userEntity.setProperty(WEBSITE_PARAMETER, website);
     }
     userEntity.setProperty(LANGUAGE_PARAMETER, language);
