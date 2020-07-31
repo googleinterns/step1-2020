@@ -10,7 +10,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
-public final class GeeksForGeeksClient implements Client {
+public class GeeksForGeeksClient extends Client {
   private static final String TITLE_TAG = "h1";
   private static final String DESC_TAG = "p";
   private static final String SNIPPET_CLASS = "code-block";
@@ -69,7 +69,8 @@ public final class GeeksForGeeksClient implements Client {
     } else {
       code = Jsoup.clean(code, Whitelist.relaxed());
     }
-    return new Card(title, code, geeksLink, description, SOURCE_NAME, ICON_LINK);
+    long votes = getVotes(geeksLink);
+    return new Card(title, code, geeksLink, description, votes, SOURCE_NAME, ICON_LINK);
   }
 
   private boolean containsEscape(String possibleHtml) {
