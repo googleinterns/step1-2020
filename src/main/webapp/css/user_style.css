@@ -1,0 +1,38 @@
+body {
+  text-align: center;
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  height: 40vh;
+}
+
+.logo {
+  text-decoration: none;
+  margin: 30px 0px;
+}
+
+h1 {
+  font: 400 60px Roboto, Arial, sans-serif;
+  margin: 0;
+}
+
+.row {
+  max-width: 400px;
+  margin: 25px auto;
+}
+
+.input-websites, input[type=text] {
+  width: 100%;
+  border: none;
+  background-color: #f1f1f1;
+  padding: 10px;
+  font: 16px Roboto, Arial, sans-serif;
+}
+
+.input-languages {
+  box-sizing: border-box;
+}
