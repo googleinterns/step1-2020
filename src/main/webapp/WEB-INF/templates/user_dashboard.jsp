@@ -12,17 +12,26 @@
       <a class="logo" href="/">
         <h1>
           <span class="blue">S</span><span class="red">n</span><span class="yellow">i</span><span
-            class="blue">p</span><span class="green">p</span><span class="red">e</span><span
-            class="yellow">t</span>
+          class="blue">p</span><span class="green">p</span><span class="red">e</span><span
+          class="yellow">t</span>
         </h1>
       </a>
     </div>
   </head>
   <body>
+    <a class="home-button" href="/">Home</a>
     <form class="setting" action="/user" method="POST">
       <div class="row">
         <label for="input-websites">Choose your preferred website:</label>
         <select class="input-websites" id="input-websites" name="website">
+          <c:choose>
+            <c:when test="${not empty user.getWebsite()}">
+              <option value="${user.getWebsite()}" selected hidden>${user.getWebsite()}</option>
+            </c:when>
+            <c:otherwise>
+              <option value="" selected disabled hidden>Select</option>
+            </c:otherwise>
+          </c:choose>
           <option value="GeeksForGeeks">GeeksForGeeks</option>
           <option value="StackOverflow">StackOverflow</option>
           <option value="W3Schools">W3Schools</option>
@@ -31,7 +40,8 @@
       <div class="row">
         <label for="input-languages">Choose your primary coding language:</label>
         <input class="input-languages" id="input-languages" type="text" name="language"
-               placeholder="Input your primary coding language">
+        <c:if test="${not empty user.getLanguage()}"> value="${user.getLanguage()}"</c:if>
+               placeholder="Input a coding language">
       </div>
       <input class="submit-button" type="submit" value="Submit">
     </form>

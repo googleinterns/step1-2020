@@ -154,19 +154,18 @@ public class SearchServlet extends HttpServlet {
       allCards = Collections.emptyList();
     }
     if (!preferredSite.isEmpty()) {
-      List<Card> sortedCards = allCards;
-      for (Card card : sortedCards) {
-        if (card.getSource().toLowerCase().equals(preferredSite)) {
-          int index = allCards.indexOf(card);
-          if (index != 0) {
-            sortedCards.remove(index);
-            sortedCards.add(0, card);
-            allCards = sortedCards;
-            break;
+      for (int i = 0; i < allCards.size(); i++) {
+        Card card = allCards.get(i);
+        if (card.getSource().equals(preferredSite)) {
+          if (i != 0) {
+            allCards.remove(i);
+            allCards.add(0, card);
           }
+          break;
         }
       }
     }
+
     request.setAttribute(CARD_LIST_LABEL, allCards);
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
