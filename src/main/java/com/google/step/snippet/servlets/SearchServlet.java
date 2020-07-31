@@ -150,7 +150,7 @@ public class SearchServlet extends HttpServlet {
     if (!preferredSite.isEmpty()) {
       for (int i = 0; i < allCards.size(); i++) {
         Card card = allCards.get(i);
-        if (card.getSource().toLowerCase().equals(preferredSite)) {
+        if (card.getSource().equals(preferredSite)) {
           if (i != 0) {
             allCards.remove(i);
             allCards.add(0, card);
