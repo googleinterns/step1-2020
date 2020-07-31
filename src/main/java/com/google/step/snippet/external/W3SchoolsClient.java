@@ -10,7 +10,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
-public final class W3SchoolsClient implements Client {
+public class W3SchoolsClient extends Client {
   private static final String TITLE_TAG = "h1";
   private static final String DESC_TAG = "p";
   private static final String SNIPPET_CLASS = "w3-example";
@@ -79,7 +79,8 @@ public final class W3SchoolsClient implements Client {
     } else {
       code = Jsoup.clean(code, Whitelist.relaxed());
     }
-    return new Card(title, code, w3Link, description, SOURCE_NAME, ICON_LINK);
+    long votes = getVotes(w3Link);
+    return new Card(title, code, w3Link, description, votes, SOURCE_NAME, ICON_LINK);
   }
 
   private boolean containsEscape(String possibleHtml) {

@@ -7,11 +7,11 @@
     </h1>
   </a>
   <div class="searchbox">
-    <div class="gcse-searchbox-only" data-resultsUrl="/search"></div>
+    <div class="gcse-searchbox-only" enableAutoComplete="true" data-resultsUrl="/search"></div>
   </div>
   <div class="spacing"></div>
   <c:if test="${authLabel == 'Logout'}">
-    <a class="setting-button" href="/user">Setting</a>
+    <a class="setting-button" href="/user">Settings</a>
   </c:if>
   <a class="auth-button" href="${authUrl}">${authLabel}</a>
 </div>

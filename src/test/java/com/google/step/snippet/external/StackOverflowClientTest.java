@@ -82,8 +82,8 @@ public final class StackOverflowClientTest {
     String answer_id = "63059653";
     String answer_body = client.getAnswerBody(answer_id);
     assertEquals(
-        "<p>I found the solution and was add in the properties this line</p>\n"
-            + "<pre><code>pageSizeOptions= {[10, 15, 20]}\n</code></pre>\n",
+        "<p>I found the solution and was add in the properties this line</p> \n"
+            + "<pre><code>pageSizeOptions= {[10, 15, 20]}\n</code></pre>",
         answer_body);
   }
 
@@ -123,8 +123,9 @@ public final class StackOverflowClientTest {
             "Custom dropdown to page size on ReactTable",
             null,
             "https://stackoverflow.com/questions/63057965/custom-dropdown-to-page-size-on-reacttable",
-            "<p>I found the solution and was add in the properties this line</p>\n"
-                + "<pre><code>pageSizeOptions= {[10, 15, 20]}\n</code></pre>\n",
+            "<p>I found the solution and was add in the properties this line</p> \n"
+                + "<pre><code>pageSizeOptions= {[10, 15, 20]}\n</code></pre>",
+            0,
             "StackOverflow",
             "https://stackoverflow.com/favicon.ico");
     assertEquals(expected, actual);
