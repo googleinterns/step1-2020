@@ -12,8 +12,8 @@
       <a class="logo" href="/">
         <h1>
           <span class="blue">S</span><span class="red">n</span><span class="yellow">i</span><span
-            class="blue">p</span><span class="green">p</span><span class="red">e</span><span
-            class="yellow">t</span>
+          class="blue">p</span><span class="green">p</span><span class="red">e</span><span
+          class="yellow">t</span>
         </h1>
       </a>
     </div>
@@ -41,12 +41,8 @@
         <label for="input-languages">Choose your primary coding language:</label>
         <input class="input-languages" id="input-languages" type="text" name="language"
         <c:choose>
-        <c:when test="${not empty user.getLanguage()}">
-               value="${user.getLanguage()}"
-        </c:when>
-        <c:otherwise>
-               placeholder="Input a coding language"
-        </c:otherwise>
+          <c:when test="${not empty user.getLanguage()}"> value="${user.getLanguage()}"</c:when>
+          <c:otherwise> placeholder="Input a coding language"</c:otherwise>
         </c:choose>
         >
       </div>
