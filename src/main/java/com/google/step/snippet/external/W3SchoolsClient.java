@@ -2,11 +2,15 @@ package com.google.step.snippet.external;
 
 import com.google.step.snippet.data.Card;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
-public final class W3SchoolsClient implements Client {
+public class W3SchoolsClient extends Client {
   private static final String TITLE_TAG = "h1";
   private static final String DESC_TAG = "p";
   private static final String SNIPPET_CLASS = "w3-example";
@@ -14,7 +18,8 @@ public final class W3SchoolsClient implements Client {
   private static final String SOURCE_NAME = "W3Schools";
   private static final String ICON_LINK = "https://w3schools.com/favicon.ico";
 
-  private String cseId;
+  private final String cseId;
+  private final List<String> escapeFilters = Arrays.asList("html", "svg", "icons", "css");
 
   public W3SchoolsClient(String cseId) {
     this.cseId = cseId;
@@ -32,7 +37,7 @@ public final class W3SchoolsClient implements Client {
    * @return the created card, or {@code null} if a card could not be created
    */
   @Override
-  public Card search(String w3Link) {
+  public Card search(String w3Link, String query) {
     Document doc = null;
     try {
       doc = Jsoup.connect(w3Link).get();
@@ -51,9 +56,39 @@ public final class W3SchoolsClient implements Client {
     if (snippets.isEmpty() || snippets.first().getElementsByClass(CODE_CLASS).text().isEmpty()) {
       return null;
     }
-    String title = titles.first().text();
-    String description = descriptions.first().text();
+    String title = Jsoup.clean(titles.first().text(), Whitelist.relaxed());
+    String description;
+    // If description for specific code example exists, use example description, otherwise use first
+    // page description.
+    if (!snippets.first().getElementsByTag(DESC_TAG).text().isEmpty()) {
+      description =
+          Jsoup.clean(
+              snippets.first().getElementsByTag(DESC_TAG).first().text(), Whitelist.relaxed());
+    } else {
+      description = Jsoup.clean(descriptions.first().text(), Whitelist.relaxed());
+    }
+
     String code = snippets.first().getElementsByClass(CODE_CLASS).text();
-    return new Card(title, code, w3Link, description, SOURCE_NAME, ICON_LINK);
+    if (containsEscape(query.toLowerCase())
+        || containsEscape(w3Link)
+        || containsEscape(title.toLowerCase())
+        || containsEscape(description.toLowerCase())) {
+      title = StringEscapeUtils.escapeHtml4(title);
+      description = StringEscapeUtils.escapeHtml4(description);
+      code = StringEscapeUtils.escapeHtml4(code);
+    } else {
+      code = Jsoup.clean(code, Whitelist.relaxed());
+    }
+    long votes = getVotes(w3Link);
+    return new Card(title, code, w3Link, description, votes, SOURCE_NAME, ICON_LINK);
+  }
+
+  private boolean containsEscape(String possibleHtml) {
+    for (String filterWord : escapeFilters) {
+      if (possibleHtml.contains(filterWord)) {
+        return true;
+      }
+    }
+    return false;
   }
 }

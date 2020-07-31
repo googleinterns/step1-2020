@@ -14,8 +14,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
-public final class StackOverflowClient implements Client {
+public class StackOverflowClient extends Client {
   private static final String SEARCH_URL_TEMPLATE =
       "https://api.stackexchange.com/2.2/questions/%s?"
           + "order=desc&sort=activity&site=stackoverflow";
@@ -56,8 +58,8 @@ public final class StackOverflowClient implements Client {
    * @return the created card, or {@code null} if a card could not be created
    */
   @Override
-  public Card search(String url) {
-    String questionId = getQuestionId(url);
+  public Card search(String stackLink, String query) {
+    String questionId = getQuestionId(stackLink);
     if (questionId == null) {
       return null;
     }
@@ -72,7 +74,9 @@ public final class StackOverflowClient implements Client {
     }
     // Code is intentionally set to null for StackOverflow
     // to avoid displaying code snippet without context.
-    return new Card(title, /* code = */ null, url, description, SOURCE_NAME, ICON_LINK);
+    long votes = getVotes(stackLink);
+    return new Card(
+        title, /* code = */ null, stackLink, description, votes, SOURCE_NAME, ICON_LINK);
   }
 
   /* Get the question id of passed in URL. */
@@ -151,7 +155,8 @@ public final class StackOverflowClient implements Client {
       JSONArray items = json.getJSONArray(ITEM_PARAMETER);
       JSONObject obj = items.getJSONObject(0);
       if (obj.has(fieldParam)) {
-        return obj.get(fieldParam).toString();
+        String result = obj.get(fieldParam).toString();
+        return Jsoup.clean(result, Whitelist.relaxed());
       }
     }
     return null;

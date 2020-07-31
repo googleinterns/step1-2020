@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servelet that renders user setting page */
+/** Servlet that renders user setting page */
 @WebServlet("/user")
 public class UserSettingServlet extends HttpServlet {
   private static final String WEBSITE_PARAMETER = "website";

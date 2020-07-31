@@ -1,84 +1,38 @@
-.main {
-    text-align: center;
-    padding: 0px 10px;
-    font-family: sans-serif;
+body {
+  text-align: center;
 }
 
-.column {
-    display: inline-block;
-    width: 45%;
+.heading {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  height: 40vh;
 }
 
-.autocomplete {
-    position: relative;
-    display: inline-block;
+.logo {
+  text-decoration: none;
+  margin: 30px 0px;
 }
 
-input {
-    border: 1px solid transparent;
-    background-color: #f1f1f1;
-    padding: 10px;
-    font-size: 16px;
+h1 {
+  font: 400 60px Roboto, Arial, sans-serif;
+  margin: 0;
 }
 
-input[type=text] {
-    background-color: #f1f1f1;
-    width: 100%;
+.row {
+  max-width: 400px;
+  margin: 25px auto;
 }
 
-input[type=submit] {
-    background-color: #4285F4;
-    color: #fff;
+.input-websites, input[type=text] {
+  width: 100%;
+  border: none;
+  background-color: #f1f1f1;
+  padding: 10px;
+  font: 16px Roboto, Arial, sans-serif;
 }
 
-.autocomplete-items {
-    border: 1px solid #d4d4d4;
-    border-bottom: none;
-    border-top: none;
-    z-index: 99;
-    top: 100%;
-    left: 0;
-    right: 0;
-    max-height: 300px;
-    overflow: scroll;
-    text-align: left;
-}
-
-.autocomplete-items div {
-    padding: 10px;
-    cursor: pointer;
-    border-bottom: 1px solid #d4d4d4;
-}
-
-.autocomplete-items div:hover {
-    background-color: #e9e9e9;
-}
-
-.autocomplete-active {
-    background-color: #4285F4;
-    color: #ffffff;
-}
-
-.setting {
-    margin-top: 20%;
-}
-
-.input-websites {
-    width: 100%;
-    display: block;
-    margin: auto;
-    border: 1px solid transparent;
-    background-color: #f1f1f1;
-    padding: 10px;
-    font-size: 16px;
-}
-
-.setting-submit {
-    display: block;
-    margin-top: 5%;
-    margin-left: 47.5%;
-}
-
-.websites {
-    vertical-align: top;
+.input-languages {
+  box-sizing: border-box;
 }

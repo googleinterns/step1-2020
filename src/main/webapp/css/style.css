@@ -24,7 +24,7 @@ body, html {
   max-width: 580px;
 }
 
-.auth-button, .setting-button {
+.auth-button, .setting-button, .submit-button {
   font: 400 15px Roboto, Arial, sans-serif;
   color: white;
   background: #4d90fe;
@@ -35,14 +35,14 @@ body, html {
   display: inline-block;
 }
 
-.auth-button:hover, .setting-button:hover {
+.auth-button:hover, .setting-button:hover, .submit-button:hover {
   border: 1px #2F5BB7 solid;
   box-shadow: 0 1px 1px #EAEAEA, inset 0 1px 0 #5A94F1;
   background: #3F83F1;
 }
 
-.auth-button:active, .setting-button:active {
-  box-shadow: inset 0 2px 5px #2370FE;   
+.auth-button:active, .setting-button:active, .submit-button:active {
+  box-shadow: inset 0 2px 5px #2370FE;
 }
 
 .auth-button {

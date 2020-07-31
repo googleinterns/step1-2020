@@ -82,8 +82,8 @@ public final class StackOverflowClientTest {
     String answer_id = "63059653";
     String answer_body = client.getAnswerBody(answer_id);
     assertEquals(
-        "<p>I found the solution and was add in the properties this line</p>\n"
-            + "<pre><code>pageSizeOptions= {[10, 15, 20]}\n</code></pre>\n",
+        "<p>I found the solution and was add in the properties this line</p> \n"
+            + "<pre><code>pageSizeOptions= {[10, 15, 20]}\n</code></pre>",
         answer_body);
   }
 
@@ -99,7 +99,8 @@ public final class StackOverflowClientTest {
   public void noAnswerSearchTest() {
     Card actual =
         client.search(
-            "https://stackoverflow.com/questions/44686609/implementing-a-neural-network-in-haskell");
+            "https://stackoverflow.com/questions/44686609/implementing-a-neural-network-in-haskell",
+            "implement neural net in haskell");
     assertNull(actual);
   }
 
@@ -107,7 +108,7 @@ public final class StackOverflowClientTest {
   public void fakeLinkSearchTest() {
     Card actual =
         client.search(
-            "https://softwareengineering.stackexchange.com/questions/100/what-website-are-yo");
+            "https://softwareengineering.stackexchange.com/questions/100/what-website-are-yo", "");
     assertNull(actual);
   }
 
@@ -115,14 +116,16 @@ public final class StackOverflowClientTest {
   public void validSearchTest() {
     Card actual =
         client.search(
-            "https://stackoverflow.com/questions/63057965/custom-dropdown-to-page-size-on-reacttable");
+            "https://stackoverflow.com/questions/63057965/custom-dropdown-to-page-size-on-reacttable",
+            "custom dropdown to page size on reacttable");
     Card expected =
         new Card(
             "Custom dropdown to page size on ReactTable",
             null,
             "https://stackoverflow.com/questions/63057965/custom-dropdown-to-page-size-on-reacttable",
-            "<p>I found the solution and was add in the properties this line</p>\n"
-                + "<pre><code>pageSizeOptions= {[10, 15, 20]}\n</code></pre>\n",
+            "<p>I found the solution and was add in the properties this line</p> \n"
+                + "<pre><code>pageSizeOptions= {[10, 15, 20]}\n</code></pre>",
+            0,
             "StackOverflow",
             "https://stackoverflow.com/favicon.ico");
     assertEquals(expected, actual);
