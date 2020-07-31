@@ -26,14 +26,9 @@ h1 {
 }
 
 .input-websites, input[type=text] {
-  width: 100%;
+  width: -webkit-fill-available;
   border: 1px solid transparent;
   background-color: #f1f1f1;
   padding: 10px;
-  font-size: 16px;
-  font-family: Roboto, Arial, sans-serif;
-}
-
-.setting-submit {
-  margin: auto;
+  font: 16px Roboto, Arial, sans-serif;
 }
