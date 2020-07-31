@@ -16,6 +16,11 @@ package com.google.step.snippet.servlets;
 
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.ThreadManager;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.JsonObject;
@@ -68,6 +73,10 @@ public class SearchServlet extends HttpServlet {
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
   private static final String CARD_LIST_LABEL = "cardList";
 
+  private static final String ID_PARAMETER = "id";
+  private static final String USER_PARAMETER = "UserInfo";
+  private static final String WEBSITE_PARAMETER = "website";
+
   private final List<Client> clients =
       Arrays.asList(
           new W3SchoolsClient(W3_CSE_ID),
@@ -93,10 +102,12 @@ public class SearchServlet extends HttpServlet {
       redirectPath += "?" + request.getQueryString();
     }
 
+    String preferredSite = "";
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
       request.setAttribute(AUTH_URL, userService.createLogoutURL(redirectPath));
       request.setAttribute(AUTH_LABEL, "Logout");
+      preferredSite = getPreferredSite(userService.getCurrentUser().getUserId());
     } else {
       request.setAttribute(AUTH_URL, userService.createLoginURL(redirectPath));
       request.setAttribute(AUTH_LABEL, "Login");
@@ -141,6 +152,19 @@ public class SearchServlet extends HttpServlet {
       allCards = Collections.emptyList();
     }
 
+    if (!preferredSite.isEmpty()) {
+      for (int i = 0; i < allCards.size(); i++) {
+        Card card = allCards.get(i);
+        if (card.getSource().equals(preferredSite)) {
+          if (i != 0) {
+            allCards.remove(i);
+            allCards.add(0, card);
+          }
+          break;
+        }
+      }
+    }
+
     request.setAttribute(CARD_LIST_LABEL, allCards);
     request.getRequestDispatcher("WEB-INF/templates/search.jsp").forward(request, response);
   }
@@ -179,5 +203,19 @@ public class SearchServlet extends HttpServlet {
       return null;
     }
     return null;
+  }
+
+  private String getPreferredSite(String userId) {
+    Query.FilterPredicate filterId =
+        new Query.FilterPredicate(ID_PARAMETER, FilterOperator.EQUAL, userId);
+    Query userQuery = new Query(USER_PARAMETER).setFilter(filterId);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Entity userPreferenceEntity = datastore.prepare(userQuery).asSingleEntity();
+    String site = "";
+    if (userPreferenceEntity != null
+        && userPreferenceEntity.getProperty(WEBSITE_PARAMETER) != null) {
+      site = (String) userPreferenceEntity.getProperty(WEBSITE_PARAMETER);
+    }
+    return site;
   }
 }
