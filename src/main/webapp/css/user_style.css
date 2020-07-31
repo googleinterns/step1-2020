@@ -27,7 +27,7 @@ h1 {
 
 .input-websites, input[type=text] {
   width: 100%;
-  border: 1px solid transparent;
+  border: none;
   background-color: #f1f1f1;
   padding: 10px;
   font: 16px Roboto, Arial, sans-serif;
