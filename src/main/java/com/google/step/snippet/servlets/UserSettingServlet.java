@@ -43,20 +43,25 @@ public class UserSettingServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     UserService userService = UserServiceFactory.getUserService();
+    // In case unauthenticated user access setting page through URL.
+    if (!userService.isUserLoggedIn()) {
+      doPost(request, response);
+      return;
+    }
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    String id = userService.getCurrentUser().getUserId();
-    String email = userService.getCurrentUser().getEmail();
-    Query.FilterPredicate filterUser =
-        new Query.FilterPredicate(ID_PARAMETER, FilterOperator.EQUAL, id);
-    Query queryUser = new Query(USER_CLASS_PARAMETER).setFilter(filterUser);
-    Entity userEntity = datastore.prepare(queryUser).asSingleEntity();
+    Entity userEntity = getUserEntity(datastore, userService);
     String website = null;
     String language = null;
     if (userEntity != null) {
       website = (String) userEntity.getProperty(WEBSITE_PARAMETER);
       language = (String) userEntity.getProperty(LANGUAGE_PARAMETER);
     }
-    User user = new User(id, email, website, language);
+    User user =
+        new User(
+            (String) userEntity.getProperty(ID_PARAMETER),
+            (String) userEntity.getProperty(EMAIL_PARAMETER),
+            website,
+            language);
     request.setAttribute(USER_PARAMETER, user);
     request.getRequestDispatcher("WEB-INF/templates/user_dashboard.jsp").forward(request, response);
   }
@@ -65,27 +70,30 @@ public class UserSettingServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
-      response.sendRedirect("/home");
+      response.sendRedirect("/");
       return;
     }
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
     String website = request.getParameter(WEBSITE_PARAMETER);
     String language = request.getParameter(LANGUAGE_PARAMETER);
+    Entity userEntity = getUserEntity(datastore, userService);
+    userEntity.setProperty(WEBSITE_PARAMETER, website);
+    userEntity.setProperty(LANGUAGE_PARAMETER, language);
+    datastore.put(userEntity);
+    response.sendRedirect("/user");
+  }
+
+  private Entity getUserEntity(DatastoreService datastore, UserService userService) {
     String id = userService.getCurrentUser().getUserId();
     Query.FilterPredicate filterUser =
         new Query.FilterPredicate(ID_PARAMETER, FilterOperator.EQUAL, id);
     Query queryUser = new Query(USER_CLASS_PARAMETER).setFilter(filterUser);
     Entity userEntity = datastore.prepare(queryUser).asSingleEntity();
-
     if (userEntity == null) {
       userEntity = new Entity(USER_CLASS_PARAMETER);
       userEntity.setProperty(ID_PARAMETER, id);
       userEntity.setProperty(EMAIL_PARAMETER, userService.getCurrentUser().getEmail());
     }
-    userEntity.setProperty(WEBSITE_PARAMETER, website);
-    userEntity.setProperty(LANGUAGE_PARAMETER, language);
-    datastore.put(userEntity);
-    response.sendRedirect("/user");
+    return userEntity;
   }
 }
