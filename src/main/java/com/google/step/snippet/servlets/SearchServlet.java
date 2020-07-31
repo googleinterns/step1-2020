@@ -98,6 +98,7 @@ public class SearchServlet extends HttpServlet {
     if (request.getQueryString() != null) {
       redirectPath += "?" + request.getQueryString();
     }
+    
     String preferredSite = "";
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
