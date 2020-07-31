@@ -64,27 +64,27 @@ h1 {
   vertical-align: bottom;
 }
 
+.card::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #FAFAFA;
+}
+
+.card::-webkit-scrollbar-thumb, pre::-webkit-scrollbar-thumb {
+  background: lightgrey;
+  border-radius: 10px;
+}
+
+.card::-webkit-scrollbar-thumb:hover, pre::-webkit-scrollbar-thumb:hover {
+  background: grey;
+}
+
 .card .content {
   overflow: scroll;
   overflow: overlay;
   padding: 24px 24px 24px 0px;
   font-size: 16px;
   scrollbar-color: grey #FAFAFA;
-}
-
-.card .content::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-  background-color: #FAFAFA;
-}
-
-.card .content::-webkit-scrollbar-thumb, pre::-webkit-scrollbar-thumb {
-  background: lightgrey;
-  border-radius: 10px;
-}
-
-.card .content::-webkit-scrollbar-thumb:hover, pre::-webkit-scrollbar-thumb:hover {
-  background: grey;
 }
 
 .card .content .card-title {
