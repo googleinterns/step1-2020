@@ -4,6 +4,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
+  <title>User Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/user_style.css">
   <div class="heading">
     <a class="logo" href="/">
       <h1>
@@ -13,10 +17,6 @@
       </h1>
     </a>
   </div>
-  <meta charset="utf-8">
-  <title>User Dashboard</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/user_style.css">
 </head>
 <body>
 <a class="home-button" href="/">Home</a>
