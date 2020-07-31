@@ -20,20 +20,20 @@
 </head>
 <body>
     <form class="setting" action="/user" method="POST">
-      <div class="column websites">
+      <div class="row">
         <label for="input-websites">Choose your preferred website:</label>
-        <select class="input-websites" id="input-websites" name="input-websites">
+        <select class="input-websites" id="input-websites" name="website">
           <option value="geeksforgeeks">GeeksForGeeks</option>
           <option value="stackoverflow">StackOverflow</option>
           <option value="w3schools">W3Schools</option>
         </select>
       </div>
-      <div id="languages" class="column">
+      <div class="row">
         <label for="input-languages">Choose your primary coding language:</label>
-        <input class="input-languages" id="input-languages" type="text" name="input-languages"
+        <input class="input-languages" id="input-languages" type="text" name="language"
                placeholder="Input your primary coding language">
       </div>
-      <input class="setting-submit" type="submit" value="Submit">
+      <input class="submit-button" type="submit" value="Submit">
     </form>
 </body>
 </html>
