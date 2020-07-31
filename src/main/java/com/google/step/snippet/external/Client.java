@@ -10,8 +10,8 @@ import com.google.step.snippet.data.Card;
 public abstract class Client {
 
   public static final String URL = "url";
-  public static final String FEEDBACK = "feedback";
   private static final String TOTAL = "totalvotes";
+  public static final String FEEDBACK = "Feedback";
 
   public abstract Card search(String url, String query);
 

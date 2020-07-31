@@ -62,7 +62,7 @@ public class FeedbackServlet extends HttpServlet {
         if (userUpCards != null && userUpCards.contains(url)) {
           json.put(STATUS, UPVOTED);
         } else if (userDownCards != null && userDownCards.contains(url)) {
-          json.put(STATUS, UPVOTED);
+          json.put(STATUS, DOWNVOTED);
         }
       }
     }
