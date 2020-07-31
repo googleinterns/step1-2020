@@ -207,16 +207,18 @@ public class SearchServlet extends HttpServlet {
   }
 
   private String[] getPreference(String userId) {
-    String[] result = new String[2];
+    String[] result = {"", ""};
     Query.FilterPredicate filterId =
         new Query.FilterPredicate(ID_PARAMETER, FilterOperator.EQUAL, userId);
     Query userQuery = new Query(USER_PARAMETER).setFilter(filterId);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Entity userPreferenceEntity = datastore.prepare(userQuery).asSingleEntity();
     if (userPreferenceEntity != null
-        && userPreferenceEntity.getProperty(WEBSITE_PARAMETER) != null
-        && userPreferenceEntity.getProperty(LANGUAGE_PARAMETER) != null) {
+        && userPreferenceEntity.getProperty(WEBSITE_PARAMETER) != null) {
       result[0] = (String) userPreferenceEntity.getProperty(WEBSITE_PARAMETER);
+    }
+    if (userPreferenceEntity != null
+        && userPreferenceEntity.getProperty(LANGUAGE_PARAMETER) != null) {
       result[1] = (String) userPreferenceEntity.getProperty(LANGUAGE_PARAMETER);
     }
     return result;

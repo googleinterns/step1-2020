@@ -10,7 +10,6 @@
     <div class="gcse-searchbox-only" enableAutoComplete="true" data-resultsUrl="/search"></div>
   </div>
   <div class="spacing"></div>
-  <a class="setting-button" href="/user">Setting</a>
   <c:if test="${authLabel == 'Logout'}">
     <a class="setting-button" href="/user">Settings</a>
   </c:if>

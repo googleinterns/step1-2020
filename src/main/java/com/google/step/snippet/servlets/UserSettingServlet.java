@@ -65,28 +65,6 @@ public class UserSettingServlet extends HttpServlet {
             (String) userEntity.getProperty(LANGUAGE_PARAMETER));
     request.setAttribute(USER_PARAMETER, user);
     request.getRequestDispatcher("WEB-INF/templates/user_dashboard.jsp").forward(request, response);
-    referer = request.getHeader("referer");
-  }
-
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    UserService userService = UserServiceFactory.getUserService();
-    if (!userService.isUserLoggedIn()) {
-      response.sendRedirect("/home");
-      return;
-    }
-
-    String website = request.getParameter(WEBSITE_PARAMETER);
-    String language = request.getParameter(LANGUAGE_PARAMETER);
-    String id = userService.getCurrentUser().getUserId();
-
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Entity entity = new Entity(USER_PARAMETER, id);
-    entity.setProperty(ID_PARAMETER, id);
-    entity.setProperty(WEBSITE_PARAMETER, website);
-    entity.setProperty(LANGUAGE_PARAMETER, language);
-    datastore.put(entity);
-    response.sendRedirect(referer);
   }
 
   @Override
