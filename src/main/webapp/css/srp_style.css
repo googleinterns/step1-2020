@@ -39,7 +39,8 @@ h1 {
   margin: 20px 0px;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
   transition: box-shadow .25s;
-  border-radius: 2px;
+  border-radius: 8px;
+  border: 1px solid #dfe1e5;
   width: 400px;
   max-height: 260px;
   display: flex;
@@ -57,6 +58,19 @@ h1 {
   cursor: pointer;
   background: none;
   border: none;
+  outline: none;
+}
+
+.gs-title * {
+  font-family: Roboto,arial,sans-serif !important;
+  font-size: 20px !important;
+  font-weight: normal !important;
+  color: #1a0dab !important;
+}
+
+.gs-snippet * {
+  font-family: Roboto,arial,sans-serif !important;
+  font-size: 14px !important;
 }
 
 .icon {
@@ -89,7 +103,16 @@ h1 {
 
 .card .content .card-title {
   font-size: 20px;
-  font-weight: 300;
+  text-decoration: none;
+  color: #1a0dab
+}
+
+.card .content .card-title:hover {
+  text-decoration: underline;
+}
+
+.card .content .card-title:visited {
+  color: #609;
 }
 
 .card .content code {
@@ -99,6 +122,7 @@ h1 {
 }
 
 .card .content p {
+  color: #333333;
   font-size: 14px;
   display: block;
 }
