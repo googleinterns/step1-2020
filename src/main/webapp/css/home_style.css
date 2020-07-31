@@ -21,3 +21,9 @@ h1 {
   top: 20px;
   right: 20px;
 }
+
+.setting-button {
+  position: absolute;
+  top: 20px;
+  right: 100px;
+}

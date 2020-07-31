@@ -1,4 +1,5 @@
 <%@tag description="Common page content" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <div class="heading">
   <a class="logo" href="/">
     <h1>
@@ -9,5 +10,8 @@
     <div class="gcse-searchbox-only" enableAutoComplete="true" data-resultsUrl="/search"></div>
   </div>
   <div class="spacing"></div>
+  <c:if test="${authLabel == 'Logout'}">
+    <a class="setting-button" href="/user">Settings</a>
+  </c:if>
   <a class="auth-button" href="${authUrl}">${authLabel}</a>
 </div>
