@@ -40,11 +40,8 @@
       <div class="row">
         <label for="input-languages">Choose your primary coding language:</label>
         <input class="input-languages" id="input-languages" type="text" name="language"
-        <c:choose>
-          <c:when test="${not empty user.getLanguage()}"> value="${user.getLanguage()}"</c:when>
-          <c:otherwise> placeholder="Input a coding language"</c:otherwise>
-        </c:choose>
-        >
+        <c:if test="${not empty user.getLanguage()}"> value="${user.getLanguage()}"</c:if>
+               placeholder="Input a coding language">
       </div>
       <input class="submit-button" type="submit" value="Submit">
     </form>
