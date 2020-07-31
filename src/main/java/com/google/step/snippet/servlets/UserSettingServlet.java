@@ -45,23 +45,17 @@ public class UserSettingServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     // In case unauthenticated user access setting page through URL.
     if (!userService.isUserLoggedIn()) {
-      doPost(request, response);
+      response.sendRedirect("/");
       return;
     }
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Entity userEntity = getUserEntity(datastore, userService);
-    String website = null;
-    String language = null;
-    if (userEntity != null) {
-      website = (String) userEntity.getProperty(WEBSITE_PARAMETER);
-      language = (String) userEntity.getProperty(LANGUAGE_PARAMETER);
-    }
     User user =
         new User(
             (String) userEntity.getProperty(ID_PARAMETER),
             (String) userEntity.getProperty(EMAIL_PARAMETER),
-            website,
-            language);
+            (String) userEntity.getProperty(WEBSITE_PARAMETER),
+            (String) userEntity.getProperty(LANGUAGE_PARAMETER));
     request.setAttribute(USER_PARAMETER, user);
     request.getRequestDispatcher("WEB-INF/templates/user_dashboard.jsp").forward(request, response);
   }
@@ -75,14 +69,24 @@ public class UserSettingServlet extends HttpServlet {
     }
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     String website = request.getParameter(WEBSITE_PARAMETER);
+    System.out.println(website);
     String language = request.getParameter(LANGUAGE_PARAMETER);
     Entity userEntity = getUserEntity(datastore, userService);
-    userEntity.setProperty(WEBSITE_PARAMETER, website);
+    if (website.equals("GeeksForGeeks")
+        || website.equals("StackOverflow")
+        || website.equals("W3Schools")) {
+      userEntity.setProperty(WEBSITE_PARAMETER, website);
+    }
     userEntity.setProperty(LANGUAGE_PARAMETER, language);
     datastore.put(userEntity);
     response.sendRedirect("/user");
   }
 
+  /**
+   * @param datastore the datastore service containing existing user information
+   * @param userService the current user information
+   * @return a new user entity if the user doesn't exist, the user information if it exists
+   */
   private Entity getUserEntity(DatastoreService datastore, UserService userService) {
     String id = userService.getCurrentUser().getUserId();
     Query.FilterPredicate filterUser =

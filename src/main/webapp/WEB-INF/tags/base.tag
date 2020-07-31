@@ -11,7 +11,7 @@
   </div>
   <div class="spacing"></div>
   <c:if test="${authLabel == 'Logout'}">
-    <a class="setting-button" href="/user">Setting</a>
+    <a class="setting-button" href="/user">Settings</a>
   </c:if>
   <a class="auth-button" href="${authUrl}">${authLabel}</a>
 </div>
