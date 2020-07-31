@@ -69,7 +69,6 @@ public class UserSettingServlet extends HttpServlet {
     }
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     String website = request.getParameter(WEBSITE_PARAMETER);
-    System.out.println(website);
     String language = request.getParameter(LANGUAGE_PARAMETER);
     Entity userEntity = getUserEntity(datastore, userService);
     if (website.equals("GeeksForGeeks")
