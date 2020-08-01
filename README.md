@@ -1,7 +1,9 @@
 # Snippet
 
-This repository contains the capstone project for a pod of interns (step1-2020)
-in Google's Student Training in Engineering program.
+Snippet is a full stack Custom Search web application with Knowledge Panel suggestions and user ratings for coding related Google Search queries. 
+
+This repository contains the Google STEP program capstone project of [@AaronLopes](https://github.com/AaronLopew), [irisliu77](https://github.com/irisliu77), and [@kaylaleung](https://github.com/kaylaleung).
+
 
 ## Set Up
 
