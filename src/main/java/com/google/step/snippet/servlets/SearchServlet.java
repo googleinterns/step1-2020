@@ -14,6 +14,8 @@
 
 package com.google.step.snippet.servlets;
 
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.ThreadManager;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -83,7 +85,8 @@ public class SearchServlet extends HttpServlet {
           new StackOverflowClient(STACK_CSE_ID),
           new GeeksForGeeksClient(GEEKS_CSE_ID));
 
-  private final ExecutorService executor = Executors.newCachedThreadPool();
+  private final ExecutorService executor =
+      Executors.newCachedThreadPool(ThreadManager.backgroundThreadFactory());
 
   private static String encodeValue(String value) {
     try {
@@ -129,6 +132,7 @@ public class SearchServlet extends HttpServlet {
                 client ->
                     ((Callable<Card>)
                         () -> {
+                          NamespaceManager.set(NamespaceManager.getGoogleAppsNamespace());
                           String link = getLink(client.getCseId(), query);
                           if (link != null) {
                             return client.search(link, query);
@@ -139,7 +143,7 @@ public class SearchServlet extends HttpServlet {
     List<Card> allCards;
     try {
       allCards =
-          executor.invokeAll(cardCallbacks, 3L, TimeUnit.SECONDS).stream()
+          executor.invokeAll(cardCallbacks, 5L, TimeUnit.SECONDS).stream()
               .map(
                   future -> {
                     try {
@@ -153,6 +157,19 @@ public class SearchServlet extends HttpServlet {
     } catch (InterruptedException | RejectedExecutionException e) {
       allCards = Collections.emptyList();
     }
+    if (!preferredSite.isEmpty()) {
+      for (int i = 0; i < allCards.size(); i++) {
+        Card card = allCards.get(i);
+        if (card.getSource().equals(preferredSite)) {
+          if (i != 0) {
+            allCards.remove(i);
+            allCards.add(0, card);
+          }
+          break;
+        }
+      }
+    }
+
     if (!preferredSite.isEmpty()) {
       for (int i = 0; i < allCards.size(); i++) {
         Card card = allCards.get(i);

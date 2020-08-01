@@ -10,7 +10,13 @@ import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public final class StackOverflowClientTest {
-  private final StackOverflowClient client = new StackOverflowClient("CSE_ID");
+  private final StackOverflowClient client =
+      new StackOverflowClient("CSE_ID") {
+        @Override
+        public long getVotes(String url) {
+          return 0;
+        }
+      };
 
   @Test
   public void noQuestionIdTest() {
