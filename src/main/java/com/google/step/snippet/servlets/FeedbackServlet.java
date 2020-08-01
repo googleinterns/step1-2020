@@ -57,11 +57,11 @@ public class FeedbackServlet extends HttpServlet {
 
       // If a user has previously voted on this card, retrieve their past voting status
       if (url != null) {
-        ArrayList<String> userUpCards = (ArrayList<String>) userEntity.getProperty(UPVOTED);
-        ArrayList<String> userDownCards = (ArrayList<String>) userEntity.getProperty(DOWNVOTED);
-        if (userUpCards != null && userUpCards.contains(url)) {
+        ArrayList<String> upCards = (ArrayList<String>) userEntity.getProperty(UPVOTED);
+        ArrayList<String> downCards = (ArrayList<String>) userEntity.getProperty(DOWNVOTED);
+        if (upCards != null && upCards.contains(url)) {
           json.put(STATUS, UPVOTED);
-        } else if (userDownCards != null && userDownCards.contains(url)) {
+        } else if (downCards != null && downCards.contains(url)) {
           json.put(STATUS, DOWNVOTED);
         }
       }
@@ -88,35 +88,27 @@ public class FeedbackServlet extends HttpServlet {
     Entity userEntity = getUserEntity(datastore, userService);
 
     // Get lists of user's upvoted and downvoted cards
-    ArrayList<String> upCards;
-    if (userEntity.getProperty(UPVOTED) == null) {
+    ArrayList<String> upCards = (ArrayList<String>) userEntity.getProperty(UPVOTED);
+    ArrayList<String> downCards = (ArrayList<String>) userEntity.getProperty(DOWNVOTED);
+    if (upCards == null) {
       upCards = new ArrayList<String>();
-    } else {
-      upCards = (ArrayList<String>) userEntity.getProperty(UPVOTED);
     }
-    ArrayList<String> downCards;
-    if (userEntity.getProperty(DOWNVOTED) == null) {
+    if (downCards == null) {
       downCards = new ArrayList<String>();
-    } else {
-      downCards = (ArrayList<String>) userEntity.getProperty(DOWNVOTED);
     }
 
     // Add or remove card from user's list of upvoted and downvoted cards
     if (request.getParameter(UP) != null) {
       if (!upCards.contains(url)) {
         upCards.add(url);
-        if (downCards.contains(url)) {
-          downCards.remove(url);
-        }
+        downCards.remove(url);
       } else {
         upCards.remove(url);
       }
     } else if (request.getParameter(DOWN) != null) {
       if (!downCards.contains(url)) {
         downCards.add(url);
-        if (upCards.contains(url)) {
-          upCards.remove(url);
-        }
+        upCards.remove(url);
       } else {
         downCards.remove(url);
       }
@@ -127,12 +119,10 @@ public class FeedbackServlet extends HttpServlet {
 
     // Retrieve toggle status of upvote and downvote buttons for user
     String status = NONE;
-    if (userEntity.getProperty(UPVOTED) != null
-        && ((ArrayList<String>) userEntity.getProperty(UPVOTED)).contains(url)) {
+    if (upCards.contains(url)) {
       status = UPVOTED;
     }
-    if (userEntity.getProperty(DOWNVOTED) != null
-        && ((ArrayList<String>) userEntity.getProperty(DOWNVOTED)).contains(url)) {
+    if (downCards.contains(url)) {
       status = DOWNVOTED;
     }
 

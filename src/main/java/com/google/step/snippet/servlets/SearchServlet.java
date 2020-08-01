@@ -137,7 +137,7 @@ public class SearchServlet extends HttpServlet {
     List<Card> allCards;
     try {
       allCards =
-          executor.invokeAll(cardCallbacks, 30L, TimeUnit.SECONDS).stream()
+          executor.invokeAll(cardCallbacks, 5L, TimeUnit.SECONDS).stream()
               .map(
                   future -> {
                     try {
