@@ -11,7 +11,13 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class GeeksForGeeksClientTest {
 
-  private final GeeksForGeeksClient client = new GeeksForGeeksClient("CSE_ID");
+  private final GeeksForGeeksClient client =
+      new GeeksForGeeksClient("CSE_ID") {
+        @Override
+        public long getVotes(String url) {
+          return 0;
+        }
+      };
 
   @Test
   public void htmlCodeCard() {

@@ -14,12 +14,20 @@
 
 package com.google.step.snippet.servlets;
 
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.ThreadManager;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.step.snippet.data.Card;
+import com.google.step.snippet.data.Languages;
 import com.google.step.snippet.external.Client;
 import com.google.step.snippet.external.GeeksForGeeksClient;
 import com.google.step.snippet.external.StackOverflowClient;
@@ -66,13 +74,19 @@ public class SearchServlet extends HttpServlet {
   private static final String CSE_URL = "https://www.googleapis.com/customsearch/v1";
   private static final String CARD_LIST_LABEL = "cardList";
 
+  private static final String ID_PARAMETER = "id";
+  private static final String USER_PARAMETER = "UserInfo";
+  private static final String WEBSITE_PARAMETER = "website";
+  private static final String LANGUAGE_PARAMETER = "language";
+
   private final List<Client> clients =
       Arrays.asList(
           new W3SchoolsClient(W3_CSE_ID),
           new StackOverflowClient(STACK_CSE_ID),
           new GeeksForGeeksClient(GEEKS_CSE_ID));
 
-  private final ExecutorService executor = Executors.newCachedThreadPool();
+  private final ExecutorService executor =
+      Executors.newCachedThreadPool(ThreadManager.backgroundThreadFactory());
 
   private static String encodeValue(String value) {
     try {
@@ -89,11 +103,14 @@ public class SearchServlet extends HttpServlet {
     if (request.getQueryString() != null) {
       redirectPath += "?" + request.getQueryString();
     }
-
+    String preferredSite = "";
+    String preferredLang = "";
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
       request.setAttribute(AUTH_URL, userService.createLogoutURL(redirectPath));
       request.setAttribute(AUTH_LABEL, "Logout");
+      preferredSite = getPreference(userService.getCurrentUser().getUserId())[0];
+      preferredLang = getPreference(userService.getCurrentUser().getUserId())[1];
     } else {
       request.setAttribute(AUTH_URL, userService.createLoginURL(redirectPath));
       request.setAttribute(AUTH_LABEL, "Login");
@@ -105,6 +122,9 @@ public class SearchServlet extends HttpServlet {
       response.getWriter().println("Invalid Query");
       return;
     }
+    if (!queryContainsLanguage(param, Languages.languages)) {
+      param = param + " " + preferredLang;
+    }
     String query = encodeValue(param);
     List<Callable<Card>> cardCallbacks =
         clients.stream()
@@ -112,6 +132,7 @@ public class SearchServlet extends HttpServlet {
                 client ->
                     ((Callable<Card>)
                         () -> {
+                          NamespaceManager.set(NamespaceManager.getGoogleAppsNamespace());
                           String link = getLink(client.getCseId(), query);
                           if (link != null) {
                             return client.search(link, query);
@@ -122,7 +143,7 @@ public class SearchServlet extends HttpServlet {
     List<Card> allCards;
     try {
       allCards =
-          executor.invokeAll(cardCallbacks, 3L, TimeUnit.SECONDS).stream()
+          executor.invokeAll(cardCallbacks, 5L, TimeUnit.SECONDS).stream()
               .map(
                   future -> {
                     try {
@@ -135,6 +156,31 @@ public class SearchServlet extends HttpServlet {
               .collect(Collectors.toList());
     } catch (InterruptedException | RejectedExecutionException e) {
       allCards = Collections.emptyList();
+    }
+    if (!preferredSite.isEmpty()) {
+      for (int i = 0; i < allCards.size(); i++) {
+        Card card = allCards.get(i);
+        if (card.getSource().equals(preferredSite)) {
+          if (i != 0) {
+            allCards.remove(i);
+            allCards.add(0, card);
+          }
+          break;
+        }
+      }
+    }
+
+    if (!preferredSite.isEmpty()) {
+      for (int i = 0; i < allCards.size(); i++) {
+        Card card = allCards.get(i);
+        if (card.getSource().equals(preferredSite)) {
+          if (i != 0) {
+            allCards.remove(i);
+            allCards.add(0, card);
+          }
+          break;
+        }
+      }
     }
 
     request.setAttribute(CARD_LIST_LABEL, allCards);
@@ -175,5 +221,27 @@ public class SearchServlet extends HttpServlet {
       return null;
     }
     return null;
+  }
+
+  private String[] getPreference(String userId) {
+    String[] result = {"", ""};
+    Query.FilterPredicate filterId =
+        new Query.FilterPredicate(ID_PARAMETER, FilterOperator.EQUAL, userId);
+    Query userQuery = new Query(USER_PARAMETER).setFilter(filterId);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Entity userPreferenceEntity = datastore.prepare(userQuery).asSingleEntity();
+    if (userPreferenceEntity != null
+        && userPreferenceEntity.getProperty(WEBSITE_PARAMETER) != null) {
+      result[0] = (String) userPreferenceEntity.getProperty(WEBSITE_PARAMETER);
+    }
+    if (userPreferenceEntity != null
+        && userPreferenceEntity.getProperty(LANGUAGE_PARAMETER) != null) {
+      result[1] = (String) userPreferenceEntity.getProperty(LANGUAGE_PARAMETER);
+    }
+    return result;
+  }
+
+  private boolean queryContainsLanguage(String query, String[] languages) {
+    return Arrays.stream(languages).parallel().anyMatch(query.toLowerCase()::contains);
   }
 }

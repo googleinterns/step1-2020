@@ -11,7 +11,13 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class W3SchoolsClientTest {
 
-  private final W3SchoolsClient client = new W3SchoolsClient("CSE_ID");
+  private final W3SchoolsClient client =
+      new W3SchoolsClient("CSE_ID") {
+        @Override
+        public long getVotes(String url) {
+          return 0;
+        }
+      };
 
   @Test
   public void htmlCodeCard() {
